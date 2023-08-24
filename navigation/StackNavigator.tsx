@@ -3,27 +3,28 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import ScanScreen from "./../screens/ScanScreen";
 import ScanAreaScreen from "./../screens/ScanAreaScreen";
-import ControlScreen from "./../screens/ControlScreen";
-import ProfileScreen from "./../screens/ProfileScreen";
 
 const Stack = createStackNavigator();
 
-const MainStackNavigator = () => {
+const ScanStackNavigator = () => {
   return (
-    <Stack.Navigator >
-      <Stack.Screen name="Home" component={ScanScreen} />
-      <Stack.Screen name="About" component={ScanAreaScreen} />
+    <Stack.Navigator initialRouteName="ScanStackRoute">
+      <Stack.Screen 
+        name="ScanStackRoute" 
+        component={ScanScreen} 
+        options={{
+          title: 'Сканирование',
+        }}  
+      />
+      <Stack.Screen 
+        name="ScanAreaStackRoute" 
+        component={ScanAreaScreen} 
+        options={{
+          title: 'Сканирование зоны',
+        }}
+      />
     </Stack.Navigator>
   );
 }
 
-const ContactStackNavigator = () => {
-  return (
-    <Stack.Navigator >
-      <Stack.Screen name="Control" component={ControlScreen} />
-      <Stack.Screen name="Contact" component={ProfileScreen} />
-    </Stack.Navigator>
-  );
-}
-
-export { MainStackNavigator, ContactStackNavigator };
+export { ScanStackNavigator };
