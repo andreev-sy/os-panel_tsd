@@ -19,9 +19,7 @@ const ScanStackNavigator = () => {
       <Stack.Screen 
         name="ScanAreaStackRoute" 
         component={ScanAreaScreen} 
-        options={{
-          title: 'Сканирование зоны',
-        }}
+        options={({ route }) => ({ title: route.params.headerTitle })}
       />
     </Stack.Navigator>
   );

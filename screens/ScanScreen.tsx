@@ -1,38 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TouchableOpacity, View, Text, ScrollView, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, Text, ScrollView, StyleSheet, FlatList } from 'react-native';
 import AreaRowComponent from './../components/AreaRowComponent';
 import { colors, fonts } from './../themes/variables';
+import axiosInstance from './../axiosInstance';
 
 function ScanScreen({ navigation }) {
+  // const data = [];
+  // for (let i = 1; i <= 100; i++) {
+  //   data.push({
+  //     id: i,
+  //     name: '000'+i+' (ряд А)',
+  //     scan: i * 2,
+  //   });
+  // }
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axiosInstance.get('/api/scan/?user_id=3').then(response => {
+        setData(response.data);
+    });
+  }, []);
+
+  console.log(data);
+
   return (
-    <ScrollView style={ styles.rowWrapper }>
-      {/* <AreaRowComponent></AreaRowComponent> */}
-      <View style={ styles.row }>
-            <View>
-                <Text style={{ fontSize: 16 }}>Зона 1-А-1-1 (Ряд А)</Text>
-                <Text style={{ fontSize: 14 }}>Отсканировано товаров: 17</Text>
-            </View>
-            <TouchableOpacity
-              accessibilityRole="button"
-              onPress={ () => navigation.navigate('ScanAreaStackRoute') }
-            >
-              <MaterialCommunityIcons name="arrow-expand-right" color={ colors.PRIMARY } size={24} />
-            </TouchableOpacity>
-        </View>
-      <View style={ styles.row }>
-            <View>
-                <Text style={{ fontSize: 16 }}>Зона 1-А-1-1 (Ряд А)</Text>
-                <Text style={{ fontSize: 14 }}>Отсканировано товаров: 17</Text>
-            </View>
-            <TouchableOpacity
-              accessibilityRole="button"
-              onPress={ () => navigation.navigate('ScanAreaStackRoute') }
-            >
-              <MaterialCommunityIcons name="arrow-expand-right" color={ colors.PRIMARY } size={24} />
-            </TouchableOpacity>
-        </View>
-    </ScrollView>
+    <View style={ styles.rowWrapper }>
+      <FlatList
+          data={data}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+              <AreaRowComponent navigation={ navigation } item={ item }></AreaRowComponent>
+          )}
+      />
+    </View>
   );
 }
 
@@ -42,17 +44,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column', 
     paddingHorizontal: 5, 
     paddingVertical: 5
-  },
-  row: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    justifyContent: 'space-between', 
-    backgroundColor: colors.WHITE, 
-    padding: 10, 
-    borderRadius: 7, 
-    elevation: 2,
-    marginHorizontal: 5,
-    marginVertical: 5,
   },
 });
 
