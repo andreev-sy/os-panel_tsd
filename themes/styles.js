@@ -68,3 +68,32 @@ export const ControlStyles = StyleSheet.create({
         padding: 10,
     }
 });
+
+export const LoginStyles = StyleSheet.create({
+    input: {
+        height: 50,
+        paddingHorizontal: 10,
+        fontSize: 16,
+        backgroundColor: colors.WHITE,
+        color: colors.GRAY_600,
+        borderRadius: 7,
+        elevation: 2,
+    },
+    title:{
+        textAlign: 'center',
+        marginBottom: 30,
+        fontSize: 24,
+    },
+    inputWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    wrapper: {
+        padding: 10,
+        flex: 1,
+        justifyContent: 'center',
+        gap: 10,
+    },
+   
+});

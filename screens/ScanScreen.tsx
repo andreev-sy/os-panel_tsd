@@ -6,24 +6,24 @@ import { colors, fonts } from './../themes/variables';
 import axiosInstance from './../axiosInstance';
 
 function ScanScreen({ navigation }) {
-  // const data = [];
-  // for (let i = 1; i <= 100; i++) {
-  //   data.push({
-  //     id: i,
-  //     name: '000'+i+' (ряд А)',
-  //     scan: i * 2,
-  //   });
-  // }
-
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    axiosInstance.get('/api/scan/?user_id=3').then(response => {
-        setData(response.data);
+  const data = [];
+  for (let i = 1; i <= 100; i++) {
+    data.push({
+      id: i,
+      name: '000'+i+' (ряд А)',
+      scan: i * 2,
     });
-  }, []);
+  }
 
-  console.log(data);
+  // const [data, setData] = useState([]);
+
+  // useEffect(() => {
+  //   axiosInstance.get('/api/scan/?user_id=3').then(response => {
+  //       setData(response.data);
+  //   });
+  // }, []);
+
+  // console.log(data);
 
   return (
     <View style={ styles.rowWrapper }>

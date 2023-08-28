@@ -1,14 +1,13 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import BottomTabNavigator from './navigation/TabNavigator';
+import React from 'react';
+import RouterComponent from './components/RouterComponent';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
 function App() {
-  return (
-    <NavigationContainer>
-      <BottomTabNavigator/>
-    </NavigationContainer>
-  );
+    return (
+        <RouterComponent />
+    );
 }
 
 export default gestureHandlerRootHOC(App);
+
+
