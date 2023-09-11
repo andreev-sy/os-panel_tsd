@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
-import { LoginStyles } from '../themes/styles';
-import { colors } from '../themes/variables';
+import { View, TextInput, Button } from 'react-native';
+import { LoginStyles } from '../../themes/styles';
+import { colors } from '../../themes/variables';
 
 const LoginScreen = () => {
     const [apiUrl, setApiUrl] = useState('135.181.78.213:1333');

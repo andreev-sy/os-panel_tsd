@@ -1,7 +1,62 @@
 import { StyleSheet } from 'react-native';
 import { colors } from './variables';
 
-export const ScanAreaStyles = StyleSheet.create({
+export const GeneralStyles = StyleSheet.create({
+    modalWrap: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalInner: {
+        backgroundColor: colors.WHITE,
+        borderRadius: 6,
+        padding: 18,
+        alignItems: 'center',
+        elevation: 400,
+    },
+    modalAction: {
+        color: colors.BLACK,
+        padding: 6,
+        fontSize: 16
+    },
+    modalClose: {
+        color: colors.SECONDARY,
+        padding: 6,
+        fontSize: 14
+    },
+    dots: {
+        paddingHorizontal: 5,
+    },
+    jobBadge: {
+        backgroundColor: colors.RED,
+        fontSize: 10,
+        lineHeight: 21,
+        height: 22,
+        borderStyle: 'solid', 
+        borderWidth: 3, 
+        borderColor: colors.WHITE,
+    },
+});
+
+
+export const ScanStyles = StyleSheet.create({
+    rowWrapper: {
+        flex: 1, 
+        flexDirection: 'column', 
+        paddingHorizontal: 5, 
+        paddingVertical: 5
+    },
+    area_row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: colors.WHITE,
+        padding: 10,
+        borderRadius: 7,
+        elevation: 2,
+        marginHorizontal: 5,
+        marginVertical: 5,
+    },
     container: {
         padding: 10,
         flex: 1,
@@ -68,6 +123,7 @@ export const ControlStyles = StyleSheet.create({
         padding: 10,
     }
 });
+
 
 export const LoginStyles = StyleSheet.create({
     input: {

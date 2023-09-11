@@ -1,7 +1,6 @@
 import React from 'react';
-import LoginScreen from './../screens/LoginScreen';
-import BottomTabNavigator from './../navigation/TabNavigator';
-import { LoginStackNavigator } from './../navigation/StackNavigator';
+import BottomTabNavigator from '../navigation/TabNavigator';
+import { LoginStackNavigator } from '../navigation/StackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 
 

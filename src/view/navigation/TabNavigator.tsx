@@ -1,14 +1,13 @@
 import * as React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { colors } from './../themes/variables';
+import { colors } from '../themes/variables';
+import { GeneralStyles } from '../themes/styles';
 
-// import ScanScreen from './../screens/ScanScreen';
-import ControlScreen from './../screens/ControlScreen';
-import RecountScreen from './../screens/RecountScreen';
-import ReviseScreen from './../screens/ReviseScreen';
-import ProfileScreen from './../screens/ProfileScreen';
-import NotificationScreen from './../screens/NotificationScreen';
+import ControlScreen from '../screens/Control';
+import RecountScreen from '../screens/Recount';
+import ReviseScreen from '../screens/Revise';
+import ProfileScreen from '../screens/Profile';
 
 import { ScanStackNavigator } from './StackNavigator'
 
@@ -22,11 +21,7 @@ const BottomTabNavigator = () => {
         screenOptions={{
           tabBarInactiveTintColor: colors.SECONDARY,
           tabBarActiveTintColor: colors.PRIMARY,
-          tabBarBadgeStyle: {
-            backgroundColor: colors.RED,
-            fontSize: 10,
-            lineHeight: 20
-          }
+          tabBarBadgeStyle: GeneralStyles.jobBadge
         }}
       >
         <Tab.Screen
