@@ -24,6 +24,31 @@ export const GeneralStyles = StyleSheet.create({
         padding: 6,
         fontSize: 14
     },
+    modalBtn: {
+        marginBottom: 10,
+        color: colors.BLACK,
+        minWidth: 200,
+        height: 40,
+        backgroundColor: colors.PRIMARY,
+        padding: 6,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    modalBtnTxt: {
+        color: colors.WHITE,
+        fontSize: 16,
+    },
+    modalInput: {
+        minWidth: 200,
+        paddingHorizontal: 10,
+        fontSize: 16,
+        backgroundColor: colors.WHITE,
+        color: colors.GRAY_600,
+        borderRadius: 7,
+        elevation: 2,
+        marginBottom: 10,
+    },
     dots: {
         paddingHorizontal: 5,
     },

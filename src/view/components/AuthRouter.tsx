@@ -1,6 +1,6 @@
 import React from 'react';
 import BottomTabNavigator from '../navigation/TabNavigator';
-import { LoginStackNavigator } from '../navigation/StackNavigator';
+import { LoginStackNavigator, HomeStackNavigator } from '../navigation/StackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 
 
@@ -10,7 +10,7 @@ function RouterComponent() {
 
     return (
         <NavigationContainer>
-            { !isAuthorized ? <LoginStackNavigator/> : <BottomTabNavigator /> }
+            { !isAuthorized ? <LoginStackNavigator/> : <HomeStackNavigator /> }
         </NavigationContainer>
     );
 
