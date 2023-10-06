@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput, Button, ScrollView } from 'react-native';
 import { LoginStyles } from '../../themes/styles';
 import { colors } from '../../themes/variables';
 
@@ -14,28 +14,30 @@ const LoginScreen = () => {
     };
 
     return (
-        <View style={LoginStyles.wrapper}>
-            <TextInput
-                style={LoginStyles.input}
-                placeholder="Адрес API"
-                value={apiUrl}
-                onChangeText={setApiUrl}
-            />
-            <TextInput
-                style={LoginStyles.input}
-                placeholder="Логин"
-                value={username}
-                onChangeText={setUsername}
-            />
-            <TextInput
-                style={LoginStyles.input}
-                placeholder="Пароль"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={true}
-            />
-            <Button color={colors.PRIMARY} title="Войти" onPress={handleAuth} />
-        </View>
+        <ScrollView>
+            <View style={LoginStyles.wrapper}>
+                    <TextInput
+                        style={LoginStyles.input}
+                        placeholder="Адрес API"
+                        value={apiUrl}
+                        onChangeText={setApiUrl}
+                    />
+                    <TextInput
+                        style={LoginStyles.input}
+                        placeholder="Логин"
+                        value={username}
+                        onChangeText={setUsername}
+                    />
+                    <TextInput
+                        style={LoginStyles.input}
+                        placeholder="Пароль"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry={true}
+                    />
+                    <Button color={colors.PRIMARY} title="Войти" onPress={handleAuth} />
+            </View>
+        </ScrollView>
     );
 };
 

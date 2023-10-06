@@ -171,10 +171,9 @@ export const LoginStyles = StyleSheet.create({
         alignItems: 'center',
     },
     wrapper: {
-        padding: 10,
         flex: 1,
         justifyContent: 'center',
         gap: 10,
+        padding: 10,
     },
-   
 });
