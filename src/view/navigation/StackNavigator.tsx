@@ -1,6 +1,8 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { TouchableOpacity } from 'react-native';
 
+import HomeTopBtn from '../components/HomeTopBtn';
 import Title from '../components/Title';
 import HomeScreen from '../screens/Home';
 import ScanScreen from '../screens/Scan';
@@ -10,6 +12,9 @@ import ActionsList from '../screens/Scan/partials/ActionsList';
 import ControlScreen from '../screens/Control';
 import RecountScreen from '../screens/Recount';
 import ReviseScreen from '../screens/Revise';
+import ProfileScreen from '../screens/Profile';
+import NotificationScreen from '../screens/Notification';
+import SplashScreen from '../screens/Splash';
 
 const Stack = createStackNavigator();
 
@@ -19,7 +24,11 @@ const HomeStackNavigator = () => {
       <Stack.Screen 
         name="HomeStackRoute" 
         component={HomeScreen} 
-        options={{ title: 'Выбор действия'}}
+        // options={{ title: 'Выбор действия'}}
+        options={({ navigation }) => ({
+          title: 'Выбор действия',
+          headerRight: () => <HomeTopBtn navigation={navigation} />
+        })}
       />
       <Stack.Screen 
         name="ScanStackRoute" 
@@ -57,6 +66,20 @@ const HomeStackNavigator = () => {
         component={ReviseScreen} 
         options={{
           title: 'Сверка',
+        }}  
+      />
+      <Stack.Screen 
+        name="ProfileStackRoute" 
+        component={ProfileScreen} 
+        options={{
+          title: 'Профиль',
+        }}  
+      />
+      <Stack.Screen 
+        name="NotificationStackRoute" 
+        component={NotificationScreen} 
+        options={{
+          title: 'Уведомления',
         }}  
       />
     </Stack.Navigator>
@@ -98,4 +121,16 @@ const LoginStackNavigator = () => {
   );
 }
 
-export { ScanStackNavigator, LoginStackNavigator, HomeStackNavigator };
+const SplashStackNavigator = () => {
+  return (
+    <Stack.Navigator>
+        <Stack.Screen 
+          name="Загрузка" 
+          component={SplashScreen} 
+          options={{headerShown: false}}
+        />
+    </Stack.Navigator>
+  );
+}
+
+export { ScanStackNavigator, SplashStackNavigator, LoginStackNavigator, HomeStackNavigator };

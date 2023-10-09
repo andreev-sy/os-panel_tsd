@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Modal, TextInput } from 'react-native';
-import { colors } from '../../themes/variables';
+import React, { useState, useContext } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Modal, TextInput, Button } from 'react-native';
+import theme, { btns, colors } from '../../themes/variables';
 import { GeneralStyles } from '../../themes/styles';
+import {AuthContext} from '../../../context/AuthContext';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Dialog from "react-native-dialog";
 
 function HomeScreen({ navigation }) {
+    const {isLoading} = useContext(AuthContext);
+
     const [modalScanVisible, setModalScanVisible] = useState(false);
     const [areaScan, setAreaScan] = useState(false);
 
@@ -26,6 +31,7 @@ function HomeScreen({ navigation }) {
 
     return (
         <View style={styles.wrapper}>
+            <Spinner visible={isLoading} />
             <View style={styles.topWrapper}>
                 <TouchableOpacity
                     style={styles.topBtn}
@@ -92,7 +98,46 @@ function HomeScreen({ navigation }) {
                 </View>
             </View>
 
-            <Modal
+            {/* <View>
+                <Dialog.Container 
+                    headerStyle={{ height: 0, padding: 0, margin: 0 }}  
+                    contentStyle={{ borderRadius: theme.sizes.radius }}
+                    footerStyle={{ justifyContent: 'center' }} 
+                    visible={modalScanVisible} 
+                    onBackdropPress={() => setModalScanVisible(!modalScanVisible)}
+                >                    
+                    <View>
+                        <Dialog.Button label="Обнулить" style={theme.fonts.body3} />
+                        <Dialog.Button label="Закончить сканирование" style={theme.fonts.body3} />
+                    </View>
+                        
+                    <Dialog.Button label="Закрыть" style={theme.fonts.body5} />
+                </Dialog.Container>
+            </View> */}
+
+            <View>
+                <Dialog.Container 
+                    headerStyle={{ height: 0, padding: 0, margin: 0 }}  
+                    contentStyle={{ borderRadius: theme.sizes.radius }}
+                    footerStyle={{ justifyContent: 'center' }} 
+                    visible={modalScanVisible} 
+                    onBackdropPress={() => setModalScanVisible(!modalScanVisible)}
+                >
+                    <View>
+                        <Dialog.Input 
+                            label="Штрихкод зоны" 
+                            autoFocus={true} 
+                            onChange={setAreaScan}
+                        />
+                        <Dialog.Button label="Войти" style={{...theme.btns.primary, ...theme.btns_text.md, width: '100%'}}  onPress={handlePressModalScan} />
+                    </View>
+                    
+                    <Dialog.Button label="Закрыть" style={theme.fonts.body5} onPress={() => setModalScanVisible(!modalScanVisible)} />
+
+                </Dialog.Container>
+            </View>
+
+            {/* <Modal
                 animationType="fade"
                 transparent={true}
                 visible={modalScanVisible}
@@ -123,7 +168,8 @@ function HomeScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </Modal> */}
+
         </View>
     );
 }

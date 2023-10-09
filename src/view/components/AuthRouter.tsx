@@ -1,16 +1,20 @@
-import React from 'react';
-import BottomTabNavigator from '../navigation/TabNavigator';
-import { LoginStackNavigator, HomeStackNavigator } from '../navigation/StackNavigator';
+import React, { useContext } from 'react';
+import { SplashStackNavigator, LoginStackNavigator, HomeStackNavigator } from '../navigation/StackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
-
+import {AuthContext} from '../../context/AuthContext';
 
 function RouterComponent() {
-
-    const isAuthorized = true;
-
+    const {userInfo, splashLoading} = useContext(AuthContext);
+ 
     return (
         <NavigationContainer>
-            { !isAuthorized ? <LoginStackNavigator/> : <HomeStackNavigator /> }
+            { splashLoading ? (
+                <SplashStackNavigator/>
+            ) : userInfo.access_token ? (
+                <HomeStackNavigator />
+            ) : (
+                <LoginStackNavigator/>
+            )}
         </NavigationContainer>
     );
 
