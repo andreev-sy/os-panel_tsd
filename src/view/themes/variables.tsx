@@ -31,6 +31,13 @@ export const colors = {
     DANGER:         "#DC3545",
     LIGHT:          "#F8F9FA",
     DARK:           "#212529",
+    LIGHT_PRIMARY:  "#eef8ff",
+    LIGHT_SECONDARY:"#f5f6f6",
+    LIGHT_SUCCESS:  "#f0fdf6",
+    LIGHT_INFO:     "#ecfdff",
+    LIGHT_WARNING:  "#ffffea",
+    LIGHT_DANGER:   "#fef2f2",
+    BG:             "#F8F9FA",
 };
 
 
@@ -39,55 +46,27 @@ export const sizes = {
     base:           8,
     font:           14,
     radius:         6,
-    padding:        24,
+    padding:        10,
 
     // font sizes
-    h1:             30,
+    h1:             24,
     h2:             22,
-    h3:             16,
-    h4:             14,
-    body1:          30,
-    body2:          22,
+    h3:             20,
+    h4:             18,
+    h5:             16,
+    h6:             14,
+    body1:          20,
+    body2:          18,
     body3:          16,
     body4:          14,
     body5:          12,
+    body6:          10,
 
     // app dimensions
     width,
     height
 };
 
-export const fonts = {
-    h1:     { fontSize: sizes.h1,      color: colors.BLACK, textTransform: 'none',  lineHeight: 36 },
-    h2:     { fontSize: sizes.h2,      color: colors.BLACK, textTransform: 'none',  lineHeight: 30 },
-    h3:     { fontSize: sizes.h3,      color: colors.BLACK, textTransform: 'none',  lineHeight: 22 },
-    h4:     { fontSize: sizes.h4,      color: colors.BLACK, textTransform: 'none',  lineHeight: 22 },
-    body1:  { fontSize: sizes.body1,   color: colors.BLACK, textTransform: 'none',  lineHeight: 36 },
-    body2:  { fontSize: sizes.body2,   color: colors.BLACK, textTransform: 'none',  lineHeight: 30 },
-    body3:  { fontSize: sizes.body3,   color: colors.BLACK, textTransform: 'none',  lineHeight: 22 },
-    body4:  { fontSize: sizes.body4,   color: colors.BLACK, textTransform: 'none',  lineHeight: 22 },
-    body5:  { fontSize: sizes.body5,   color: colors.BLACK, textTransform: 'none',  lineHeight: 22 },
+export const constant = {
+    activeOpacity:  0.8,
 };
-
-export const btns = {
-    primary:    { borderWidth: 1, borderStyle: 'solid', borderColor: colors.PRIMARY,    borderRadius: sizes.radius, backgroundColor: colors.PRIMARY,    color: colors.WHITE, textTransform: 'none' },
-    success:    { borderWidth: 1, borderStyle: 'solid', borderColor: colors.SUCCESS,    borderRadius: sizes.radius, backgroundColor: colors.SUCCESS,    color: colors.WHITE, textTransform: 'none' },
-    warning:    { borderWidth: 1, borderStyle: 'solid', borderColor: colors.WARNING,    borderRadius: sizes.radius, backgroundColor: colors.WARNING,    color: colors.WHITE, textTransform: 'none' },
-    danger:     { borderWidth: 1, borderStyle: 'solid', borderColor: colors.DANGER,     borderRadius: sizes.radius, backgroundColor: colors.DANGER,     color: colors.WHITE, textTransform: 'none' },
-    info:       { borderWidth: 1, borderStyle: 'solid', borderColor: colors.INFO,       borderRadius: sizes.radius, backgroundColor: colors.INFO,       color: colors.WHITE, textTransform: 'none' },
-    light:      { borderWidth: 1, borderStyle: 'solid', borderColor: colors.LIGHT,      borderRadius: sizes.radius, backgroundColor: colors.LIGHT,      color: colors.BLACK, textTransform: 'none' },
-    dark:       { borderWidth: 1, borderStyle: 'solid', borderColor: colors.DARK,       borderRadius: sizes.radius, backgroundColor: colors.DARK,       color: colors.WHITE, textTransform: 'none' },
-    secondary:  { borderWidth: 1, borderStyle: 'solid', borderColor: colors.SECONDARY,  borderRadius: sizes.radius, backgroundColor: colors.SECONDARY,  color: colors.WHITE, textTransform: 'none' },
-    white:      { borderWidth: 1, borderStyle: 'solid', borderColor: colors.WHITE,      borderRadius: sizes.radius, backgroundColor: colors.WHITE,      color: colors.BLACK, textTransform: 'none' },
-    black:      { borderWidth: 1, borderStyle: 'solid', borderColor: colors.BLACK,      borderRadius: sizes.radius, backgroundColor: colors.BLACK,      color: colors.WHITE, textTransform: 'none' },
-};
-
-export const btns_text = {
-    sm: { padding: 6,  fontSize: sizes.body5, lineHeight: 22 },
-    md: { padding: 10, fontSize: sizes.body4, lineHeight: 22 },
-    lg: { padding: 16, fontSize: sizes.body3, lineHeight: 22 },
-};
-
-const theme = { colors, sizes, fonts, btns, btns_text };
-
-export default theme;

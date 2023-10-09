@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from './variables';
+import { colors, sizes } from './variables';
 
 export const GeneralStyles = StyleSheet.create({
     modalWrap: {
@@ -157,8 +157,24 @@ export const LoginStyles = StyleSheet.create({
         fontSize: 16,
         backgroundColor: colors.WHITE,
         color: colors.GRAY_600,
+        borderWidth: 1,
+        borderColor: colors.GRAY_300,
         borderRadius: 7,
-        elevation: 2,
+        elevation: 3,
+    },
+    btn: {
+        height: 50,
+        backgroundColor: colors.PRIMARY,
+        borderRadius: sizes.radius,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    btnText: {
+        color: colors.WHITE,
+        fontSize: sizes.body3,
+        fontWeight: '400'
     },
     title:{
         textAlign: 'center',
@@ -171,9 +187,15 @@ export const LoginStyles = StyleSheet.create({
         alignItems: 'center',
     },
     wrapper: {
+        backgroundColor: colors.BG,
+        paddingVertical: sizes.padding,
         flex: 1,
         justifyContent: 'center',
+    },
+    inner: {
+        paddingHorizontal: sizes.padding,
+        flexGrow: 1, 
+        justifyContent: 'center',
         gap: 10,
-        padding: 10,
     },
 });

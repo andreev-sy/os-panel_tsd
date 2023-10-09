@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, TouchableOpacity, Text,  Modal, Alert } from 'react-native';
-import { colors } from '../../../themes/variables';
+import { colors, sizes } from '../../../themes/variables';
 import { GeneralStyles } from '../../../themes/styles';
+import Dialog from "react-native-dialog";
 
 const ActionsList = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -42,37 +43,34 @@ const ActionsList = () => {
                 </TouchableOpacity>
             }
 
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={modalVisible}
-            >
-                <View style={GeneralStyles.modalWrap}>
-                    <View style={GeneralStyles.modalInner}>
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            accessibilityRole="button"
+            <View>
+                <Dialog.Container 
+                    headerStyle={{ height: 0, padding: 0, margin: 0 }}  
+                    contentStyle={{ borderRadius: sizes.radius }}
+                    footerStyle={{ justifyContent: 'center' }} 
+                    visible={modalVisible} 
+                    onBackdropPress={() => setModalVisible(!modalVisible)}
+                >                    
+                    <View>
+                        <Dialog.Button 
+                            label="Обнулить" 
+                            style={{ fontSize: sizes.body2, color: colors.BLACK, textTransform: 'none' }} 
                             onPress={handleNullPress}
-                        >
-                            <Text style={GeneralStyles.modalAction}>Обнулить зону</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            accessibilityRole="button"
+                        />
+                        <Dialog.Button 
+                            label="Закончить сканирование" 
+                            style={{ fontSize: sizes.body2, color: colors.BLACK, textTransform: 'none' }} 
                             onPress={handleFinishPress}
-                        >
-                            <Text style={GeneralStyles.modalAction}>Закончить сканирование</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            accessibilityRole="button"
-                            onPress={() => setModalVisible(!modalVisible)}
-                        >
-                            <Text style={GeneralStyles.modalClose}>Закрыть</Text>
-                        </TouchableOpacity>
+                        />
                     </View>
-                </View>
-            </Modal>
+                        
+                    <Dialog.Button 
+                        label="Закрыть" 
+                        style={{ fontSize: sizes.body3, color: colors.SECONDARY, textTransform: 'none' }} 
+                        onPress={() => setModalVisible(!modalVisible)}
+                    />
+                </Dialog.Container>
+            </View>
         </View>
     );
 };

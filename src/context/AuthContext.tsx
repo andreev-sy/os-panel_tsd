@@ -32,6 +32,20 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  const changeBaseUrl = (baseUrl) => {
+    try {
+      setSplashLoading(true);
+      setBaseUrl(baseUrl);
+      AsyncStorage.removeItem('baseUrl');
+      AsyncStorage.setItem('baseUrl', baseUrl);
+      setSplashLoading(false);
+
+    } catch (e) {
+      console.log(`is logged in error ${e}`);
+      setSplashLoading(false);
+    }
+  };
+
   const logout = () => {
     setIsLoading(true);
 
@@ -65,7 +79,18 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => { isLoggedIn(); }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoading, splashLoading, userInfo, baseUrl, login, logout }}>
+    <AuthContext.Provider 
+      value={{ 
+        isLoading, 
+        splashLoading, 
+        userInfo, 
+        baseUrl, 
+        setBaseUrl, 
+        changeBaseUrl,
+        login, 
+        logout 
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
