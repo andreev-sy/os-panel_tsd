@@ -9,8 +9,8 @@ function LoginScreen() {
     const { isLoading, login } = useContext(AuthContext);
 
     const [baseUrl, setBaseUrl] = useState('135.181.78.213:1333');
-    const [username, setUsername] = useState('admin');
-    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('api');
+    const [password, setPassword] = useState('api');
 
 
     const handlePressLogin = () => {

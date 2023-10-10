@@ -96,6 +96,7 @@ export const styles = StyleSheet.create({
     gap: 8,
     borderWidth: 1,
     borderColor: colors.GRAY_500,
+    borderRadius: sizes.radius,
     marginVertical: 12,
   },
   boxTitle: {

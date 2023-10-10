@@ -6,10 +6,10 @@ import { styles } from './styles';
 import { AuthContext } from '../../../context/AuthContext';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog from "react-native-dialog";
+import axios from 'axios';
 
 function HomeScreen({ navigation }) {
-    const { isLoading } = useContext(AuthContext);
-
+    const { isLoading, baseUrl, userInfo  } = useContext(AuthContext);
     const [modalScanVisible, setModalScanVisible] = useState(false);
     const [areaScan, setAreaScan] = useState(false);
 
@@ -29,6 +29,18 @@ function HomeScreen({ navigation }) {
     const handlePressControlJob = () => navigation.navigate('ControlStackRoute')
     const handlePressRecountJob = () => navigation.navigate('RecountStackRoute')
     const handlePressReviseJob = () => navigation.navigate('ReviseStackRoute')
+
+
+
+    // axios.get(`http://${baseUrl}/api/site/index/`, { headers: { Authorization: `Bearer ${userInfo.access_token}` } })
+    //     .then(res => {
+    //         let data = res.data;
+    //         console.log(data)
+    //     })
+    //     .catch(e => { 
+    //         console.log(`login error ${e}`);  
+    //     });
+
 
     return (
         <View style={styles.wrapper}>
@@ -62,11 +74,12 @@ function HomeScreen({ navigation }) {
                     <TouchableOpacity
                         style={[ styles.botJob, styles.botJobDisabled ]}
                         activeOpacity={0.8}
+                        disabled={true}
                         accessibilityRole="button"
                         onPress={handlePressScanJob}
                     >
-                        <Text style={styles.botJobText}>Скан</Text>
-                        <Text style={styles.botJobCount}>3</Text>
+                        <Text style={[ styles.botJobText, styles.botJobTextDisabled ]}>Скан</Text>
+                        <Text style={[ styles.botJobCount, styles.botJobCountDisabled ]}>0</Text>
                     </TouchableOpacity>
                     <View style={styles.botHr} />
                     <TouchableOpacity

@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
       })
       .then(res => {
         let userInfo = res.data;
+        console.log(userInfo)
         setUserInfo(userInfo);
         setBaseUrl(baseUrl);
         AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
@@ -51,9 +52,9 @@ export const AuthProvider = ({ children }) => {
 
     AsyncStorage.removeItem('userInfo');
     AsyncStorage.removeItem('baseUrl');
-
     setUserInfo({});
     setBaseUrl('');
+
     setIsLoading(false);
   };
 

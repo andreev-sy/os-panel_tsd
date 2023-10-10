@@ -125,41 +125,18 @@ export const ScanStyles = StyleSheet.create({
     },
 });
 
-export const ControlStyles = StyleSheet.create({
-    input: {
-        height: 50,
-        paddingHorizontal: 10,
-        fontSize: 16,
-        flexBasis: '48%',
-        backgroundColor: colors.WHITE,
-        color: colors.GRAY_600,
-        borderRadius: 7,
-        elevation: 2,
-    },
-    inputWrapper: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    tableWrapper: {
-        paddingVertical: 20,
-    },
-    wrapper: {
-        padding: 10,
-    }
-});
 
 
 export const LoginStyles = StyleSheet.create({
     input: {
         height: 50,
         paddingHorizontal: 10,
-        fontSize: 16,
+        fontSize: sizes.body3,
         backgroundColor: colors.WHITE,
         color: colors.GRAY_600,
         borderWidth: 1,
         borderColor: colors.GRAY_300,
-        borderRadius: 7,
+        borderRadius: sizes.radius,
         elevation: 3,
     },
     btn: {
@@ -174,12 +151,12 @@ export const LoginStyles = StyleSheet.create({
     btnText: {
         color: colors.WHITE,
         fontSize: sizes.body3,
-        fontWeight: '400'
+        fontWeight: '400' 
     },
     title:{
         textAlign: 'center',
         marginBottom: 30,
-        fontSize: 24,
+        fontSize: sizes.h1,
     },
     inputWrapper: {
         flexDirection: 'row',

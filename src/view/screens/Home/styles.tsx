@@ -75,15 +75,9 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 12,
     },
-    botJobDisabled: {
-        backgroundColor: colors.GRAY_100
-    },
-    botJobText: {
-        fontSize: sizes.body3,
-        color: colors.GRAY_900
-    },
-    botJobCount: {
-        color: colors.DANGER,
-        fontSize: sizes.body2
-    },  
+    botJobDisabled: { opacity: 0.6, backgroundColor: colors.GRAY_200 },
+    botJobText: { fontSize: sizes.body3,  color: colors.GRAY_900 },
+    botJobCount: { color: colors.DANGER, fontSize: sizes.body2 },  
+    botJobTextDisabled: {  color: colors.BLACK },
+    botJobCountDisabled: { color: colors.GRAY_800 },  
 })
