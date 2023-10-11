@@ -5,9 +5,12 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { AuthContext } from '../../../context/AuthContext';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function ProfileScreen() {
+
+function ProfileScreen() {
   const { isLoading, userInfo, logout, baseUrl, changeBaseUrl } = useContext(AuthContext);
   const [newBaseUrl, setNewBaseUrl] = useState(baseUrl);
+
+  console.log('render ProfileScreen')
   
   const handlePressSave = () => changeBaseUrl(newBaseUrl)
 
@@ -152,3 +155,5 @@ export const styles = StyleSheet.create({
     borderColor: colors.SUCCESS
   },
 })
+
+export default ProfileScreen;

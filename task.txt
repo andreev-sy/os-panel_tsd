@@ -1,0 +1,53 @@
+
+// SUCCESS ACTION
+Snackbar.show({
+  text: 'Контроль в зоне успешно закончен',
+  textColor: colors.LIGHT_SUCCESS,
+  backgroundColor: colors.SUCCESS,
+  duration: Snackbar.LENGTH_SHORT,
+  // action: {
+  //   text: 'СКРЫТЬ',
+  //   textColor: colors.L,
+  //   onPress: () => { /* Do something. */ },
+  // },
+});
+
+// INFORMATION 
+Snackbar.show({
+  text: 'Контроль в зоне успешно закончен',
+  textColor: colors.LIGHT_PRIMARY,
+  backgroundColor: colors.PRIMARY,
+  duration: Snackbar.LENGTH_SHORT,
+  action: {
+    text: 'СКРЫТЬ',
+    textColor: colors.LIGHT_PRIMARY,
+    onPress: () => { /* Do something. */ },
+  },
+});
+
+
+// WARNING
+Snackbar.show({
+  text: 'Контроль в зоне успешно закончен',
+  textColor: colors.LIGHT_WARNING,
+  backgroundColor: colors.WARNING,
+  duration: Snackbar.LENGTH_SHORT,
+  action: {
+    text: 'СКРЫТЬ',
+    textColor: colors.LIGHT_WARNING,
+    onPress: () => { /* Do something. */ },
+  },
+});
+
+// ERROR
+Snackbar.show({
+  text: 'Контроль в зоне успешно закончен',
+  textColor: colors.LIGHT_DANGER,
+  backgroundColor: colors.DANGER,
+  duration: Snackbar.LENGTH_SHORT,
+  action: {
+    text: 'СКРЫТЬ',
+    textColor: colors.LIGHT_DANGER,
+    onPress: () => { /* Do something. */ },
+  },
+});

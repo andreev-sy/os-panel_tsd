@@ -1,109 +1,127 @@
-import React, { useState } from 'react';
-import { TextInput, Text, View, FlatList, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import TableHeader from './partials/TableHeader';
-import TableRow from './partials/TableRow';
+import React, { useState, useCallback, useEffect } from 'react';
+import { TextInput, Text, View, FlatList, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import Thead from './partials/Thead';
+import Tbody from './partials/Tbody';
 import { colors, sizes } from '../../themes/variables';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
-
-// const keyExtractor = (item) => item.id;
-// const renderHeader = () => <TableHeader />;
-// const renderItem = ({ item }) => <TableRow item={item} />;
+import Dialog from "react-native-dialog";
+import Snackbar from "react-native-snackbar";
 
 const ControlScreen = () => {
   const [text, onChangeText] = useState('');
   const [number, onChangeNumber] = useState('');
+  const [tableData, setTableData] = useState([]);
+  const [contextModalVisible, setContextModalVisible] = useState(false);
+  const [area, setArea] = useState({});
 
-  const [tableHead, setTableHead] = useState(['Зона', 'Ряд', 'Количество']);
-  const [tableData, setTableData] = useState([
-    ['Зона 0001', 'А', ''],
-    ['Зона 0002', 'А', ''],
-    ['Зона 0003', 'А', ''],
-    ['Зона 0004', 'B', ''],
-    ['Зона 0005', 'B', ''],
-    ['Зона 0006', 'B', ''],
-    ['Зона 0007', 'B', ''],
-    ['Зона 0008', 'C', '12'],
-    ['Зона 0009', 'C', '4'],
-    ['Зона 0010', 'C', '2'],
-    ['Зона 0011', 'C', '5'],
-    ['Зона 0012', 'C', '45'],
-    ['Зона 0013', 'C', '2'],
-    ['Зона 0014', 'C', '45'],
-    ['Зона 0015', 'A', '12'],
-    ['Зона 0016', 'A', '45'],
-    ['Зона 0017', 'A', '12'],
-    ['Зона 0018', 'A', '12'],
-    ['Зона 0019', 'D', '120'],
-  ]);
-  
+  console.log('render ControlScreen')
 
-  let widthArr = [130, 59, 110]
+  const onPressEvent = useCallback((area) => {
+    console.log(area)
+    setArea(area)
+    setContextModalVisible(!contextModalVisible)
+  }, []);
+
+  const handlePressFinish = () => {
+    Alert.alert("", "Вы точно хотите закончить контроль в зоне?", [
+      { text: "Отмена" },
+      { text: "Да", onPress: () => finishArea() },
+    ])
+  };
+
+  const finishArea = () => {
+    const index = tableData.findIndex(el => el.id === area.id);
+    if (index !== -1) {
+      tableData.splice(index, 1); // Удаляем элемент из массива
+      setTableData([...tableData]); // Обновляем состояние массива
+    }
+    setContextModalVisible(!contextModalVisible)
+    setArea({})
+
+    setTimeout(function () {
+      Snackbar.show({
+        text: 'Контроль в зоне успешно закончен',
+        textColor: colors.SUCCESS,
+        backgroundColor: colors.LIGHT_SUCCESS,
+        duration: Snackbar.LENGTH_SHORT,
+      });
+    }, 500)
+  }
+
+  const setData = () => {
+    const data = [];
+    for (let i = 1; i <= 100000; i++) {
+      data.push({
+        id: i,
+        code: 'Зона' + i,
+        row: 'A',
+        controlCount: (i * 2).toString(),
+      });
+    }
+    setTableData(data)
+  }
+
+  useEffect(() => {
+    setData();
+  }, [])
+
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.inner}>
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeText}
-            placeholder="Зона"
-            value={text}
-          />
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeNumber}
-            value={number}
-            placeholder="Количество"
-            keyboardType="numeric"
-          />
-          <TouchableOpacity
-            style={styles.btn}
-            activeOpacity={0.8}
-            accessibilityRole="button"
-          >
-            <Text style={styles.btnText}>Ок</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={table.container}>
-          <ScrollView horizontal={true}>
-            <View>
-              <Table borderStyle={table.theadBorder}>
-                <Row data={tableHead} widthArr={widthArr} style={table.thead} textStyle={table.theadText} />
-              </Table>
-              <ScrollView style={table.tbody}>
-                <Table borderStyle={table.tbodyBorder}>
-                  {
-                    tableData.map((rowData, index) => (
-                      <Row
-                        key={index}
-                        data={rowData}
-                        widthArr={widthArr}
-                        style={table.tbodyRow}
-                        textStyle={table.tbodyRowText}
-                      />
-                    ))
-                  }
-                </Table>
-              </ScrollView>
-            </View>
-          </ScrollView>
-        </View>
-
-        {/* <View style={styles.tableWrapper}>
-          <FlatList
-            initialNumToRender={6}
-            removeClippedSubviews={true}
-            maxToRenderPerBatch={6}
-            windowSize={2}
-
-            data={data}
-            keyExtractor={keyExtractor}
-            renderItem={renderItem}
-            ListHeaderComponent={renderHeader}
-          />
-        </View> */}
+      <View style={styles.form}>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeText}
+          placeholder="Зона"
+          value={text}
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeNumber}
+          value={number}
+          placeholder="Количество"
+          keyboardType="numeric"
+        />
+        <TouchableOpacity
+          style={styles.btn}
+          activeOpacity={0.8}
+          accessibilityRole="button"
+        >
+          <Text style={styles.btnText}>Ок</Text>
+        </TouchableOpacity>
       </View>
+
+
+      <View style={styles.tableWrapper}>
+        <Thead />
+        <FlatList
+          // contentContainerStyle={{ flexDirection: 'column' }}
+          removeClippedSubviews={false}
+          initialNumToRender={1}
+          maxToRenderPerBatch={20}
+          windowSize={2}
+          data={tableData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <Tbody area={item} onPressEvent={onPressEvent} />}
+        />
+      </View>
+
+      <View>
+        <Dialog.Container
+          headerStyle={styles.dialogHeader}
+          contentStyle={styles.dialogContent}
+          footerStyle={styles.dialogFooter}
+          visible={contextModalVisible}
+          onBackdropPress={() => setContextModalVisible(!contextModalVisible)}
+        >
+          <Dialog.Title style={styles.dialogTitle}>Зона -{area.code}</Dialog.Title>
+          <View>
+            <Dialog.Button label="Закончить контроль" style={styles.dialogBtn} onPress={handlePressFinish} />
+          </View>
+
+          <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setContextModalVisible(!contextModalVisible)} />
+        </Dialog.Container>
+      </View>
+
     </View>
   );
 }
@@ -111,17 +129,17 @@ const ControlScreen = () => {
 
 export const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: colors.BG,
-    paddingVertical: sizes.padding,
-  },
-  inner: {
-    paddingHorizontal: sizes.padding,
+    padding: sizes.padding,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   form: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: 5,
+    marginBottom: 12,
   },
   input: {
     height: 50,
@@ -149,21 +167,23 @@ export const styles = StyleSheet.create({
     fontSize: sizes.body4,
     fontWeight: '400'
   },
+
+
+  tableWrapper: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: colors.WHITE,
+    width: '100%',
+  },
+
+  dialogHeader: { padding: 0, margin: 0, marginBottom: 15, },
+  dialogContent: { borderRadius: sizes.radius },
+  dialogFooter: { justifyContent: 'center' },
+  dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700 },
+  dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },
+  dialogClose: { fontSize: sizes.body4, color: colors.SECONDARY, textTransform: 'none' },
+
 });
 
-
-const table = StyleSheet.create({
-  container: { marginTop: 10, height: 314, backgroundColor: colors.WHITE },
-  thead: { height: 35 },
-  theadBorder: { borderWidth: 1, borderColor: colors.GRAY_500 },
-  theadText: { textAlign: 'center', color: colors.BLACK, fontWeight: '600', fontSize: sizes.body4 },
-
-  text: { textAlign: 'center', color: colors.BLACK },
-  tbody: { marginTop: -1 },
-  tbodyBorder: { borderWidth: 1, borderColor: colors.GRAY_500 },
-  tbodyRow: { height: 35 },
-  tbodyRowText: { textAlign: 'center', color: colors.BLACK, fontWeight: '400', fontSize: sizes.body4 },
-
-});
 
 export default ControlScreen;

@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { View, Text, Switch, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { View, Text, Switch, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
@@ -7,13 +7,15 @@ import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
 
 function ScanAreaScreen({ area }) {
-  const [isAuto, setIsAuto] = useState(false);
+  const [isAuto, setIsAuto] = useState(true);
   const [barcode, setBarcode] = useState('');
   const [quantity, setQuantity] = useState('');
   const [contextModalVisible, setContextModalVisible] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [item, setitem] = useState({});
   const [isEdit, setIsEdit] = useState(false);
+  const barcodeRef = useRef(null);
+  const countRef = useRef(null);
   
   console.log('render ScanAreaScreen')
   
@@ -29,6 +31,7 @@ function ScanAreaScreen({ area }) {
 
     setIsAuto(!isAuto);
     setQuantity(!isAuto ? '1' : '');
+    barcodeRef.current.focus();
   };
 
   const handlePressEdit = () => {
@@ -37,7 +40,18 @@ function ScanAreaScreen({ area }) {
 
     if(!isEdit) setIsEdit(true);
     if(isAuto) setIsAuto(false);
+    
     setContextModalVisible(!contextModalVisible)
+    countRef.current.focus();
+
+    setTimeout(function(){
+      Snackbar.show({
+        text: 'Данные о товаре занесены в форму',
+        textColor: colors.PRIMARY,
+        backgroundColor: colors.LIGHT_PRIMARY,
+        duration: Snackbar.LENGTH_SHORT,
+      });
+    }, 800)
   };
 
   const handlePressDelete = () => {
@@ -53,19 +67,16 @@ function ScanAreaScreen({ area }) {
       tableData.splice(index, 1); // Удаляем элемент из массива
       setTableData([...tableData]); // Обновляем состояние массива
     }
+
     setContextModalVisible(!contextModalVisible)
+    setitem({})
     
     setTimeout(function(){
       Snackbar.show({
         text: 'Товар успешно удален',
         textColor: colors.SUCCESS,
         backgroundColor: colors.LIGHT_SUCCESS,
-        duration: Snackbar.LENGTH_LONG,
-        action: {
-          text: 'СКРЫТЬ',
-          textColor: colors.PRIMARY,
-          onPress: () => { /* Do something. */ },
-        },
+        duration: Snackbar.LENGTH_SHORT,
       });
     }, 500)
   }
@@ -80,12 +91,7 @@ function ScanAreaScreen({ area }) {
         text: 'Товар успешно изменён',
         textColor: colors.SUCCESS,
         backgroundColor: colors.LIGHT_SUCCESS,
-        duration: Snackbar.LENGTH_LONG,
-        action: {
-          text: 'СКРЫТЬ',
-          textColor: colors.PRIMARY,
-          onPress: () => { /* Do something. */ },
-        },
+        duration: Snackbar.LENGTH_SHORT,
       });
     }else{
       setBarcode('')
@@ -93,17 +99,11 @@ function ScanAreaScreen({ area }) {
 
       Snackbar.show({
         text: 'Товар успешно добавлен',
-        duration: Snackbar.LENGTH_LONG ,
-        action: {
-          text: 'СКРЫТЬ',
-          textColor: 'green',
-          onPress: () => { /* Do something. */ },
-        },
+        textColor: colors.SUCCESS,
+        backgroundColor: colors.LIGHT_SUCCESS,
+        duration: Snackbar.LENGTH_SHORT,
       });
     }
-    
-   
-
   };
 
   const setData = () => {
@@ -119,6 +119,10 @@ function ScanAreaScreen({ area }) {
       });
     }
     setTableData(data)
+  }
+
+  const onChangeBarcode = () => {
+    console.log(barcode)
   }
 
   useEffect(() => {
@@ -141,16 +145,21 @@ function ScanAreaScreen({ area }) {
         <View style={styles.formRow}>
           <TextInput
             style={[styles.formInput, styles.formInputBarcode ]}
+            ref={barcodeRef}
             value={barcode}
+            autoCorrect={false}
+            autoFocus={isAuto}
+            inputMode={ isAuto ? 'none' : 'text' }
             placeholder="Штрихкод"
             onChangeText={setBarcode}
-            autoFocus={!isAuto}
+            onSubmitEditing={onChangeBarcode}
           />
           <TextInput
             style={[styles.formInput, styles.formInputCount, !isAuto ? styles.formInputLong : {} ]}
+            ref={countRef}
             value={quantity}
+            autoCorrect={false}
             editable={!isAuto}
-            autoFocus={isEdit}
             placeholder="Кол-во"
             onChangeText={setQuantity}
             keyboardType="numeric"
@@ -184,15 +193,12 @@ function ScanAreaScreen({ area }) {
           <FlatList
             // contentContainerStyle={{ flexDirection: 'column' }}
             removeClippedSubviews={false}
-            initialNumToRender={20}
+            initialNumToRender={1}
             maxToRenderPerBatch={20}
             windowSize={2}
             data={tableData}
             keyExtractor={(item) => item.id}
-            // ListHeaderComponent={renderHeader}
             renderItem={({ item }) => <Tbody item={item} onPressEvent={onPressEvent} />}
-          // showsVerticalScrollIndicator={true}
-          // showsHorizontalScrollIndicator={true}
           />
         </ScrollView>
       </View>
@@ -206,7 +212,7 @@ function ScanAreaScreen({ area }) {
           visible={contextModalVisible}
           onBackdropPress={() => setContextModalVisible(!contextModalVisible)}
         >
-          <Dialog.Title style={{ textAlign: 'center', fontSize: sizes.h4, fontWeight: '500' }}>Артикул -{item.article}</Dialog.Title>
+          <Dialog.Title style={{ textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700 }}>Артикул -{item.article}</Dialog.Title>
           <View>
             <Dialog.Button
               label="Удалить"

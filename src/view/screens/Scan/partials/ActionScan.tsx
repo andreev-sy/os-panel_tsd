@@ -5,7 +5,7 @@ import { colors, sizes } from '../../../themes/variables';
 import { GeneralStyles } from '../../../themes/styles';
 import Dialog from "react-native-dialog";
 
-const ActionsList = () => {
+const ActionScan = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const handleNullPress = () => {
@@ -35,6 +35,7 @@ const ActionsList = () => {
         <View>
             {
                 <TouchableOpacity
+                    style={{ marginRight: 6 }}
                     activeOpacity={0.5}
                     accessibilityRole="button"
                     onPress={() => setModalVisible(true)}
@@ -77,4 +78,4 @@ const ActionsList = () => {
 
 
 
-export default ActionsList;
+export default ActionScan;

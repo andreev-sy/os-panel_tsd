@@ -8,13 +8,15 @@ import HomeScreen from '../screens/Home';
 import ScanScreen from '../screens/Scan';
 import ScanAreaScreen from '../screens/Scan/view';
 import LoginScreen from '../screens/Login';
-import ActionsList from '../screens/Scan/partials/ActionsList';
 import ControlScreen from '../screens/Control';
 import RecountScreen from '../screens/Recount';
 import ReviseScreen from '../screens/Revise';
 import ProfileScreen from '../screens/Profile';
 import NotificationScreen from '../screens/Notification';
 import SplashScreen from '../screens/Splash';
+
+import ActionScan from '../screens/Scan/partials/ActionScan';
+import ActionNotification from '../screens/Notification/partials/ActionNotification';
 
 const Stack = createStackNavigator();
 
@@ -44,7 +46,7 @@ const HomeStackNavigator = () => {
         options={({ navigation, route }) => ({
           // headerTitle: (props) => <Title {...props} />,
           title: route.params.headerTitle,
-          headerRight: () => <ActionsList />,
+          headerRight: () => <ActionScan />,
         })}
       />
       <Stack.Screen 
@@ -78,9 +80,10 @@ const HomeStackNavigator = () => {
       <Stack.Screen 
         name="NotificationStackRoute" 
         component={NotificationScreen} 
-        options={{
+        options={({ navigation, route }) => ({
           title: 'Уведомления',
-        }}  
+          headerRight: () => <ActionNotification />,
+        })}
       />
     </Stack.Navigator>
   );
