@@ -54,19 +54,19 @@ const ActionsList = () => {
                     <View>
                         <Dialog.Button 
                             label="Обнулить" 
-                            style={{ fontSize: sizes.body2, color: colors.BLACK, textTransform: 'none' }} 
+                            style={{ fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' }} 
                             onPress={handleNullPress}
                         />
                         <Dialog.Button 
                             label="Закончить сканирование" 
-                            style={{ fontSize: sizes.body2, color: colors.BLACK, textTransform: 'none' }} 
+                            style={{ fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' }} 
                             onPress={handleFinishPress}
                         />
                     </View>
                         
                     <Dialog.Button 
                         label="Закрыть" 
-                        style={{ fontSize: sizes.body3, color: colors.SECONDARY, textTransform: 'none' }} 
+                        style={{ fontSize: sizes.body4, color: colors.SECONDARY, textTransform: 'none' }} 
                         onPress={() => setModalVisible(!modalVisible)}
                     />
                 </Dialog.Container>
