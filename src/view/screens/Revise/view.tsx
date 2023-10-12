@@ -1,12 +1,12 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { View, Text, Switch, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
-import Dialog from "react-native-dialog";
-import Snackbar from "react-native-snackbar";
+import Dialog from 'react-native-dialog';
+import Snackbar from 'react-native-snackbar';
 import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
 
-function ScanAreaScreen({ navigation, area }) {
+function ReviseAreaScreen({ navigation, area }) {
   const [isAuto, setIsAuto] = useState(true);
   const [barcode, setBarcode] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -28,9 +28,6 @@ function ScanAreaScreen({ navigation, area }) {
     console.log('onFinishEvent')
   }, []);
   
-  const onNullEvent = useCallback(() => {
-    console.log('onNullEvent')
-  }, []);
 
   const handleAutoSwitch = () => {
     if(isEdit) setIsEdit(false);
@@ -323,4 +320,4 @@ export const styles = StyleSheet.create({
 });
 
 
-export default ScanAreaScreen;
+export default ReviseAreaScreen;

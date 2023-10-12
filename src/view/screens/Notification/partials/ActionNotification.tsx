@@ -15,7 +15,7 @@ const ActionNotification = () => {
         <View>
             {
                 <TouchableOpacity
-                    style={{ marginRight: 6 }}
+                    style={{ marginRight: 3 }}
                     activeOpacity={0.5}
                     accessibilityRole="button"
                     onPress={() => setModalVisible(true)}

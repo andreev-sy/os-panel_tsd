@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
-import { LoginStyles } from '../../themes/styles';
-import { colors } from '../../themes/variables';
+import { View, TextInput, TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native';
+import { colors, constant, sizes } from '../../themes/variables';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { AuthContext } from '../../../context/AuthContext';
 
@@ -18,39 +17,91 @@ function LoginScreen() {
     }
 
     return (
-        <View style={LoginStyles.wrapper}>
-            <ScrollView contentContainerStyle={LoginStyles.inner}>
+        <View style={styles.wrapper}>
+            <ScrollView contentContainerStyle={styles.inner}>
                 <Spinner visible={isLoading} />
                 <TextInput
-                    style={LoginStyles.input}
+                    style={styles.input}
                     placeholder="Адрес API"
                     value={baseUrl}
                     onChangeText={setBaseUrl}
                 />
                 <TextInput
-                    style={LoginStyles.input}
+                    style={styles.input}
                     placeholder="Логин"
                     value={username}
                     onChangeText={setUsername}
                 />
                 <TextInput
-                    style={LoginStyles.input}
+                    style={styles.input}
                     placeholder="Пароль"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry={true}
                 />
                 <TouchableOpacity
-                    style={LoginStyles.btn}
-                    activeOpacity={0.8}
+                    style={styles.btn}
+                    activeOpacity={constant.activeOpacity}
                     accessibilityRole="button"
                     onPress={handlePressLogin}
                 >
-                    <Text style={LoginStyles.btnText}>Войти</Text>
+                    <Text style={styles.btnText}>Войти</Text>
                 </TouchableOpacity>
             </ScrollView>
         </View>
     );
 };
+
+
+export const styles = StyleSheet.create({
+    input: {
+        height: 50,
+        paddingHorizontal: 10,
+        fontSize: sizes.body3,
+        backgroundColor: colors.WHITE,
+        color: colors.GRAY_600,
+        borderWidth: 1,
+        borderColor: colors.GRAY_300,
+        borderRadius: sizes.radius,
+        elevation: 3,
+    },
+    btn: {
+        height: 50,
+        backgroundColor: colors.PRIMARY,
+        borderRadius: sizes.radius,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    btnText: {
+        color: colors.WHITE,
+        fontSize: sizes.body3,
+        fontWeight: '400' 
+    },
+    title:{
+        textAlign: 'center',
+        marginBottom: 30,
+        fontSize: sizes.h1,
+    },
+    inputWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    wrapper: {
+        backgroundColor: colors.BG,
+        paddingVertical: sizes.padding,
+        flex: 1,
+        justifyContent: 'center',
+    },
+    inner: {
+        paddingHorizontal: sizes.padding,
+        flexGrow: 1, 
+        justifyContent: 'center',
+        gap: 10,
+    },
+});
+
 
 export default LoginScreen;

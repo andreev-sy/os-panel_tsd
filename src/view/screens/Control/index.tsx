@@ -129,6 +129,7 @@ const ControlScreen = () => {
 
 export const styles = StyleSheet.create({
   wrapper: {
+    backgroundColor: colors.BG,
     padding: sizes.padding,
     flex: 1,
     flexDirection: 'column',

@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors } from '../themes/variables';
 
-function HomeTopBtn({ navigation }) {
+function HeaderHome({ navigation }) {
 
     return (
         <View style={{ display: 'flex', flexDirection: 'row', gap: 10, paddingRight: 10 }}>
@@ -25,6 +25,6 @@ function HomeTopBtn({ navigation }) {
     );
 }
 
-export default HomeTopBtn;
+export default HeaderHome;
 
 
