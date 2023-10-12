@@ -3,8 +3,7 @@ import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { colors, sizes } from '../../../themes/variables';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const AreaRow = ({ navigation, area, onPressEvent }) => {
-  // const handlePress = () => navigation.navigate('ScanAreaStackRoute', { headerTitle: area.title, area: area.id })
+const AreaRow = ({ area, onPressEvent }) => {
   console.log('render area'+area.id);
   return (
     <TouchableOpacity
@@ -14,11 +13,11 @@ const AreaRow = ({ navigation, area, onPressEvent }) => {
       onPress={() => onPressEvent(area)}
     >
       <View>
-        <Text style={{ fontSize: 16 }}>Зона {area.code} {area.row}</Text>
-        <Text style={{ fontSize: 14 }}>Отсканировано товаров: {area.scan}</Text>
+        <Text style={styles.title}>Зона {area.code} {area.row}</Text>
+        <Text style={styles.text}>Отсканировано товаров: {area.scan}</Text>
       </View>
         
-      <MaterialCommunityIcons name="arrow-expand-right" color={colors.PRIMARY} size={24} />
+      <MaterialCommunityIcons name="arrow-expand-right" color={colors.PRIMARY} size={22} />
     </TouchableOpacity>
   );
 }
@@ -37,6 +36,8 @@ export const styles = StyleSheet.create({
     borderColor: colors.GRAY_500,
     marginBottom: 8,
   },
+  title: { color: colors.GRAY_800, fontSize: sizes.body3, },
+  text: { color: colors.GRAY_600, fontSize: sizes.body4, },
 
 });
 

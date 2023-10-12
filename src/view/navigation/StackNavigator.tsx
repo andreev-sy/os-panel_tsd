@@ -36,7 +36,7 @@ const HomeStackNavigator = () => {
         name="ScanStackRoute" 
         component={ScanScreen} 
         options={{
-          title: 'Сканирование',
+          title: 'Скан',
         }}  
       />
       <Stack.Screen 
@@ -45,8 +45,8 @@ const HomeStackNavigator = () => {
         // options={({ route }) => ({ title: route.params.headerTitle })}
         options={({ navigation, route }) => ({
           // headerTitle: (props) => <Title {...props} />,
-          title: route.params.headerTitle,
-          headerRight: () => <ActionScan />,
+          title: 'Скан: '+route.params.headerTitle,
+          headerRight: () => <ActionScan onNullEvent={route.params.onNullEvent} onFinishEvent={route.params.onFinishEvent} />,
         })}
       />
       <Stack.Screen 

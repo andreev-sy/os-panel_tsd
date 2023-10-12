@@ -17,8 +17,8 @@ const Thead = () => {
 export const styles = StyleSheet.create({
   thead: {
     flexDirection: 'row', 
-    borderColor: colors.GRAY_600,
     borderWidth: 1,
+    borderColor: colors.GRAY_600,
   },
   theadText: {
     flex: 1, 

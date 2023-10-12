@@ -6,7 +6,7 @@ import Snackbar from "react-native-snackbar";
 import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
 
-function ScanAreaScreen({ area }) {
+function ScanAreaScreen({ navigation, area }) {
   const [isAuto, setIsAuto] = useState(true);
   const [barcode, setBarcode] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -22,6 +22,14 @@ function ScanAreaScreen({ area }) {
   const onPressEvent = useCallback((item) => {
     setitem(item)
     setContextModalVisible(!contextModalVisible)
+  }, []);
+
+  const onFinishEvent = useCallback(() => {
+    console.log('onFinishEvent')
+  }, []);
+  
+  const onNullEvent = useCallback(() => {
+    console.log('onNullEvent')
   }, []);
 
   const handleAutoSwitch = () => {
@@ -188,7 +196,7 @@ function ScanAreaScreen({ area }) {
       </View>
 
       <View style={styles.tableWrapper}>
-        <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1, flexDirection: 'column' }}>
+        <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
           <Thead />
           <FlatList
             // contentContainerStyle={{ flexDirection: 'column' }}
@@ -206,29 +214,29 @@ function ScanAreaScreen({ area }) {
 
       <View>
         <Dialog.Container
-          headerStyle={{  padding: 0, margin: 0, marginBottom: 15, }}
-          contentStyle={{ borderRadius: sizes.radius }}
-          footerStyle={{ justifyContent: 'center' }}
+          headerStyle={styles.dialogHeader}
+          contentStyle={styles.dialogContent}
+          footerStyle={styles.dialogFooter}
           visible={contextModalVisible}
           onBackdropPress={() => setContextModalVisible(!contextModalVisible)}
         >
-          <Dialog.Title style={{ textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700 }}>Артикул -{item.article}</Dialog.Title>
+          <Dialog.Title style={styles.dialogTitle}>Артикул -{item.article}</Dialog.Title>
           <View>
             <Dialog.Button
               label="Удалить"
-              style={{ fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' }}
+              style={styles.dialogBtn}
               onPress={handlePressDelete}
             />
             <Dialog.Button
               label="Редактировать"
-              style={{ fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' }}
+              style={styles.dialogBtn}
               onPress={handlePressEdit}
             />
           </View>
 
           <Dialog.Button
             label="Закрыть"
-            style={{ fontSize: sizes.body4, color: colors.SECONDARY, textTransform: 'none' }}
+            style={styles.dialogClose}
             onPress={() => setContextModalVisible(!contextModalVisible)}
           />
         </Dialog.Container>
@@ -246,9 +254,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  form: {
-    marginBottom: 12,
-  },
+  form: { marginBottom: 12, },
   formSwitch: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -299,18 +305,19 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.PRIMARY,
     borderRadius: sizes.radius,
   },
-  formBtnText: {
-    color: colors.WHITE,
-    fontSize: sizes.body4,
-    fontWeight: '400'
-  },
+  formBtnText: { color: colors.WHITE, fontSize: sizes.body4, fontWeight: '400' },
 
-  tableWrapper: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: colors.WHITE,
-    width: '100%',
-  }
+  tableWrapper: { flex: 1, flexDirection: 'column', backgroundColor: colors.WHITE, width: '100%' },
+  tableInner: { flexGrow: 1, flexDirection: 'column' },
+
+  dialogHeader: { padding: 0, margin: 0 },
+  dialogContent: { borderRadius: sizes.radius },
+  dialogFooter: { justifyContent: 'center' },
+  dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700, marginBottom: 15, },
+  dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },
+  dialogBtnFill: { height: 50, width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.PRIMARY, borderRadius: sizes.radius, },
+  dialogBtnFillText: { color: colors.WHITE, fontSize: sizes.body3, fontWeight: '400' },
+  dialogClose: { fontSize: sizes.body4, color: colors.SECONDARY, textTransform: 'none' },
 
 });
 
