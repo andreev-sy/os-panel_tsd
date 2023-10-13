@@ -23,7 +23,15 @@ function HomeScreen({ navigation }) {
 
     const handlePressModalScan = () => {
         setModalScanVisible(!modalScanVisible)
-        navigation.navigate('ScanAreaStackRoute', { headerTitle: 'Зона ' + areaScan })
+        let area = {
+            id: 1,
+            article: 'артикул' + 1,
+            name: 'наименование' + 1,
+            param1: 'параметр' + 1,
+            scanCount: (2 * 2).toString(),
+            barcode: 'штрихкод' + 1,
+        };
+        navigation.navigate('ScanAreaStackRoute', { headerTitle: 'Зона ' + areaScan, area: area })
     }
 
     const handlePressControl = () => navigation.navigate('ControlStackRoute')
@@ -213,10 +221,18 @@ export const styles = StyleSheet.create({
     botJobs: {
         borderRadius: sizes.radius,
         borderWidth: 1,
-        borderStyle: 'solid',
         borderColor: colors.GRAY_500,
         flexDirection: 'column',
-        backgroundColor: colors.WHITE
+        backgroundColor: colors.WHITE,
+        shadowColor: colors.GRAY_500,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.23,
+        shadowRadius: 2.62,
+        
+        elevation: 4,
     },
     botHr: {
         borderBottomWidth: 1,

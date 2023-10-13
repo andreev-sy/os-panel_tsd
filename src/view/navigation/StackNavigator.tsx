@@ -57,7 +57,7 @@ const HomeStackNavigator = () => {
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => <HeaderBack navigation={navigation} />,
-          headerRight: () => <ActionScan onNullEvent={route.params.onNullEvent} onFinishEvent={route.params.onFinishEvent} />,
+          headerRight: () => <ActionScan navigation={navigation} route={route} />,
         })}
       />
       <Stack.Screen

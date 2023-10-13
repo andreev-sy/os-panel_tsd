@@ -1,18 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, sizes } from '../../../themes/variables';
+import { colors, sizes } from '../../../../themes/variables';
 
-const Thead = () => {
-
-  let widthArr = [130, 140, 140, 100, 150]
+const TableHead = () => {
+  let widthArr = [130, 140, 80, 80, 80, 140]
 
   return (
     <View style={styles.thead}>
       <Text numberOfLines={0} style={[ styles.theadText, styles.theadBorderRight, { width: widthArr[0] } ]}>Артикул</Text>
       <Text numberOfLines={0} style={[ styles.theadText, styles.theadBorderRight, { width: widthArr[1] } ]}>Название</Text>
-      <Text numberOfLines={0} style={[ styles.theadText, styles.theadBorderRight, { width: widthArr[2] } ]}>Параметр1</Text>
-      <Text numberOfLines={0} style={[ styles.theadText, styles.theadBorderRight, { width: widthArr[3] } ]}>Количество</Text>
-      <Text numberOfLines={0} style={[ styles.theadText, { width: widthArr[4] } ]}>Штрихкод</Text>
+      <Text numberOfLines={0} style={[ styles.theadText, styles.theadBorderRight, { width: widthArr[2] } ]}>Учет</Text>
+      <Text numberOfLines={0} style={[ styles.theadText, styles.theadBorderRight, { width: widthArr[3] } ]}>Факт</Text>
+      <Text numberOfLines={0} style={[ styles.theadText, styles.theadBorderRight, { width: widthArr[4] } ]}>+/-</Text>
+      <Text numberOfLines={0} style={[ styles.theadText, { width: widthArr[5] } ]}>Штрихкод</Text>
     </View>
   );
 }
@@ -40,4 +40,4 @@ export const styles = StyleSheet.create({
 });
 
 
-export default Thead;
+export default TableHead;

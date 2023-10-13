@@ -20,7 +20,7 @@ function ScanScreen({ navigation }) {
   const handlePressEnter = () => {
     // сверяем введный ШК с ШК из выбранной зоны
     if (areaBarcode.trim() == areaSelect.barcode) {
-      navigation.navigate('ScanAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect.id })
+      navigation.navigate('ScanAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect })
       setmodalVisible(!modalVisible)
       return;
     }

@@ -6,7 +6,7 @@ import Snackbar from "react-native-snackbar";
 import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
 
-function ScanAreaScreen({ navigation, area }) {
+function ScanAreaScreen({ navigation, route }) {
   const [isAuto, setIsAuto] = useState(true);
   const [barcode, setBarcode] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -18,6 +18,7 @@ function ScanAreaScreen({ navigation, area }) {
   const countRef = useRef(null);
   
   console.log('render ScanAreaScreen')
+  console.log(route.params.area)
   
   const onPressEvent = useCallback((item) => {
     setitem(item)

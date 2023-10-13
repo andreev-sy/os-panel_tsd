@@ -1,10 +1,10 @@
 import React, {memo} from 'react';
 import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
-import { colors, constant, sizes } from '../../../themes/variables';
+import { colors, constant, sizes } from '../../../../themes/variables';
 
-const Tbody = ({ item, onPressEvent }) => {
+const TableBody = ({ item, onPressEvent }) => {
   console.log('render item'+item.id);
-  let widthArr = [130, 140, 140, 100, 150]
+  let widthArr = [130, 140, 80, 80, 80, 140]
 
   return (
     <TouchableNativeFeedback
@@ -15,9 +15,10 @@ const Tbody = ({ item, onPressEvent }) => {
         <View style={styles.tbody}>
           <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] } ]}>{item.article}</Text>
           <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{item.name}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] } ]}>{item.param1}</Text>
+          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] } ]}>{item.planCount}</Text>
           <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[3] } ]}>{item.scanCount}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, { width: widthArr[4] } ]}>{item.barcode}</Text>
+          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[4] } ]}>{item.gap}</Text>
+          <Text numberOfLines={item.id} style={[ styles.tbodyText, { width: widthArr[5] } ]}>{item.barcode}</Text>
         </View>
     </TouchableNativeFeedback>
 
@@ -46,5 +47,5 @@ export const styles = StyleSheet.create({
 
 });
 
-export default memo(Tbody)
+export default memo(TableBody)
 

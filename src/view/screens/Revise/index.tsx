@@ -20,7 +20,7 @@ function ReviseScreen({ navigation }) {
   const handlePressEnter = () => {
     // сверяем введный ШК с ШК из выбранной зоны
     if (areaBarcode.trim() == areaSelect.barcode) {
-      navigation.navigate('ReviseAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect.id })
+      navigation.navigate('ReviseAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect })
       setmodalVisible(!modalVisible)
       return;
     }

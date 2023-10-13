@@ -4,31 +4,22 @@ import { View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { colors, constant, sizes } from '../../../themes/variables';
 import Dialog from "react-native-dialog";
 
-const ActionScan = () => {
+const ActionScan = ({ navigation, route }) => {
     const [modalVisible, setModalVisible] = useState(false);
-
-    const handleNullPress = () => {
-        Alert.alert("", "Вы точно хотите обнулить зону?", [
-            { text: "Отмена" },
-            { text: "Да", onPress: () => nullArea() },
-        ])
-    };
 
     const handleFinishPress = () => {
         Alert.alert("", "Вы точно хотите закончить сканирование?", [
             { text: "Отмена" },
-            { text: "Да", onPress: () => finishArea() },
+            { text: "Да", onPress: () => { } },
         ])
     };
 
-    function nullArea() {
-        setModalVisible(!modalVisible);
+    const handleNullPress = () => {
+        Alert.alert("", "Вы точно хотите обнулить зону?", [
+            { text: "Отмена" },
+            { text: "Да", onPress: () => { } },
+        ])
     };
-
-    function finishArea() {
-        setModalVisible(!modalVisible);
-    };
-
 
     return (
         <View>
