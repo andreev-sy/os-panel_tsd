@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { colors, sizes } from '../../../../themes/variables';
 
-const TableHead = () => {
+const MainHead = () => {
   let widthArr = [130, 140, 80, 80, 80, 140]
 
   return (
@@ -40,4 +40,4 @@ export const styles = StyleSheet.create({
 });
 
 
-export default TableHead;
+export default MainHead;

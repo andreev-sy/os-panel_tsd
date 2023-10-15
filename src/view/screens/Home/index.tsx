@@ -1,7 +1,6 @@
 import React, { useState, useContext, useRef } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet,TextInput } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
-import { GeneralStyles } from '../../themes/styles';
 import { AuthContext } from '../../../context/AuthContext';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog from "react-native-dialog";

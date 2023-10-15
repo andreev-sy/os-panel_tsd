@@ -2,8 +2,8 @@ import React, {memo} from 'react';
 import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { colors, constant, sizes } from '../../../../themes/variables';
 
-const TableBody = ({ item, onPressEvent }) => {
-  console.log('render item'+item.id);
+const MainBody = ({ item, onPressEvent }) => {
+  console.log('render main'+item.id);
   let widthArr = [130, 140, 80, 80, 80, 140]
 
   return (
@@ -47,5 +47,5 @@ export const styles = StyleSheet.create({
 
 });
 
-export default memo(TableBody)
+export default memo(MainBody)
 
