@@ -1,6 +1,8 @@
 import React, { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Snackbar from "react-native-snackbar";
+import { colors } from '../view/themes/variables';
 
 export const AuthContext = createContext();
 
@@ -20,32 +22,26 @@ export const AuthProvider = ({ children }) => {
       })
       .then(res => {
         let userInfo = res.data;
-        console.log(userInfo)
         setUserInfo(userInfo);
         setBaseUrl(baseUrl);
         AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
         AsyncStorage.setItem('baseUrl', baseUrl);
+
         setIsLoading(false);
       })
       .catch(e => {
-        console.log(`login error ${e}`);
         setIsLoading(false);
+        setTimeout(function () {
+          Snackbar.show({
+            text: e.response.data.message,
+            textColor: colors.DANGER,
+            backgroundColor: colors.LIGHT_DANGER,
+            duration: Snackbar.LENGTH_SHORT,
+          });
+        }, 500)
       });
   };
 
-  const changeBaseUrl = (baseUrl) => {
-    try {
-      setSplashLoading(true);
-      setBaseUrl(baseUrl);
-      AsyncStorage.removeItem('baseUrl');
-      AsyncStorage.setItem('baseUrl', baseUrl);
-      setSplashLoading(false);
-
-    } catch (e) {
-      console.log(`is logged in error ${e}`);
-      setSplashLoading(false);
-    }
-  };
 
   const logout = () => {
     setIsLoading(true);
@@ -61,35 +57,46 @@ export const AuthProvider = ({ children }) => {
   const isLoggedIn = async () => {
     try {
       setSplashLoading(true);
-
-      let userInfo = await AsyncStorage.getItem('userInfo');
-      userInfo = JSON.parse(userInfo);
-      if (userInfo) setUserInfo(userInfo);
-
       let baseUrl = await AsyncStorage.getItem('baseUrl');
-      if (baseUrl) setBaseUrl(baseUrl);
+      let userInfo = await AsyncStorage.getItem('userInfo');
+      setBaseUrl(baseUrl);
+      userInfo = JSON.parse(userInfo);
 
-      setSplashLoading(false);
+      if (userInfo) {
+        axios.get(`http://${baseUrl}/api/auth/check/`, { headers: { Authorization: `Bearer ${userInfo.access_token}` } })
+          .then(res => {
+            let userInfo = res.data;
+            setUserInfo(userInfo);
+            AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+            setSplashLoading(false);
+          })
+          .catch(e => {
+            setSplashLoading(false);
+            logout();
+          });
+      } else {
+        setSplashLoading(false);
+        logout();
+      }
 
     } catch (e) {
-      console.log(`is logged in error ${e}`);
       setSplashLoading(false);
+      logout();
     }
   };
 
   useEffect(() => { isLoggedIn(); }, []);
 
   return (
-    <AuthContext.Provider 
-      value={{ 
-        isLoading, 
-        splashLoading, 
-        userInfo, 
-        baseUrl, 
-        setBaseUrl, 
-        changeBaseUrl,
-        login, 
-        logout 
+    <AuthContext.Provider
+      value={{
+        isLoading,
+        splashLoading,
+        userInfo,
+        baseUrl,
+        setBaseUrl,
+        login,
+        logout
       }}
     >
       {children}

@@ -11,11 +11,6 @@ function LoginScreen() {
     const [username, setUsername] = useState('api');
     const [password, setPassword] = useState('api');
 
-
-    const handlePressLogin = () => {
-        login(username, password, baseUrl)
-    }
-
     return (
         <View style={styles.wrapper}>
             <ScrollView contentContainerStyle={styles.inner}>
@@ -43,7 +38,7 @@ function LoginScreen() {
                     style={styles.btn}
                     activeOpacity={constant.activeOpacity}
                     accessibilityRole="button"
-                    onPress={handlePressLogin}
+                    onPress={ () => login(username, password, baseUrl) }
                 >
                     <Text style={styles.btnText}>Войти</Text>
                 </TouchableOpacity>

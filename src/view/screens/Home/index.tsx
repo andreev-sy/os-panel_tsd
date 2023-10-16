@@ -1,5 +1,5 @@
-import React, { useState, useContext, useRef } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet,TextInput } from 'react-native';
+import React, { useState, useContext, useRef, useEffect } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, TextInput } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -7,7 +7,7 @@ import Dialog from "react-native-dialog";
 import axios from 'axios';
 
 function HomeScreen({ navigation }) {
-    const { isLoading, baseUrl, userInfo  } = useContext(AuthContext);
+    const { isLoading, baseUrl, userInfo, } = useContext(AuthContext);
     const [modalScanVisible, setModalScanVisible] = useState(false);
     const [areaScan, setAreaScan] = useState(false);
     const areaScanRef = useRef(null);
@@ -42,35 +42,33 @@ function HomeScreen({ navigation }) {
 
 
 
-    // axios.get(`http://${baseUrl}/api/site/index/`, { headers: { Authorization: `Bearer ${userInfo.access_token}` } })
-    //     .then(res => {
-    //         let data = res.data;
-    //         console.log(data)
-    //     })
-    //     .catch(e => { 
-    //         console.log(`login error ${e}`);  
-    //     });
 
+
+    // useEffect(() => {
+
+        
+
+    // }, []);
 
     return (
         <View style={styles.wrapper}>
             <Spinner visible={isLoading} />
             <View style={styles.topWrapper}>
                 <TouchableOpacity
-                    style={[ styles.topBtn, styles.topBtnSuccess ]}
+                    style={[styles.topBtn, styles.topBtnSuccess]}
                     activeOpacity={0.8}
                     accessibilityRole="button"
                     onPress={handlePressScan}
                 >
-                    <Text style={[ styles.topBtnText, styles.topBtnTextSuccess ]}>Скан</Text>
+                    <Text style={[styles.topBtnText, styles.topBtnTextSuccess]}>Скан</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[ styles.topBtn, styles.topBtnPrimary ]}
+                    style={[styles.topBtn, styles.topBtnPrimary]}
                     activeOpacity={0.8}
                     accessibilityRole="button"
                     onPress={handlePressControl}
                 >
-                    <Text style={[ styles.topBtnText, styles.topBtnTextPrimary ]}>Контроль</Text>
+                    <Text style={[styles.topBtnText, styles.topBtnTextPrimary]}>Контроль</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.botWrapper}>
@@ -82,14 +80,14 @@ function HomeScreen({ navigation }) {
                 </View>
                 <View style={styles.botJobs}>
                     <TouchableOpacity
-                        style={[ styles.botJob, styles.botJobDisabled ]}
+                        style={[styles.botJob, styles.botJobDisabled]}
                         activeOpacity={0.8}
                         // disabled={true}
                         accessibilityRole="button"
                         onPress={handlePressScanJob}
                     >
-                        <Text style={[ styles.botJobText, styles.botJobTextDisabled ]}>Скан</Text>
-                        <Text style={[ styles.botJobCount, styles.botJobCountDisabled ]}>0</Text>
+                        <Text style={[styles.botJobText, styles.botJobTextDisabled]}>Скан</Text>
+                        <Text style={[styles.botJobCount, styles.botJobCountDisabled]}>0</Text>
                     </TouchableOpacity>
                     <View style={styles.botHr} />
                     <TouchableOpacity
@@ -153,7 +151,7 @@ function HomeScreen({ navigation }) {
                         >
                             <Text style={styles.dialogBtnFillText}>Войти</Text>
                         </TouchableOpacity>
-                        
+
                     </View>
 
                     <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setModalScanVisible(!modalScanVisible)} />
@@ -230,7 +228,7 @@ export const styles = StyleSheet.create({
         },
         shadowOpacity: 0.23,
         shadowRadius: 2.62,
-        
+
         elevation: 4,
     },
     botHr: {
@@ -246,10 +244,10 @@ export const styles = StyleSheet.create({
         paddingVertical: 12,
     },
     botJobDisabled: { opacity: 0.6, backgroundColor: colors.GRAY_200 },
-    botJobText: { fontSize: sizes.body3,  color: colors.GRAY_900 },
-    botJobCount: { color: colors.DANGER, fontSize: sizes.body2 },  
-    botJobTextDisabled: {  color: colors.BLACK },
-    botJobCountDisabled: { color: colors.GRAY_800 },  
+    botJobText: { fontSize: sizes.body3, color: colors.GRAY_900 },
+    botJobCount: { color: colors.DANGER, fontSize: sizes.body2 },
+    botJobTextDisabled: { color: colors.BLACK },
+    botJobCountDisabled: { color: colors.GRAY_800 },
 
     dialogHeader: { height: 0, padding: 0, margin: 0 },
     dialogContent: { borderRadius: sizes.radius },
@@ -259,7 +257,7 @@ export const styles = StyleSheet.create({
     dialogBtnFill: { height: 50, width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.PRIMARY, borderRadius: sizes.radius, },
     dialogBtnFillText: { color: colors.WHITE, fontSize: sizes.body3, fontWeight: '400' },
     dialogClose: { fontSize: sizes.body4, color: colors.SECONDARY, textTransform: 'none' },
-    dialogInput: { 
+    dialogInput: {
         flexBasis: 55,
         paddingHorizontal: 10,
         width: '100%',

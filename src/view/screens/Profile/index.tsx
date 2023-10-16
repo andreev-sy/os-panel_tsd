@@ -1,23 +1,31 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
-import Spinner from 'react-native-loading-spinner-overlay';
 import { AuthContext } from '../../../context/AuthContext';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import createInstance from '../../../context/AxiosInstance';
 
+const api = createInstance();
 
 function ProfileScreen() {
-  const { isLoading, userInfo, logout, baseUrl, changeBaseUrl } = useContext(AuthContext);
-  const [newBaseUrl, setNewBaseUrl] = useState(baseUrl);
+  const { userInfo, baseUrl } = useContext(AuthContext);
+  const [newBaseUrl, setNewBaseUrl] = useState('');
 
   console.log('render ProfileScreen')
   
-  const handlePressSave = () => changeBaseUrl(newBaseUrl)
+  const handlePressSave = () => {
+    console.log(newBaseUrl)
+  }
+
+  api.get(`/auth/check/`)
+    .then(res => {
+        let data = res.data;
+        console.log(data)
+    });
 
   return (
     <View style={styles.wrapper}>
       <ScrollView style={styles.inner}>
-        <Spinner visible={isLoading} />
 
         <View style={styles.boxWrapper}>
           <Text style={styles.boxTitle}>Аккаунт</Text>
@@ -55,7 +63,7 @@ function ProfileScreen() {
           <TextInput
             style={styles.formInput}
             placeholder="Адрес API"
-            value={newBaseUrl}
+            value={baseUrl}
             onChange={setNewBaseUrl}
           />
           <TouchableOpacity
