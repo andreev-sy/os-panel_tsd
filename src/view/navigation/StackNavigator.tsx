@@ -4,7 +4,7 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 
 import Title from '../components/Title';
 import HeaderBack from '../components/HeaderBack';
-import HeaderHome from '../components/HeaderHome';
+import HeaderHome from '../screens/Home/partials/HeaderHome';
 import HomeScreen from '../screens/Home';
 import ScanScreen from '../screens/Scan';
 import ScanAreaScreen from '../screens/Scan/view';

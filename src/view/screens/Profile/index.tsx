@@ -3,12 +3,11 @@ import { View, Text, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import createInstance from '../../../context/AxiosInstance';
+import createInstance from '../../helpers/AxiosInstance';
 
-const api = createInstance();
 
 function ProfileScreen() {
-  const { userInfo, baseUrl } = useContext(AuthContext);
+  const { userInfo, baseUrl, logout } = useContext(AuthContext);
   const [newBaseUrl, setNewBaseUrl] = useState('');
 
   console.log('render ProfileScreen')
@@ -17,11 +16,13 @@ function ProfileScreen() {
     console.log(newBaseUrl)
   }
 
-  api.get(`/auth/check/`)
-    .then(res => {
-        let data = res.data;
-        console.log(data)
-    });
+  // const api = createInstance();
+
+  // api.get(`/auth/check/`)
+  //   .then(res => {
+  //       let data = res.data;
+  //       console.log(data)
+  //   });
 
   return (
     <View style={styles.wrapper}>
@@ -31,11 +32,11 @@ function ProfileScreen() {
           <Text style={styles.boxTitle}>Аккаунт</Text>
           <View style={styles.boxText}>
             <Text style={styles.boxKey}>ФИО:</Text>
-            <Text style={styles.boxValue}>{userInfo.user.fullname}</Text>
+            <Text style={styles.boxValue}>{userInfo.fullname}</Text>
           </View>
           <View style={styles.boxText}>
             <Text style={styles.boxKey}>Логин:</Text>
-            <Text style={styles.boxValue}>{userInfo.user.username}</Text>
+            <Text style={styles.boxValue}>{userInfo.username}</Text>
           </View>
           {/* <View style={styles.boxText}>
             <Text style={styles.boxKey}>Токен:</Text>
@@ -47,15 +48,15 @@ function ProfileScreen() {
           <Text style={styles.boxTitle}>Разрешения</Text>
           <View style={styles.boxText}>
             <Text style={styles.boxKey}>Контроль за собой:</Text>
-            <Text style={styles.boxValue}>{userInfo.user.access.self_control == '1' ? 'Да' : 'Нет'}</Text>
+            <Text style={styles.boxValue}>{userInfo.access.self_control == '1' ? 'Да' : 'Нет'}</Text>
           </View>
           <View style={styles.boxText}>
             <Text style={styles.boxKey}>Редактировать товары:</Text>
-            <Text style={styles.boxValue}>{userInfo.user.access.edit_products == '1' ? 'Да' : 'Нет'}</Text>
+            <Text style={styles.boxValue}>{userInfo.access.edit_products == '1' ? 'Да' : 'Нет'}</Text>
           </View>
           <View style={styles.boxText}>
             <Text style={styles.boxKey}>Обнулять зону:</Text>
-            <Text style={styles.boxValue}>{userInfo.user.access.nullable_area == '1' ? 'Да' : 'Нет'}</Text>
+            <Text style={styles.boxValue}>{userInfo.access.nullable_area == '1' ? 'Да' : 'Нет'}</Text>
           </View>
         </View>
 

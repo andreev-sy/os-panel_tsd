@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import axios from 'axios';
-import { AuthContext } from './AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 function createInstance(){
     const { userInfo, baseUrl, logout } = useContext(AuthContext);
@@ -17,6 +17,7 @@ function createInstance(){
             if (error.response.status == '401') {
                 logout();
             }
+            
             return error;
         }
     );

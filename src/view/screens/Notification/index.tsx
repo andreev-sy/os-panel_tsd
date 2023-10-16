@@ -1,46 +1,55 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
-import NotyRow from './partials/NotyRow';
 import { colors, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
+import NotificationRow from './partials/NotificationRow';
+import createInstance from '../../helpers/AxiosInstance';
 
 function NotificationScreen() {
-  const [listData, setListData] = useState([]);
+  const [notificationData, setNotificationData] = useState([]);
   console.log('render NotificationScreen')
 
-  const onPressEvent = useCallback((noty) => {
-    const index = listData.findIndex(el => el.id === noty.id);
+  const onPressEvent = useCallback((notification) => {
+    const index = notificationData.findIndex(el => el.id === notification.id);
     if (index !== -1) {
-      noty.viewed = true;
-      listData[index] = noty;
-      setListData([...listData]);
+      api.get('/notification/update/?id=' + notification.id)
+        .then(res => {
+          notificationData[index]['viewed'] = true;
+          setNotificationData(notificationData);
 
-      Snackbar.show({
-        text: 'Уведомление прочитано',
-        textColor: colors.SUCCESS,
-        backgroundColor: colors.LIGHT_SUCCESS,
-        duration: Snackbar.LENGTH_SHORT,
-      });
+          Snackbar.show({
+            text: 'Уведомление прочитано',
+            textColor: colors.SUCCESS,
+            backgroundColor: colors.LIGHT_SUCCESS,
+            duration: Snackbar.LENGTH_SHORT,
+          });
+        })
+        .catch(e => {
+          Snackbar.show({
+            text: e.response.data.msg,
+            textColor: colors.LIGHT_DANGER,
+            backgroundColor: colors.DANGER,
+            duration: Snackbar.LENGTH_SHORT,
+          });
+        });
     }
   }, []);
 
-  const setData = () => {
-    const data = [];
-    for (let i = 1; i <= 100; i++) {
-      data.push({ 
-        id: i, 
-        text: 'Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. ', 
-        viewed: i % 2 == 0 ? false : true
-      });
-    }
-    setListData(data)
-  }
-
+  const api = createInstance();
 
   useEffect(() => {
-    setData();
-  }, [])
+    api.get('/notification/index/')
+      .then(res => { setNotificationData(res.data) })
+      .catch(e => {
+        Snackbar.show({
+          text: e.response.data.msg,
+          textColor: colors.LIGHT_DANGER,
+          backgroundColor: colors.DANGER,
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      });
+  }, []);
 
 
   return (
@@ -51,9 +60,9 @@ function NotificationScreen() {
         removeClippedSubviews={true}
         maxToRenderPerBatch={6}
         windowSize={2}
-        data={listData}
+        data={notificationData}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <NotyRow noty={item} onPressEvent={onPressEvent} />}
+        renderItem={({ item }) => <NotificationRow notification={item} onPressEvent={onPressEvent} />}
       />
     </View>
   );

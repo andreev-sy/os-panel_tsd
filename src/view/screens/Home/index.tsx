@@ -2,12 +2,14 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, TextInput } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
+import createInstance from '../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog from "react-native-dialog";
-import axios from 'axios';
+import Snackbar from 'react-native-snackbar';
 
 function HomeScreen({ navigation }) {
     const { isLoading, baseUrl, userInfo, } = useContext(AuthContext);
+    const [homeData, setHomeData] = useState({});
     const [modalScanVisible, setModalScanVisible] = useState(false);
     const [areaScan, setAreaScan] = useState(false);
     const areaScanRef = useRef(null);
@@ -40,15 +42,25 @@ function HomeScreen({ navigation }) {
     const handlePressRecountJob = () => navigation.navigate('RecountStackRoute')
     const handlePressReviseJob = () => navigation.navigate('ReviseStackRoute')
 
+    const api = createInstance();
 
-
-
-
-    // useEffect(() => {
-
-        
-
-    // }, []);
+    useEffect(() => {
+        api.get(`/site/index/`)
+            .then(res => { setHomeData(res.data) })
+            .catch(e => { 
+                Snackbar.show({
+                    text: e.response.data.msg,
+                    textColor: colors.LIGHT_DANGER,
+                    backgroundColor: colors.DANGER,
+                    duration: Snackbar.LENGTH_SHORT,
+                    action: {
+                      text: 'СКРЫТЬ',
+                      textColor: colors.LIGHT_DANGER,
+                      onPress: () => { /* Do something. */ },
+                    },
+                  });
+            });
+    }, []);
 
     return (
         <View style={styles.wrapper}>
@@ -75,53 +87,54 @@ function HomeScreen({ navigation }) {
                 <View style={styles.botTitle}>
                     <Text style={styles.botTitleText}>Задания</Text>
                     <View style={styles.botTitleBadge}>
-                        <Text style={styles.botTitleBadgeText}>10</Text>
+                        <Text style={styles.botTitleBadgeText}>{homeData.job}</Text>
                     </View>
                 </View>
                 <View style={styles.botJobs}>
                     <TouchableOpacity
-                        style={[styles.botJob, styles.botJobDisabled]}
-                        activeOpacity={0.8}
-                        // disabled={true}
+                        style={[styles.botJob, homeData.scan > 0 ? {} : styles.botJobDisabled]}
+                        activeOpacity={constant.activeOpacity}
+                        disabled={ homeData.scan > 0 ? false : true}
                         accessibilityRole="button"
                         onPress={handlePressScanJob}
                     >
-                        <Text style={[styles.botJobText, styles.botJobTextDisabled]}>Скан</Text>
-                        <Text style={[styles.botJobCount, styles.botJobCountDisabled]}>0</Text>
+                        <Text style={[styles.botJobText, homeData.scan > 0 ? {} : styles.botJobTextDisabled ]}>Скан</Text>
+                        <Text style={[styles.botJobCount, homeData.scan > 0 ? {} : styles.botJobCountDisabled ]}>{homeData.scan}</Text>
                     </TouchableOpacity>
                     <View style={styles.botHr} />
                     <TouchableOpacity
-                        style={styles.botJob}
-                        activeOpacity={0.8}
+                        style={[styles.botJob, homeData.control > 0 ? {} : styles.botJobDisabled]}
+                        activeOpacity={constant.activeOpacity}
+                        disabled={ homeData.control > 0 ? false : true}
                         accessibilityRole="button"
                         onPress={handlePressControlJob}
                     >
-                        <Text style={styles.botJobText}>Контроль</Text>
-                        <Text style={styles.botJobCount}>5</Text>
+                        <Text style={[styles.botJobText, homeData.control > 0 ? {} : styles.botJobTextDisabled ]}>Контроль</Text>
+                        <Text style={[styles.botJobCount, homeData.control > 0 ? {} : styles.botJobCountDisabled ]}>{homeData.control}</Text>
                     </TouchableOpacity>
                     <View style={styles.botHr} />
                     <TouchableOpacity
-                        style={styles.botJob}
-                        activeOpacity={0.8}
+                        style={[styles.botJob, homeData.recount > 0 ? {} : styles.botJobDisabled]}
+                        activeOpacity={constant.activeOpacity}
+                        disabled={ homeData.recount > 0 ? false : true}
                         accessibilityRole="button"
                         onPress={handlePressRecountJob}
                     >
-                        <Text style={styles.botJobText}>Пересчет</Text>
-                        <Text style={styles.botJobCount}>1</Text>
+                        <Text style={[styles.botJobText, homeData.recount > 0 ? {} : styles.botJobTextDisabled ]}>Пересчет</Text>
+                        <Text style={[styles.botJobCount, homeData.recount > 0 ? {} : styles.botJobCountDisabled ]}>{homeData.recount}</Text>
                     </TouchableOpacity>
                     <View style={styles.botHr} />
                     <TouchableOpacity
-                        style={styles.botJob}
-                        activeOpacity={0.8}
+                        style={[styles.botJob, homeData.revise > 0 ? {} : styles.botJobDisabled]}
+                        activeOpacity={constant.activeOpacity}
+                        disabled={ homeData.revise > 0 ? false : true}
                         accessibilityRole="button"
                         onPress={handlePressReviseJob}
                     >
-                        <Text style={styles.botJobText}>Сверка</Text>
-                        <Text style={styles.botJobCount}>1</Text>
+                        <Text style={[styles.botJobText, homeData.revise > 0 ? {} : styles.botJobTextDisabled ]}>Сверка</Text>
+                        <Text style={[styles.botJobCount, homeData.revise > 0 ? {} : styles.botJobCountDisabled ]}>{homeData.revise}</Text>
                     </TouchableOpacity>
                 </View>
-
-
             </View>
 
             <View>
