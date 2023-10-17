@@ -6,6 +6,7 @@ import { colors, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
 import createInstance from '../../helpers/AxiosInstance';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const ReacountScreen = () => {
   const [text, onChangeText] = useState('');
@@ -13,6 +14,7 @@ const ReacountScreen = () => {
   const [tableData, setTableData] = useState([]);
   const [contextModalVisible, setContextModalVisible] = useState(false);
   const [area, setArea] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   console.log('render ReacountScreen')
 
@@ -53,8 +55,12 @@ const ReacountScreen = () => {
 
   useEffect(() => {
     api.get('/recount/index/')
-      .then(res => { setTableData(res.data) })
+      .then(res => { 
+        setTableData(res.data) 
+        setIsLoading(false)
+      })
       .catch(e => {
+        setIsLoading(false)
         Snackbar.show({
           text: e.response.data.msg,
           textColor: colors.LIGHT_DANGER,
@@ -67,6 +73,7 @@ const ReacountScreen = () => {
 
   return (
     <View style={styles.wrapper}>
+      <Spinner visible={isLoading} animation="fade" />
       <View style={styles.form}>
         <TextInput
           style={styles.input}

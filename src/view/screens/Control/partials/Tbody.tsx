@@ -5,7 +5,7 @@ import { colors, constant, sizes } from '../../../themes/variables';
 const Tbody = ({ area, onPressEvent }) => {
   console.log('render area' + area.id);
   let widthArr = [100, 50, 50]
-
+  let numberOfLines = parseInt(area.id)
   return (
     <TouchableNativeFeedback
       accessibilityRole="button"
@@ -13,9 +13,9 @@ const Tbody = ({ area, onPressEvent }) => {
       background={TouchableNativeFeedback.Ripple(colors.GRAY_200, false)}
     >
       <View style={styles.tbody}>
-        <Text numberOfLines={area.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] } ]}>{area.code}</Text>
-        <Text numberOfLines={area.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{area.row}</Text>
-        <Text numberOfLines={area.id} style={[ styles.tbodyText, { width: widthArr[2] } ]}>{area.controlCount}</Text>
+        <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] } ]}>{area.code}</Text>
+        <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{area.row}</Text>
+        <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, { width: widthArr[2] } ]}>{area.control}</Text>
       </View>
   </TouchableNativeFeedback>
 

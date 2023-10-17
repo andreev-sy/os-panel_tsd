@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { colors, sizes } from '../../themes/variables';
-import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
 import NotificationRow from './partials/NotificationRow';
 import createInstance from '../../helpers/AxiosInstance';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function NotificationScreen() {
   const [notificationData, setNotificationData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   console.log('render NotificationScreen')
 
   const onPressEvent = useCallback((notification) => {
@@ -40,8 +41,12 @@ function NotificationScreen() {
 
   useEffect(() => {
     api.get('/notification/index/')
-      .then(res => { setNotificationData(res.data) })
+      .then(res => { 
+        setNotificationData(res.data) 
+        setIsLoading(false)
+      })
       .catch(e => {
+        setIsLoading(false)
         Snackbar.show({
           text: e.response.data.msg,
           textColor: colors.LIGHT_DANGER,
@@ -54,6 +59,7 @@ function NotificationScreen() {
 
   return (
     <View style={styles.wrapper}>
+      <Spinner visible={isLoading} animation="fade" />
       <FlatList
         contentContainerStyle={styles.inner}
         initialNumToRender={6}

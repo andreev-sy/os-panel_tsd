@@ -46,25 +46,27 @@ function HomeScreen({ navigation }) {
 
     useEffect(() => {
         api.get(`/site/index/`)
-            .then(res => { setHomeData(res.data); console.log(res.data) })
-            .catch(e => { 
+            .then(res => {
+                if(res.data) setHomeData(res.data);
+            })
+            .catch(e => {
                 Snackbar.show({
                     text: e.response.data.msg,
                     textColor: colors.LIGHT_DANGER,
                     backgroundColor: colors.DANGER,
                     duration: Snackbar.LENGTH_SHORT,
                     action: {
-                      text: 'СКРЫТЬ',
-                      textColor: colors.LIGHT_DANGER,
-                      onPress: () => { /* Do something. */ },
+                        text: 'СКРЫТЬ',
+                        textColor: colors.LIGHT_DANGER,
+                        onPress: () => { /* Do something. */ },
                     },
-                  });
+                });
             });
-    }, []);
+    }, [isLoading]);
 
     return (
         <View style={styles.wrapper}>
-            <Spinner visible={isLoading} />
+            <Spinner visible={isLoading} animation="fade" />
             <View style={styles.topWrapper}>
                 <TouchableOpacity
                     style={[styles.topBtn, styles.topBtnSuccess]}
@@ -94,45 +96,45 @@ function HomeScreen({ navigation }) {
                     <TouchableOpacity
                         style={[styles.botJob, homeData.scan > 0 ? {} : styles.botJobDisabled]}
                         activeOpacity={constant.activeOpacity}
-                        disabled={ homeData.scan > 0 ? false : true}
+                        disabled={homeData.scan > 0 ? false : true}
                         accessibilityRole="button"
                         onPress={handlePressScanJob}
                     >
-                        <Text style={[styles.botJobText, homeData.scan > 0 ? {} : styles.botJobTextDisabled ]}>Скан</Text>
-                        <Text style={[styles.botJobCount, homeData.scan > 0 ? {} : styles.botJobCountDisabled ]}>{homeData.scan}</Text>
+                        <Text style={[styles.botJobText, homeData.scan > 0 ? {} : styles.botJobTextDisabled]}>Скан</Text>
+                        <Text style={[styles.botJobCount, homeData.scan > 0 ? {} : styles.botJobCountDisabled]}>{homeData.scan}</Text>
                     </TouchableOpacity>
                     <View style={styles.botHr} />
                     <TouchableOpacity
                         style={[styles.botJob, homeData.control > 0 ? {} : styles.botJobDisabled]}
                         activeOpacity={constant.activeOpacity}
-                        disabled={ homeData.control > 0 ? false : true}
+                        disabled={homeData.control > 0 ? false : true}
                         accessibilityRole="button"
                         onPress={handlePressControlJob}
                     >
-                        <Text style={[styles.botJobText, homeData.control > 0 ? {} : styles.botJobTextDisabled ]}>Контроль</Text>
-                        <Text style={[styles.botJobCount, homeData.control > 0 ? {} : styles.botJobCountDisabled ]}>{homeData.control}</Text>
+                        <Text style={[styles.botJobText, homeData.control > 0 ? {} : styles.botJobTextDisabled]}>Контроль</Text>
+                        <Text style={[styles.botJobCount, homeData.control > 0 ? {} : styles.botJobCountDisabled]}>{homeData.control}</Text>
                     </TouchableOpacity>
                     <View style={styles.botHr} />
                     <TouchableOpacity
                         style={[styles.botJob, homeData.recount > 0 ? {} : styles.botJobDisabled]}
                         activeOpacity={constant.activeOpacity}
-                        disabled={ homeData.recount > 0 ? false : true}
+                        disabled={homeData.recount > 0 ? false : true}
                         accessibilityRole="button"
                         onPress={handlePressRecountJob}
                     >
-                        <Text style={[styles.botJobText, homeData.recount > 0 ? {} : styles.botJobTextDisabled ]}>Пересчет</Text>
-                        <Text style={[styles.botJobCount, homeData.recount > 0 ? {} : styles.botJobCountDisabled ]}>{homeData.recount}</Text>
+                        <Text style={[styles.botJobText, homeData.recount > 0 ? {} : styles.botJobTextDisabled]}>Пересчет</Text>
+                        <Text style={[styles.botJobCount, homeData.recount > 0 ? {} : styles.botJobCountDisabled]}>{homeData.recount}</Text>
                     </TouchableOpacity>
                     <View style={styles.botHr} />
                     <TouchableOpacity
                         style={[styles.botJob, homeData.revise > 0 ? {} : styles.botJobDisabled]}
                         activeOpacity={constant.activeOpacity}
-                        disabled={ homeData.revise > 0 ? false : true}
+                        disabled={homeData.revise > 0 ? false : true}
                         accessibilityRole="button"
                         onPress={handlePressReviseJob}
                     >
-                        <Text style={[styles.botJobText, homeData.revise > 0 ? {} : styles.botJobTextDisabled ]}>Сверка</Text>
-                        <Text style={[styles.botJobCount, homeData.revise > 0 ? {} : styles.botJobCountDisabled ]}>{homeData.revise}</Text>
+                        <Text style={[styles.botJobText, homeData.revise > 0 ? {} : styles.botJobTextDisabled]}>Сверка</Text>
+                        <Text style={[styles.botJobCount, homeData.revise > 0 ? {} : styles.botJobCountDisabled]}>{homeData.revise}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

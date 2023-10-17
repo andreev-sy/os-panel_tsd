@@ -14,7 +14,7 @@ function LoginScreen() {
     return (
         <View style={styles.wrapper}>
             <ScrollView contentContainerStyle={styles.inner}>
-                <Spinner visible={isLoading} />
+                <Spinner visible={isLoading} animation="fade" />
                 <TextInput
                     style={styles.input}
                     placeholder="Адрес API"

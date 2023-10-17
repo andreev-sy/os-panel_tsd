@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 
-function createInstance(){
+function createInstance() {
     const { userInfo, baseUrl, logout } = useContext(AuthContext);
 
     const instance = axios.create({
@@ -10,14 +10,14 @@ function createInstance(){
         headers: { Authorization: `Bearer ${userInfo.access_token}` },
         timeout: 5000,
     });
-    
+
     instance.interceptors.response.use(
         (response) => response,
         (error) => {
-            if (error.response.status == '401') {
-                logout();
-            }
-            
+            if (error.response)
+                if (error.response.status == '401')
+                    logout();
+
             return error;
         }
     );

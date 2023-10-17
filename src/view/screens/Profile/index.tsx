@@ -4,11 +4,12 @@ import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import createInstance from '../../helpers/AxiosInstance';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function ProfileScreen() {
   const { userInfo, baseUrl, logout } = useContext(AuthContext);
   const [newBaseUrl, setNewBaseUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log('render ProfileScreen')
   
@@ -27,7 +28,7 @@ function ProfileScreen() {
   return (
     <View style={styles.wrapper}>
       <ScrollView style={styles.inner}>
-
+        <Spinner visible={isLoading} animation="fade" />
         <View style={styles.boxWrapper}>
           <Text style={styles.boxTitle}>Аккаунт</Text>
           <View style={styles.boxText}>
