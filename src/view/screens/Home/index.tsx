@@ -46,7 +46,7 @@ function HomeScreen({ navigation }) {
 
     useEffect(() => {
         api.get(`/site/index/`)
-            .then(res => { setHomeData(res.data) })
+            .then(res => { setHomeData(res.data); console.log(res.data) })
             .catch(e => { 
                 Snackbar.show({
                     text: e.response.data.msg,

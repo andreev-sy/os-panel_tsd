@@ -4,6 +4,7 @@ import AreaRow from './partials/AreaRow';
 import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
+import createInstance from '../../helpers/AxiosInstance';
 
 function ScanScreen({ navigation }) {
   const [listData, setListData] = useState([]);
@@ -34,17 +35,21 @@ function ScanScreen({ navigation }) {
     });
   };
 
-  const setData = () => {
-    const data = [];
-    for (let i = 1; i <= 100; i++) {
-      data.push({ id: i, title: 'Зона 000' + i + ' (ряд А)', code: '000' + i, row: '(A)', barcode: '000' + i, scan: i * 2 });
-    }
-    setListData(data)
-  }
 
+
+  const api = createInstance();
 
   useEffect(() => {
-    setData();
+    api.get('/scan/index/')
+      .then(res => { setListData(res.data) })
+      .catch(e => {
+        Snackbar.show({
+          text: e.response.data.msg,
+          textColor: colors.LIGHT_DANGER,
+          backgroundColor: colors.DANGER,
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      });
   }, [])
 
 
@@ -106,11 +111,11 @@ export const styles = StyleSheet.create({
   wrapper: {
     paddingVertical: sizes.padding,
     backgroundColor: colors.BG,
+    height: '100%'
   },
   inner: {
     paddingHorizontal: sizes.padding,
   },
-
 
   dialogHeader: { padding: 0, margin: 0 },
   dialogContent: { borderRadius: sizes.radius },
@@ -120,18 +125,18 @@ export const styles = StyleSheet.create({
   dialogBtnFill: { height: 50, width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.PRIMARY, borderRadius: sizes.radius, },
   dialogBtnFillText: { color: colors.WHITE, fontSize: sizes.body3, fontWeight: '400' },
   dialogClose: { fontSize: sizes.body4, color: colors.SECONDARY, textTransform: 'none' },
-  dialogInput: { 
-      flexBasis: 55,
-      paddingHorizontal: 10,
-      width: '100%',
-      fontSize: sizes.body3,
-      backgroundColor: colors.WHITE,
-      color: colors.GRAY_600,
-      borderWidth: 1,
-      borderColor: colors.GRAY_300,
-      borderRadius: 7,
-      elevation: 3,
-      marginBottom: 12,
+  dialogInput: {
+    flexBasis: 55,
+    paddingHorizontal: 10,
+    width: '100%',
+    fontSize: sizes.body3,
+    backgroundColor: colors.WHITE,
+    color: colors.GRAY_600,
+    borderWidth: 1,
+    borderColor: colors.GRAY_300,
+    borderRadius: 7,
+    elevation: 3,
+    marginBottom: 12,
   },
 });
 

@@ -5,6 +5,7 @@ import Tbody from './partials/Tbody';
 import { colors, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
+import createInstance from '../../helpers/AxiosInstance';
 
 const ReacountScreen = () => {
   const [text, onChangeText] = useState('');
@@ -47,23 +48,20 @@ const ReacountScreen = () => {
     }, 500)
   }
 
-  const setData = () => {
-    const data = [];
-    for (let i = 1; i <= 100000; i++) {
-      data.push({
-        id: i,
-        row: 'A',
-        code: 'Зона' + i,
-        scanCount: (i * 2).toString(),
-        controlCount: (i * 12 - 10).toString(),
-        gap: ((i * 12 - 10) - (i * 2)).toString(),
-      });
-    }
-    setTableData(data)
-  }
+
+  const api = createInstance();
 
   useEffect(() => {
-    setData();
+    api.get('/recount/index/')
+      .then(res => { setTableData(res.data) })
+      .catch(e => {
+        Snackbar.show({
+          text: e.response.data.msg,
+          textColor: colors.LIGHT_DANGER,
+          backgroundColor: colors.DANGER,
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      });
   }, [])
 
 
