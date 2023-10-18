@@ -1,11 +1,13 @@
 import React, { memo } from 'react';
 import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { colors, sizes } from '../../../themes/variables';
+import { fixFloat } from '../../../helpers/Utilitites'
 
 const Tbody = ({ area, onPressEvent }) => {
   console.log('render area' + area.id);
   let widthArr = [42, 120, 80, 80, 80]
   let numberOfLines = parseInt(area.id)
+
   return (
     <TouchableNativeFeedback
       accessibilityRole="button"
@@ -17,7 +19,7 @@ const Tbody = ({ area, onPressEvent }) => {
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{area.code}</Text>
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] } ]}>{area.scan}</Text>
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[3] } ]}>{area.control}</Text>
-        <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, { width: widthArr[4] } ]}>{area.gap}</Text>
+        <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, { width: widthArr[4] } ]}>{ area.gap }</Text>
       </View>
   </TouchableNativeFeedback>
 
