@@ -10,34 +10,26 @@ function OtherData({ navigation, area }) {
   const [tableData, setTableData] = useState([]);
   console.log('render other');
 
-  const setData = () => {
+  useEffect(() => {
     const data = [];
     for (let i = 1; i <= 20; i++) {
       data.push({
         id: i,
         article: 'артикул' + i,
         name: 'наименование' + i,
-        scanCount: (i * 2).toString(),
+        scan: (i * 2).toString(),
         barcode: 'штрихкод' + i,
       });
     }
     setTableData(data)
-
-    setTimeout(function(){
-      setIsLoading(false);
-    }, 3000)
-  }
-
-
-  useEffect(() => {
-    setData();
+    setIsLoading(false);
   }, [])
 
 
 
   return (
     <View style={styles.wrapper}>
-        <Spinner visible={isLoading} />
+        <Spinner visible={isLoading} animation="fade" />
         <View style={styles.tableWrapper}>
           <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
             <OtherHead />

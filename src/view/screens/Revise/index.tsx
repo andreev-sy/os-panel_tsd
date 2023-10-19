@@ -4,12 +4,15 @@ import AreaRow from './partials/AreaRow';
 import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
+import createInstance from '../../helpers/AxiosInstance';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function ReviseScreen({ navigation }) {
   const [listData, setListData] = useState([]);
   const [modalVisible, setmodalVisible] = useState(false);
   const [areaSelect, setAreaSelect] = useState({});
   const [areaBarcode, setAreaBarcode] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const onPressEvent = useCallback((area) => {
     console.log(area)
@@ -34,30 +37,27 @@ function ReviseScreen({ navigation }) {
     });
   };
 
-  const setData = () => {
-    const data = [];
-    for (let i = 1; i <= 100; i++) {
-      data.push({ 
-        id: i, 
-        title: 'Зона 000' + i + ' (ряд А)', 
-        code: '000' + i, 
-        row: '(A)', 
-        barcode: '000' + i, 
-        planCount: (i * 3 - 10).toString(),
-        scanCount: (i * 2).toString(),
-      });
-    }
-    setListData(data)
-  }
-
-
+  const api = createInstance();
   useEffect(() => {
-    setData();
+    api.get('/revise/index/')
+      .then(res => { 
+        setListData(res.data) 
+        setIsLoading(false)
+      })
+      .catch(e => {
+        setIsLoading(false)
+        Snackbar.show({
+          text: e.response.data.msg,
+          textColor: colors.LIGHT_DANGER,
+          backgroundColor: colors.DANGER,
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      });
   }, [])
-
 
   return (
     <View style={styles.wrapper}>
+      <Spinner visible={isLoading} animation="fade" />
       <FlatList
         contentContainerStyle={styles.inner}
         initialNumToRender={6}
@@ -111,7 +111,7 @@ function ReviseScreen({ navigation }) {
 
 
 export const styles = StyleSheet.create({
-  wrapper: { paddingVertical: sizes.padding, backgroundColor: colors.BG, },
+  wrapper: { paddingVertical: sizes.padding, backgroundColor: colors.BG, height: '100%' },
   inner: { paddingHorizontal: sizes.padding, },
 
   dialogHeader: { padding: 0, margin: 0 },

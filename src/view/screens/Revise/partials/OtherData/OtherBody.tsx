@@ -5,13 +5,14 @@ import { colors, sizes } from '../../../../themes/variables';
 const OtherBody = ({ item }) => {
   console.log('render other' + item.id);
   let widthArr = [130, 140, 80, 140]
+  let numberOfLines = parseInt(item.id)
 
   return (
     <View style={styles.tbody}>
-      <Text numberOfLines={item.id} style={[styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] }]}>{item.article}</Text>
-      <Text numberOfLines={item.id} style={[styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] }]}>{item.name}</Text>
-      <Text numberOfLines={item.id} style={[styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] }]}>{item.scanCount}</Text>
-      <Text numberOfLines={item.id} style={[styles.tbodyText, { width: widthArr[3] }]}>{item.barcode}</Text>
+      <Text numberOfLines={numberOfLines} style={[styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] }]}>{item.article}</Text>
+      <Text numberOfLines={numberOfLines} style={[styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] }]}>{item.name}</Text>
+      <Text numberOfLines={numberOfLines} style={[styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] }]}>{item.scan}</Text>
+      <Text numberOfLines={numberOfLines} style={[styles.tbodyText, { width: widthArr[3] }]}>{item.barcode}</Text>
     </View>
   );
 }

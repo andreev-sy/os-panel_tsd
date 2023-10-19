@@ -5,8 +5,10 @@ import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
 import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function ScanAreaScreen({ navigation, route }) {
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuto, setIsAuto] = useState(true);
   const [barcode, setBarcode] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -115,7 +117,12 @@ function ScanAreaScreen({ navigation, route }) {
     }
   };
 
-  const setData = () => {
+
+  const onChangeBarcode = () => {
+    console.log(barcode)
+  }
+
+  useEffect(() => {
     const data = [];
     for (let i = 1; i <= 100000; i++) {
       data.push({
@@ -128,19 +135,13 @@ function ScanAreaScreen({ navigation, route }) {
       });
     }
     setTableData(data)
-  }
-
-  const onChangeBarcode = () => {
-    console.log(barcode)
-  }
-
-  useEffect(() => {
-    setData();
+    setIsLoading(false)
   },[])
 
 
   return (
     <View style={styles.wrapper}>
+      <Spinner visible={isLoading} animation="fade" />
       <View style={styles.form}>
         <View style={styles.formSwitch}>
           <Text style={styles.formSwitchText}>Авто</Text>
@@ -286,7 +287,7 @@ export const styles = StyleSheet.create({
     elevation: 3,
   },
   formInputBarcode: { flexBasis: '56%' },
-  formInputCount: { flexBasis: '28%', textAlign: 'center' },
+  formInputCount: { flexBasis: '28%' },
   formInputLong: { flexBasis: '42%' },
   formBottomBtn: {
     height: 38,

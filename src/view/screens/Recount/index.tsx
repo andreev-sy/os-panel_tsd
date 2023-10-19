@@ -70,7 +70,7 @@ const ReacountScreen = () => {
       });
   }, [])
 
-
+ 
   return (
     <View style={styles.wrapper}>
       <Spinner visible={isLoading} animation="fade" />

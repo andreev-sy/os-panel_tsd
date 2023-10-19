@@ -25,24 +25,23 @@ const ActionNotification = () => {
             }
 
             <View>
-                <Dialog.Container 
-                    headerStyle={{ height: 0, padding: 0, margin: 0 }}  
+                <Dialog.Container
+                    headerStyle={{ height: 0, padding: 0, margin: 0 }}
                     contentStyle={{ borderRadius: sizes.radius }}
-                    footerStyle={{ justifyContent: 'center' }} 
-                    visible={modalVisible} 
+                    footerStyle={{ justifyContent: 'center' }}
+                    visible={modalVisible}
                     onBackdropPress={() => setModalVisible(!modalVisible)}
-                >                    
+                >
                     <View>
-                        <Dialog.Button 
-                            label="Прочитать всё" 
-                            style={{ fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' }} 
+                        <Dialog.Button
+                            label="Прочитать всё"
+                            style={{ fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' }}
                             onPress={handleViewedAll}
                         />
                     </View>
-                        
-                    <Dialog.Button 
-                        label="Закрыть" 
-                        style={{ fontSize: sizes.body4, color: colors.SECONDARY, textTransform: 'none' }} 
+                    <Dialog.Button
+                        label="Закрыть"
+                        style={{ fontSize: sizes.body4, color: colors.SECONDARY, textTransform: 'none' }}
                         onPress={() => setModalVisible(!modalVisible)}
                     />
                 </Dialog.Container>
@@ -50,6 +49,5 @@ const ActionNotification = () => {
         </View>
     );
 };
-
 
 export default ActionNotification;

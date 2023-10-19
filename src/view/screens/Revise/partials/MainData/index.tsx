@@ -2,47 +2,51 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { View, Text, Switch, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import { colors, constant, sizes } from '../../../../themes/variables';
 import Dialog from 'react-native-dialog';
-import Snackbar from 'react-native-snackbar';
 import MainBody from './MainBody';
 import MainHead from './MainHead';
+import createInstance from '../../../../helpers/AxiosInstance';
+import Snackbar from "react-native-snackbar";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function MainData({ navigation, area }) {
   const [contextModalVisible, setContextModalVisible] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [item, setitem] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   
   console.log('render main');
+  console.log('area', area)
 
   const onPressEvent = useCallback((item) => {
     setitem(item)
     setContextModalVisible(!contextModalVisible)
   }, []);
+ 
 
 
-  const setData = () => {
-    const data = [];
-    for (let i = 1; i <= 20; i++) {
-        data.push({
-        id: i,
-        article: 'артикул' + i,
-        name: 'наименование' + i,
-        planCount: (i * 4 - 4).toString(),
-        scanCount: (i * 2).toString(),
-        gap: ((i * 4 - 4) - (i * 2)).toString(),
-        barcode: 'штрихкод' + i,
-      });
-    }
-    setTableData(data)
-  }
-
-
+  
+  const api = createInstance();
   useEffect(() => {
-    setData();
+    api.get(`/revise/view/?area_id=${area.id}`)
+      .then(res => { 
+        setTableData(res.data) 
+        setIsLoading(false)
+      })
+      .catch(e => {
+        setIsLoading(false)
+        Snackbar.show({
+          text: e.response.data.msg,
+          textColor: colors.LIGHT_DANGER,
+          backgroundColor: colors.DANGER,
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      });
   }, [])
 
 
   return (
     <View style={styles.wrapper}>
+      <Spinner visible={isLoading} animation="fade" />
         <View style={styles.tableWrapper}>
           <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
             <MainHead />

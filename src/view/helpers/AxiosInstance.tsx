@@ -15,8 +15,7 @@ function createInstance() {
         (response) => response,
         (error) => {
             if (error.response)
-                if (error.response.status == '401')
-                    logout();
+                if (error.response.status == '401') logout();
 
             return error;
         }

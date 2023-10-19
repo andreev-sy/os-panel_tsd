@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { colors, sizes } from '../../themes/variables';
 import Snackbar from "react-native-snackbar";
 import NotificationRow from './partials/NotificationRow';

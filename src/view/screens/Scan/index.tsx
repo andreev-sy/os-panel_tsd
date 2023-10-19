@@ -5,12 +5,14 @@ import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
 import createInstance from '../../helpers/AxiosInstance';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function ScanScreen({ navigation }) {
   const [listData, setListData] = useState([]);
   const [modalVisible, setmodalVisible] = useState(false);
   const [areaSelect, setAreaSelect] = useState({});
   const [areaBarcode, setAreaBarcode] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const onPressEvent = useCallback((area) => {
     console.log(area)
@@ -23,26 +25,26 @@ function ScanScreen({ navigation }) {
     if (areaBarcode.trim() == areaSelect.barcode) {
       navigation.navigate('ScanAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect })
       setmodalVisible(!modalVisible)
-      return;
+    }else{
+      setAreaBarcode('');
+      Snackbar.show({
+        text: 'Введенный штрихкод не совпадает с выбраной зоной',
+        textColor: colors.DANGER,
+        backgroundColor: colors.LIGHT_DANGER,
+        duration: Snackbar.LENGTH_SHORT,
+      });
     }
-
-    setAreaBarcode('');
-    Snackbar.show({
-      text: 'Введенный штрихкод не совпадает с выбраной зоной',
-      textColor: colors.DANGER,
-      backgroundColor: colors.LIGHT_DANGER,
-      duration: Snackbar.LENGTH_SHORT,
-    });
   };
 
-
-
   const api = createInstance();
-
   useEffect(() => {
     api.get('/scan/index/')
-      .then(res => { setListData(res.data) })
+      .then(res => { 
+        setListData(res.data) 
+        setIsLoading(false)
+      })
       .catch(e => {
+        setIsLoading(false)
         Snackbar.show({
           text: e.response.data.msg,
           textColor: colors.LIGHT_DANGER,
@@ -55,6 +57,7 @@ function ScanScreen({ navigation }) {
 
   return (
     <View style={styles.wrapper}>
+      <Spinner visible={isLoading} animation="fade" />
       <FlatList
         contentContainerStyle={styles.inner}
         initialNumToRender={6}

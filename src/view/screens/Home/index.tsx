@@ -19,20 +19,20 @@ function HomeScreen({ navigation }) {
     const handlePressScan = () => {
         setAreaScan(false)
         setModalScanVisible(true)
-        // areaScanRef.current.focus();
+        setTimeout(() => areaScanRef.current.focus(), 150)
     }
 
     const handlePressModalScan = () => {
-        setModalScanVisible(!modalScanVisible)
-        let area = {
-            id: 1,
-            article: 'артикул' + 1,
-            name: 'наименование' + 1,
-            param1: 'параметр' + 1,
-            scanCount: (2 * 2).toString(),
-            barcode: 'штрихкод' + 1,
-        };
-        navigation.navigate('ScanAreaStackRoute', { headerTitle: 'Зона ' + areaScan, area: area })
+        api.get(`/scan/verify/?area_barcode=${areaScan}`)
+            .then(res => {
+                console.log(res)
+                navigation.navigate('ScanAreaStackRoute', { headerTitle: 'Зона ' + res.data.title, area: res.data })
+            })
+            .catch(e => {
+                console.log(e)
+                // Snackbar.show({ text: e.response.data.msg, textColor: colors.LIGHT_DANGER, backgroundColor: colors.DANGER, duration: Snackbar.LENGTH_SHORT, });
+                // setTimeout(() => areaScanRef.current.focus(), 150)
+            });
     }
 
     const handlePressControl = () => navigation.navigate('ControlStackRoute')
@@ -47,20 +47,10 @@ function HomeScreen({ navigation }) {
     useEffect(() => {
         api.get(`/site/index/`)
             .then(res => {
-                if(res.data) setHomeData(res.data);
+                if (res.data) setHomeData(res.data);
             })
             .catch(e => {
-                Snackbar.show({
-                    text: e.response.data.msg,
-                    textColor: colors.LIGHT_DANGER,
-                    backgroundColor: colors.DANGER,
-                    duration: Snackbar.LENGTH_SHORT,
-                    action: {
-                        text: 'СКРЫТЬ',
-                        textColor: colors.LIGHT_DANGER,
-                        onPress: () => { /* Do something. */ },
-                    },
-                });
+                Snackbar.show({ text: e.response.data.msg, textColor: colors.LIGHT_DANGER, backgroundColor: colors.DANGER, duration: Snackbar.LENGTH_SHORT, });
             });
     }, [isLoading]);
 
@@ -147,13 +137,14 @@ function HomeScreen({ navigation }) {
                     visible={modalScanVisible}
                     onBackdropPress={() => setModalScanVisible(!modalScanVisible)}
                 >
+                    <Dialog.Title style={styles.dialogTitle}>Войти в зону</Dialog.Title>
                     <View>
                         <TextInput
                             style={styles.dialogInput}
                             placeholder="Штрихкод зоны"
-                            // ref={areaScanRef}
-                            autoFocus={true}
+                            ref={areaScanRef}
                             autoCorrect={false}
+                            selectTextOnFocus={true}
                             onChangeText={setAreaScan}
                             onSubmitEditing={handlePressModalScan}
                         />
@@ -264,10 +255,10 @@ export const styles = StyleSheet.create({
     botJobTextDisabled: { color: colors.BLACK },
     botJobCountDisabled: { color: colors.GRAY_800 },
 
-    dialogHeader: { height: 0, padding: 0, margin: 0 },
+    dialogHeader: { padding: 0, margin: 0 },
     dialogContent: { borderRadius: sizes.radius },
     dialogFooter: { justifyContent: 'center' },
-    dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700 },
+    dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700, marginBottom: 15, },
     dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },
     dialogBtnFill: { height: 50, width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.PRIMARY, borderRadius: sizes.radius, },
     dialogBtnFillText: { color: colors.WHITE, fontSize: sizes.body3, fontWeight: '400' },

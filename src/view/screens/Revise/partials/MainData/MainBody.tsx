@@ -5,6 +5,7 @@ import { colors, constant, sizes } from '../../../../themes/variables';
 const MainBody = ({ item, onPressEvent }) => {
   console.log('render main'+item.id);
   let widthArr = [130, 140, 80, 80, 80, 140]
+  let numberOfLines = parseInt(item.id)
 
   return (
     <TouchableNativeFeedback
@@ -13,15 +14,14 @@ const MainBody = ({ item, onPressEvent }) => {
       background={TouchableNativeFeedback.Ripple(colors.GRAY_200, false)}
     >
         <View style={styles.tbody}>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] } ]}>{item.article}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{item.name}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] } ]}>{item.planCount}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[3] } ]}>{item.scanCount}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[4] } ]}>{item.gap}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, { width: widthArr[5] } ]}>{item.barcode}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] } ]}>{item.article}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{item.name}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] } ]}>{item.plan}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[3] } ]}>{item.scan}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[4] } ]}>{item.gap}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, { width: widthArr[5] } ]}>{item.barcode}</Text>
         </View>
     </TouchableNativeFeedback>
-
   );
 }
 
@@ -44,7 +44,6 @@ export const styles = StyleSheet.create({
     borderRightColor: colors.GRAY_600,
     borderRightWidth: 1,
   }
-
 });
 
 export default memo(MainBody)

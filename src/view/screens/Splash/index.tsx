@@ -6,7 +6,7 @@ import { colors } from '../../themes/variables';
 const SplashScreen = () => {
   return (
     <View style={styles.wrapper}>
-          <Spinner visible={true} />
+        <Spinner visible={true} />
     </View>
   );
 };

@@ -13,9 +13,10 @@ const AreaRow = ({ area, onPressEvent }) => {
       onPress={() => onPressEvent(area)}
     >
       <View>
-        <Text style={styles.title}>Зона {area.code} {area.row}</Text>
-        <Text style={styles.text}>Отсканировано товаров: {area.scanCount}</Text>
-        <Text style={styles.text}>Учетное количество: {area.planCount}</Text>
+        <Text style={styles.title}>{area.title}</Text>
+        <Text style={styles.text}>Отсканировано товаров: {area.scan}</Text>
+        <Text style={styles.text}>Учетное количество: {area.plan}</Text>
+        <Text style={styles.text}>Расхождение: {area.gap}</Text>
       </View>
         
       <MaterialCommunityIcons name="arrow-expand-right" color={colors.PRIMARY} size={22} />

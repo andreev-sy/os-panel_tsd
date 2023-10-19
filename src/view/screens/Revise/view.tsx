@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { colors, sizes } from '../../themes/variables';
 import MainData from './partials/MainData';
 import OtherData from './partials/OtherData/';
 
-function ReviseAreaScreen({ navigation, area }) {
+function ReviseAreaScreen({ navigation, route }) {
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -24,17 +24,30 @@ function ReviseAreaScreen({ navigation, area }) {
         <TabBar
           {...props}
           renderLabel={ ({ focused, route }) => (
-            <Text style={{ color: focused ? colors.BLACK : colors.GRAY_600, fontSize: sizes.body3, fontWeight: '600' }}>{route.title}</Text>
+            <Text style={[styles.tabBarText, focused ? styles.tabBarTextActive : {} ]}>{route.title}</Text>
           )}
-          indicatorStyle={{ backgroundColor: colors.BLACK, borderRadius: sizes.radius }}
-          style={{backgroundColor: colors.BG }}
+          indicatorStyle={styles.tabBarIndicator}
+          style={styles.tabBar}
         />
       )}
-      renderScene={SceneMap({ main: MainData, other: OtherData })}
+      renderScene={SceneMap({ 
+        main: () => <MainData navigation={navigation} area={route.params.area} />, 
+        other: () => <OtherData navigation={navigation} area={route.params.area} />,
+      })}
       onIndexChange={setIndex}
-      initialLayout={{ width: sizes.width }}
+      initialLayout={styles.tabView}
     />
   );
 }
 
+export const styles = StyleSheet.create({
+  tabView: { width: sizes.width },
+  tabBar: { backgroundColor: colors.BG },
+  tabBarText: { color: colors.GRAY_600, fontSize: sizes.body3, fontWeight: '400' },
+  tabBarTextActive: { color: colors.BLACK },
+  tabBarIndicator: { backgroundColor: colors.BLACK, borderRadius: sizes.radius },
+
+});
+
+                        
 export default ReviseAreaScreen;
