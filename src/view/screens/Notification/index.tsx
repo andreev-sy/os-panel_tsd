@@ -6,7 +6,7 @@ import NotificationRow from './partials/NotificationRow';
 import createInstance from '../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-function NotificationScreen() {
+function NotificationScreen({ navigation, route }) {
   const [notificationData, setNotificationData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   console.log('render NotificationScreen')

@@ -69,4 +69,6 @@ export const sizes = {
 
 export const constant = {
     activeOpacity:  0.8,
+    refDelay: 200,
+    snackbarDelay: 500,
 };

@@ -8,7 +8,7 @@ import Snackbar from "react-native-snackbar";
 import createInstance from '../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-const ReacountScreen = () => {
+const ReacountScreen = ({ navigation, route }) => {
   const [text, onChangeText] = useState('');
   const [number, onChangeNumber] = useState('');
   const [tableData, setTableData] = useState([]);

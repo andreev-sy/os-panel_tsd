@@ -6,7 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import createInstance from '../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-function ProfileScreen() {
+function ProfileScreen({ navigation, route }) {
   const { userInfo, baseUrl, logout } = useContext(AuthContext);
   const [newBaseUrl, setNewBaseUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);

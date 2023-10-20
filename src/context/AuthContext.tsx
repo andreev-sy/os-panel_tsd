@@ -7,6 +7,7 @@ import { colors } from '../view/themes/variables';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const [scanAuto, setScanAuto] = useState(true);
   const [userInfo, setUserInfo] = useState({});
   const [baseUrl, setBaseUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -85,7 +86,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // const setConst = async () => {
+  //     let scan = await AsyncStorage.getItem('scanAuto');
+
+  //     if(scan) setScanAuto(scan);
+  //     else setScanAuto(true);
+  // };
+
   useEffect(() => { isLoggedIn(); }, []);
+  // useEffect(() => { setConst(); }, []);
 
   return (
     <AuthContext.Provider
@@ -94,6 +103,7 @@ export const AuthProvider = ({ children }) => {
         splashLoading,
         userInfo,
         baseUrl,
+        scanAuto,
         setBaseUrl,
         login,
         logout

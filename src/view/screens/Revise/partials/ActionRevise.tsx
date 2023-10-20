@@ -3,9 +3,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { colors, constant, sizes } from '../../../themes/variables';
 import Dialog from "react-native-dialog";
+import createInstance from '../../../helpers/AxiosInstance';
+import Snackbar from 'react-native-snackbar';
 
-const ActionRevise = () => {
+const ActionRevise = ({ navigation, area }) => {
     const [modalVisible, setModalVisible] = useState(false);
+    const api = createInstance();
 
     const handleFinishPress = () => {
         Alert.alert("", "Вы точно хотите закончить сверку?", [
@@ -15,7 +18,15 @@ const ActionRevise = () => {
     };
 
     function finishArea() {
-        setModalVisible(!modalVisible);
+        api.get(`/revise/finish/?area_id=${area.id}`)
+            .then(res => {
+                setModalVisible(!modalVisible)
+                navigation.goBack({ params: { refresh: true } })
+                setTimeout(() => { Snackbar.show({ text: 'Сверка в зоне закончена', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, }); }, constant.snackbarDelay)
+            })
+            .catch(e => {
+                Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
+            });
     };
 
     return (

@@ -1,11 +1,12 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { View, Text, Switch, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
-import Dialog from "react-native-dialog";
+import Dialog from 'react-native-dialog';
 import Snackbar from "react-native-snackbar";
 import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { AuthContext } from '../../../context/AuthContext';
 
 function ScanAreaScreen({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);

@@ -6,13 +6,16 @@ import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
 import createInstance from '../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { useFocusEffect } from '@react-navigation/native';
 
-function ReviseScreen({ navigation }) {
+function ReviseScreen({ navigation, route }) {
   const [listData, setListData] = useState([]);
   const [modalVisible, setmodalVisible] = useState(false);
   const [areaSelect, setAreaSelect] = useState({});
   const [areaBarcode, setAreaBarcode] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const api = createInstance();
+  console.log('render ReviseScreen')
 
   const onPressEvent = useCallback((area) => {
     console.log(area)
@@ -22,8 +25,8 @@ function ReviseScreen({ navigation }) {
 
   const handlePressEnter = () => {
     // сверяем введный ШК с ШК из выбранной зоны
-    if (areaBarcode.trim() == areaSelect.barcode) {
-      navigation.navigate('ReviseAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect })
+    if (areaBarcode.trim() == areaSelect?.barcode) {
+      navigation.navigate('ReviseAreaStackRoute', { headerTitle: areaSelect?.title, area: areaSelect })
       setmodalVisible(!modalVisible)
       return;
     }
@@ -37,11 +40,10 @@ function ReviseScreen({ navigation }) {
     });
   };
 
-  const api = createInstance();
-  useEffect(() => {
+  const reviseIndex = () => {
     api.get('/revise/index/')
       .then(res => { 
-        setListData(res.data) 
+        setListData(res?.data) 
         setIsLoading(false)
       })
       .catch(e => {
@@ -53,7 +55,10 @@ function ReviseScreen({ navigation }) {
           duration: Snackbar.LENGTH_SHORT,
         });
       });
-  }, [])
+  }
+
+  useFocusEffect( useCallback( () => { reviseIndex() }, []) );
+  useEffect(() => { reviseIndex() }, [])
 
   return (
     <View style={styles.wrapper}>

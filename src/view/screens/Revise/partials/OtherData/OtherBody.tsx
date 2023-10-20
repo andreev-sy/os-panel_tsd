@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { colors, sizes } from '../../../../themes/variables';
+import { fixFloat } from '../../../../helpers/Utilitites';
 
 const OtherBody = ({ item }) => {
   console.log('render other' + item.id);

@@ -76,7 +76,7 @@ const HomeStackNavigator = () => {
         component={RecountScreen}
         options={({ navigation, route }) => ({
           // headerTitle: (props) => <Title {...props} />,
-          title: 'Пересчет',
+          title: 'Пересчёт',
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => <HeaderBack navigation={navigation} />,
@@ -103,7 +103,7 @@ const HomeStackNavigator = () => {
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => <HeaderBack navigation={navigation} />,
-          headerRight: () => <ActionRevise onNullEvent={route.params.onNullEvent} onFinishEvent={route.params.onFinishEvent} />,
+          headerRight: () => <ActionRevise navigation={navigation} area={route.params.area} />,
         })}
       />
       <Stack.Screen

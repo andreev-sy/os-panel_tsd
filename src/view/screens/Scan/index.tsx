@@ -6,13 +6,15 @@ import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
 import createInstance from '../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { useFocusEffect } from '@react-navigation/native';
 
-function ScanScreen({ navigation }) {
+function ScanScreen({ navigation, route }) {
   const [listData, setListData] = useState([]);
   const [modalVisible, setmodalVisible] = useState(false);
   const [areaSelect, setAreaSelect] = useState({});
   const [areaBarcode, setAreaBarcode] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const api = createInstance();
 
   const onPressEvent = useCallback((area) => {
     console.log(area)
@@ -36,8 +38,7 @@ function ScanScreen({ navigation }) {
     }
   };
 
-  const api = createInstance();
-  useEffect(() => {
+  const scanIndex = () => {
     api.get('/scan/index/')
       .then(res => { 
         setListData(res.data) 
@@ -52,12 +53,16 @@ function ScanScreen({ navigation }) {
           duration: Snackbar.LENGTH_SHORT,
         });
       });
-  }, [])
+  }
+
+  useFocusEffect( useCallback( () => { scanIndex() }, []) );
+  useEffect(() => { scanIndex() }, [])
 
 
   return (
     <View style={styles.wrapper}>
       <Spinner visible={isLoading} animation="fade" />
+
       <FlatList
         contentContainerStyle={styles.inner}
         initialNumToRender={6}
@@ -88,7 +93,6 @@ function ScanScreen({ navigation }) {
               onChangeText={setAreaBarcode}
               onSubmitEditing={handlePressEnter}
             />
-
             <TouchableOpacity
               style={styles.dialogBtnFill}
               activeOpacity={constant.activeOpacity}
@@ -97,13 +101,10 @@ function ScanScreen({ navigation }) {
             >
               <Text style={styles.dialogBtnFillText}>Войти</Text>
             </TouchableOpacity>
-
           </View>
-
           <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setmodalVisible(!modalVisible)} />
         </Dialog.Container>
       </View>
-
 
     </View>
   );

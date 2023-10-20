@@ -8,7 +8,7 @@ import Snackbar from "react-native-snackbar";
 import Spinner from 'react-native-loading-spinner-overlay';
 import createInstance from '../../helpers/AxiosInstance';
 
-const ControlScreen = () => {
+const ControlScreen = ({ navigation, route }) => {
   const [area, setArea] = useState('');
   const [control, setControl] = useState('');
   const [tableData, setTableData] = useState([]);

@@ -4,28 +4,31 @@ import { colors, sizes } from '../../../../themes/variables';
 import Spinner from 'react-native-loading-spinner-overlay';
 import OtherBody from './OtherBody';
 import OtherHead from './OtherHead';
+import createInstance from '../../../../helpers/AxiosInstance';
+import Snackbar from "react-native-snackbar";
 
 function OtherData({ navigation, area }) {
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
   console.log('render other');
 
+  const api = createInstance();
   useEffect(() => {
-    const data = [];
-    for (let i = 1; i <= 20; i++) {
-      data.push({
-        id: i,
-        article: 'артикул' + i,
-        name: 'наименование' + i,
-        scan: (i * 2).toString(),
-        barcode: 'штрихкод' + i,
+    api.get(`/revise/other/?area_id=${area.id}`)
+      .then(res => { 
+        setTableData(res.data) 
+        setIsLoading(false)
+      })
+      .catch(e => {
+        setIsLoading(false)
+        Snackbar.show({
+          text: e.response.data.msg,
+          textColor: colors.LIGHT_DANGER,
+          backgroundColor: colors.DANGER,
+          duration: Snackbar.LENGTH_SHORT,
+        });
       });
-    }
-    setTableData(data)
-    setIsLoading(false);
   }, [])
-
-
 
   return (
     <View style={styles.wrapper}>
@@ -58,7 +61,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-  tableWrapper: { flex: 1, flexDirection: 'column', backgroundColor: colors.WHITE, width: '100%' },
+  tableWrapper: { flexDirection: 'column', backgroundColor: colors.WHITE, width: '100%' },
   tableInner: { flexGrow: 1, flexDirection: 'column' },
 });
 

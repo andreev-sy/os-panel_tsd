@@ -19,7 +19,7 @@ const Tbody = ({ area, onPressEvent }) => {
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{area.code}</Text>
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] } ]}>{area.scan}</Text>
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[3] } ]}>{area.control}</Text>
-        <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, { width: widthArr[4] } ]}>{ area.gap }</Text>
+        <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, { width: widthArr[4] } ]}>{ fixFloat(area.gap) }</Text>
       </View>
   </TouchableNativeFeedback>
 

@@ -10,7 +10,7 @@ function HeaderBack({ navigation }) {
             style={styles.btn}
             activeOpacity={constant.activeOpacity}
             accessibilityRole="button"
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.goBack() }
         >
             <Ionicons
                 name="chevron-back-sharp"

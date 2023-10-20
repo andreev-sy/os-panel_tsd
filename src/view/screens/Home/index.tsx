@@ -1,4 +1,5 @@
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import React, { useState, useContext, useRef, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, TouchableOpacity, Text, StyleSheet, TextInput } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
@@ -7,12 +8,13 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog from "react-native-dialog";
 import Snackbar from 'react-native-snackbar';
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ navigation, route }) {
     const { isLoading, baseUrl, userInfo, } = useContext(AuthContext);
     const [homeData, setHomeData] = useState({});
     const [modalScanVisible, setModalScanVisible] = useState(false);
     const [areaScan, setAreaScan] = useState(false);
     const areaScanRef = useRef(null);
+    const api = createInstance();
 
     console.log('render HomeScreen')
 
@@ -36,15 +38,12 @@ function HomeScreen({ navigation }) {
     }
 
     const handlePressControl = () => navigation.navigate('ControlStackRoute')
-
     const handlePressScanJob = () => navigation.navigate('ScanStackRoute')
     const handlePressControlJob = () => navigation.navigate('ControlStackRoute')
     const handlePressRecountJob = () => navigation.navigate('RecountStackRoute')
     const handlePressReviseJob = () => navigation.navigate('ReviseStackRoute')
 
-    const api = createInstance();
-
-    useEffect(() => {
+    const siteIndex = () => {
         api.get(`/site/index/`)
             .then(res => {
                 if (res.data) setHomeData(res.data);
@@ -52,7 +51,10 @@ function HomeScreen({ navigation }) {
             .catch(e => {
                 Snackbar.show({ text: e.response.data.msg, textColor: colors.LIGHT_DANGER, backgroundColor: colors.DANGER, duration: Snackbar.LENGTH_SHORT, });
             });
-    }, [isLoading]);
+    }
+
+    useFocusEffect( useCallback(() => { siteIndex() }, []) );
+    useEffect(() => { siteIndex() }, [isLoading]);
 
     return (
         <View style={styles.wrapper}>
@@ -112,7 +114,7 @@ function HomeScreen({ navigation }) {
                         accessibilityRole="button"
                         onPress={handlePressRecountJob}
                     >
-                        <Text style={[styles.botJobText, homeData.recount > 0 ? {} : styles.botJobTextDisabled]}>Пересчет</Text>
+                        <Text style={[styles.botJobText, homeData.recount > 0 ? {} : styles.botJobTextDisabled]}>Пересчёт</Text>
                         <Text style={[styles.botJobCount, homeData.recount > 0 ? {} : styles.botJobCountDisabled]}>{homeData.recount}</Text>
                     </TouchableOpacity>
                     <View style={styles.botHr} />
