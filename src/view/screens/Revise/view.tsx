@@ -43,7 +43,6 @@ export const styles = StyleSheet.create({
   tabBarText: { color: colors.GRAY_600, fontSize: sizes.body3, fontWeight: '400' },
   tabBarTextActive: { color: colors.BLACK },
   tabBarIndicator: { backgroundColor: colors.BLACK, borderRadius: sizes.radius },
-
 });
 
                         

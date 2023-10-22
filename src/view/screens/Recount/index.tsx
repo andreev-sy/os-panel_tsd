@@ -135,6 +135,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
+  tableWrapper: { flex: 1, flexDirection: 'column',  width: '100%' },
+  tableInner: { flexGrow: 1, flexDirection: 'column' },
+
   form: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -168,10 +171,6 @@ export const styles = StyleSheet.create({
     fontSize: sizes.body4,
     fontWeight: '400'
   },
-
-
-  tableWrapper: { flex: 1, flexDirection: 'column', backgroundColor: colors.WHITE, width: '100%' },
-  tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0, marginBottom: 15, },
   dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE  },

@@ -291,7 +291,7 @@ export const styles = StyleSheet.create({
   },
   formBtnText: { color: colors.WHITE, fontSize: sizes.body4, fontWeight: '400' },
 
-  tableWrapper: { flex: 1, flexDirection: 'column', backgroundColor: colors.WHITE, width: '100%' },
+  tableWrapper: { flex: 1, flexDirection: 'column', width: '100%' },
   tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0 },

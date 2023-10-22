@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { colors, sizes } from '../../../themes/variables';
 
 const Thead = () => {
-  let widthArr = [100, 50, 50]
+  let widthArr = [100, 20, 70]
 
   return (
     <View style={styles.thead}>
@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row', 
     borderWidth: 1,
     borderColor: colors.GRAY_600,
+    backgroundColor: colors.WHITE, 
   },
   theadText: {
     flex: 1, 

@@ -4,7 +4,8 @@ import { colors, sizes } from '../../../themes/variables';
 
 const Tbody = ({ area, onPressEvent }) => {
   console.log('render area' + area.id);
-  let widthArr = [100, 50, 50]
+  let widthArr = [100, 20, 70]
+
   let numberOfLines = parseInt(area.id)
 
   return (
@@ -28,7 +29,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row', 
     borderColor: colors.GRAY_600,
     borderWidth: 1,
-    borderTopWidth: 0
+    borderTopWidth: 0,
+    backgroundColor: colors.WHITE, 
   },
   tbodyText: {
     flex: 1, 

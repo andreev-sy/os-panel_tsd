@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { TextInput, Text, View, FlatList, Alert, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
+import { TextInput, Text, View, FlatList, Alert, StyleSheet, ScrollView, TouchableOpacity, Vibration } from 'react-native';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
 import { colors, constant, sizes } from '../../themes/variables';
@@ -131,18 +131,20 @@ const ControlScreen = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
 
-
       <View style={styles.tableWrapper}>
-        <Thead />
-        <FlatList
-          removeClippedSubviews={false}
-          initialNumToRender={1}
-          maxToRenderPerBatch={20}
-          windowSize={2}
-          data={tableData}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <Tbody area={item} onPressEvent={onPressEvent} />}
-        />
+        <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
+          <Thead />
+          <FlatList
+            // contentContainerStyle={{ flexDirection: 'column' }}
+            removeClippedSubviews={false}
+            initialNumToRender={1}
+            maxToRenderPerBatch={20}
+            windowSize={2}
+            data={tableData}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <Tbody area={item} onPressEvent={onPressEvent} />}
+          />
+        </ScrollView>
       </View>
 
       <View>
@@ -211,12 +213,8 @@ export const styles = StyleSheet.create({
   },
 
 
-  tableWrapper: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: colors.WHITE,
-    width: '100%',
-  },
+  tableWrapper: { flex: 1, flexDirection: 'column', width: '100%', },
+  tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0, marginBottom: 15, },
   dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE },

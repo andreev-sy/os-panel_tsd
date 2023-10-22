@@ -31,7 +31,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row', 
     borderColor: colors.GRAY_600,
     borderWidth: 1,
-    borderTopWidth: 0
+    borderTopWidth: 0,
+    backgroundColor: colors.WHITE
   },
   tbodyText: {
     flex: 1, 

@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row', 
     borderWidth: 1,
     borderColor: colors.GRAY_600,
+    backgroundColor: colors.WHITE
   },
   theadText: {
     flex: 1, 

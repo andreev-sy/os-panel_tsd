@@ -167,7 +167,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-  tableWrapper: { flexDirection: 'column', backgroundColor: colors.WHITE, width: '100%' },
+  tableWrapper: { flexDirection: 'column', width: '100%' },
   tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0 },
