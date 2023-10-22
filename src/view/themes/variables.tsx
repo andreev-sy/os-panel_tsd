@@ -71,4 +71,7 @@ export const constant = {
     activeOpacity:  0.8,
     refDelay: 200,
     snackbarDelay: 500,
+    vibroTimeShort: 250,
+    vibroTimeMedium: 400,
+    vibroTimeLong: 700,
 };

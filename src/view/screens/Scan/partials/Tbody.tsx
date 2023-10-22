@@ -1,6 +1,6 @@
 import React, {memo} from 'react';
 import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
-import { colors, constant, sizes } from '../../../themes/variables';
+import { colors, sizes } from '../../../themes/variables';
 
 const Tbody = ({ item, onPressEvent }) => {
   console.log('render item'+item.id);

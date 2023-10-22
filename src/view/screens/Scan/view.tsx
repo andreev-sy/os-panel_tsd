@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { View, Text, Switch, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from 'react-native-dialog';
-import Snackbar from "react-native-snackbar";
+import Snackbar from 'react-native-snackbar';
 import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -43,7 +43,7 @@ function ScanAreaScreen({ navigation, route }) {
 
     setIsAuto(!isAuto);
     setQuantity(!isAuto ? '1' : '');
-    barcodeRef.current.focus();
+    setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
   };
 
   const handlePressEdit = () => {
@@ -54,22 +54,15 @@ function ScanAreaScreen({ navigation, route }) {
     if(isAuto) setIsAuto(false);
     
     setContextModalVisible(!contextModalVisible)
-    countRef.current.focus();
-
-    setTimeout(function(){
-      Snackbar.show({
-        text: 'Данные о товаре занесены в форму',
-        textColor: colors.PRIMARY,
-        backgroundColor: colors.LIGHT_PRIMARY,
-        duration: Snackbar.LENGTH_SHORT,
-      });
-    }, 800)
+    setTimeout(() => countRef.current.focus(), constant.refDelay)
+    setTimeout(() => {
+      Snackbar.show({ text: 'Данные о товаре занесены в форму', textColor: colors.PRIMARY, backgroundColor: colors.LIGHT_PRIMARY, duration: Snackbar.LENGTH_SHORT });
+    }, constant.snackbarDelay)
   };
 
   const handlePressDelete = () => {
-    Alert.alert("", "Вы точно хотите удалить товар из зоны?", [
-        { text: "Отмена" },
-        { text: "Да", onPress: () => deleteItem() },
+    Alert.alert('', 'Вы точно хотите удалить товар из зоны?', [
+        { text: 'Отмена' }, { text: 'Да', onPress: () => deleteItem() },
     ])
   };
 
@@ -82,15 +75,6 @@ function ScanAreaScreen({ navigation, route }) {
 
     setContextModalVisible(!contextModalVisible)
     setitem({})
-    
-    setTimeout(function(){
-      Snackbar.show({
-        text: 'Товар успешно удален',
-        textColor: colors.SUCCESS,
-        backgroundColor: colors.LIGHT_SUCCESS,
-        duration: Snackbar.LENGTH_SHORT,
-      });
-    }, 500)
   }
 
   const handleBtnSave = () => {
@@ -98,26 +82,17 @@ function ScanAreaScreen({ navigation, route }) {
       setIsEdit(false);
       setBarcode('')
       setQuantity('')
-
-      Snackbar.show({
-        text: 'Товар успешно изменён',
-        textColor: colors.SUCCESS,
-        backgroundColor: colors.LIGHT_SUCCESS,
-        duration: Snackbar.LENGTH_SHORT,
-      });
+      setTimeout(() => {
+        Snackbar.show({ text: 'Товар успешно изменён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT});
+      }, constant.snackbarDelay)
     }else{
       setBarcode('')
       setQuantity('')
-
-      Snackbar.show({
-        text: 'Товар успешно добавлен',
-        textColor: colors.SUCCESS,
-        backgroundColor: colors.LIGHT_SUCCESS,
-        duration: Snackbar.LENGTH_SHORT,
-      });
+      setTimeout(() => {
+        Snackbar.show({ text: 'Товар успешно добавлен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT});
+      }, constant.snackbarDelay)
     }
   };
-
 
   const onChangeBarcode = () => {
     console.log(barcode)
@@ -142,7 +117,9 @@ function ScanAreaScreen({ navigation, route }) {
 
   return (
     <View style={styles.wrapper}>
+
       <Spinner visible={isLoading} animation="fade" />
+
       <View style={styles.form}>
         <View style={styles.formSwitch}>
           <Text style={styles.formSwitchText}>Авто</Text>
@@ -151,7 +128,7 @@ function ScanAreaScreen({ navigation, route }) {
             onValueChange={handleAutoSwitch}
             thumbColor={isAuto ? colors.PRIMARY : colors.LIGHT}
           />
-          {isEdit ? <Text style={{ marginLeft: 16, fontSize: sizes.body4 }}>Редактирование</Text> : ''}
+          {isEdit ? <Text style={styles.editLabel}>Редактирование</Text> : ''}
         </View>
         <View style={styles.formRow}>
           <TextInput
@@ -162,6 +139,7 @@ function ScanAreaScreen({ navigation, route }) {
             autoFocus={isAuto}
             inputMode={ isAuto ? 'none' : 'text' }
             placeholder="Штрихкод"
+            placeholderTextColor={colors.GRAY_500}
             onChangeText={setBarcode}
             onSubmitEditing={onChangeBarcode}
           />
@@ -172,6 +150,7 @@ function ScanAreaScreen({ navigation, route }) {
             autoCorrect={false}
             editable={!isAuto}
             placeholder="Кол-во"
+            placeholderTextColor={colors.GRAY_500}
             onChangeText={setQuantity}
             keyboardType="numeric"
           />
@@ -223,7 +202,7 @@ function ScanAreaScreen({ navigation, route }) {
           visible={contextModalVisible}
           onBackdropPress={() => setContextModalVisible(!contextModalVisible)}
         >
-          <Dialog.Title style={styles.dialogTitle}>Артикул -{item.article}</Dialog.Title>
+          <Dialog.Title style={styles.dialogTitle}>{item.name} ({item.article})</Dialog.Title>
           <View>
             <Dialog.Button
               label="Удалить"
@@ -259,6 +238,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   form: { marginBottom: 12, },
+  editLabel: { marginLeft: 16, fontSize: sizes.body4 },
   formSwitch: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -281,7 +261,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: sizes.body4,
     backgroundColor: colors.WHITE,
-    color: colors.GRAY_600,
+    color: colors.GRAY_700,
     borderWidth: 1,
     borderColor: colors.GRAY_300,
     borderRadius: 7,
@@ -315,7 +295,7 @@ export const styles = StyleSheet.create({
   tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0 },
-  dialogContent: { borderRadius: sizes.radius },
+  dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE  },
   dialogFooter: { justifyContent: 'center' },
   dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700, marginBottom: 15, },
   dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },

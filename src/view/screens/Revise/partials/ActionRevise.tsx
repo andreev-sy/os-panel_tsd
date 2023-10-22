@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Alert, Vibration } from 'react-native';
 import { colors, constant, sizes } from '../../../themes/variables';
-import Dialog from "react-native-dialog";
+import Dialog from 'react-native-dialog';
 import createInstance from '../../../helpers/AxiosInstance';
 import Snackbar from 'react-native-snackbar';
 
@@ -11,9 +11,9 @@ const ActionRevise = ({ navigation, area }) => {
     const api = createInstance();
 
     const handleFinishPress = () => {
-        Alert.alert("", "Вы точно хотите закончить сверку?", [
-            { text: "Отмена" },
-            { text: "Да", onPress: () => finishArea() },
+        Alert.alert('', 'Вы точно хотите завершить сверку?', [
+            { text: 'Отмена' },
+            { text: 'Да', onPress: () => finishArea() },
         ])
     };
 
@@ -21,11 +21,16 @@ const ActionRevise = ({ navigation, area }) => {
         api.get(`/revise/finish/?area_id=${area.id}`)
             .then(res => {
                 setModalVisible(!modalVisible)
-                navigation.goBack({ params: { refresh: true } })
-                setTimeout(() => { Snackbar.show({ text: 'Сверка в зоне закончена', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, }); }, constant.snackbarDelay)
+                navigation.goBack()
+                setTimeout(() => { 
+                    Snackbar.show({ text: 'Сверка в зоне успешно завершена', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, }); 
+                }, constant.snackbarDelay)
             })
             .catch(e => {
-                Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
+                setTimeout(() => {
+                    Vibration.vibrate(constant.vibroTimeShort)
+                    Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+                }, constant.snackbarDelay)
             });
     };
 
@@ -50,7 +55,7 @@ const ActionRevise = ({ navigation, area }) => {
                 >
                     <View>
                         <Dialog.Button
-                            label="Закончить сверку"
+                            label="Завершить сверку"
                             style={styles.dialogBtn}
                             onPress={handleFinishPress}
                         />
@@ -70,7 +75,7 @@ export const styles = StyleSheet.create({
     actionDots: { marginRight: 3 },
 
     dialogHeader: { padding: 0, margin: 0 },
-    dialogContent: { borderRadius: sizes.radius },
+    dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE },
     dialogFooter: { justifyContent: 'center' },
     dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700, marginBottom: 10, },
     dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },

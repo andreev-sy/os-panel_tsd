@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { TextInput, Text, View, FlatList, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { TextInput, Text, View, FlatList, Alert, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
 import { colors, constant, sizes } from '../../themes/variables';
-import Dialog from "react-native-dialog";
-import Snackbar from "react-native-snackbar";
+import Dialog from 'react-native-dialog';
+import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import createInstance from '../../helpers/AxiosInstance';
 
@@ -28,39 +28,31 @@ const ControlScreen = ({ navigation, route }) => {
 
   const handlePressSave = () => {
     setIsLoading(true)
-
-    api.post('/control/update/', {
-      area, control
-    })
+    api.post('/control/update/', { area, control })
       .then(res => {
         setTableData(res.data)
         setArea('')
         setControl('')
-        setTimeout(() => areaRef.current.focus(), 150)
         setIsLoading(false)
-        Snackbar.show({
-          text: 'Контроль сохранен',
-          textColor: colors.LIGHT_SUCCESS,
-          backgroundColor: colors.SUCCESS,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setTimeout(() => areaRef.current.focus(), constant.refDelay)
+        setTimeout(() => {
+          Snackbar.show({ text: 'Контроль сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+        }, constant.snackbarDelay)
       })
       .catch(e => {
         setIsLoading(false)
-        setTimeout(() => areaRef.current.focus(), 150)
-        Snackbar.show({
-          text: e.response.data.msg,
-          textColor: colors.LIGHT_DANGER,
-          backgroundColor: colors.DANGER,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setTimeout(() => areaRef.current.focus(), constant.refDelay)
+        setTimeout(() => {
+          Vibration.vibrate(constant.vibroTimeShort)
+          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
+        }, constant.snackbarDelay)
       });
   };
 
   const handlePressFinish = () => {
-    Alert.alert("", "Вы точно хотите закончить контроль в зоне?", [
-      { text: "Отмена" },
-      { text: "Да", onPress: () => finishArea() },
+    Alert.alert('', 'Вы точно хотите завершить контроль в зоне?', [
+      { text: 'Отмена' },
+      { text: 'Да', onPress: () => finishArea() },
     ])
   };
 
@@ -73,14 +65,9 @@ const ControlScreen = ({ navigation, route }) => {
     setContextModalVisible(!contextModalVisible)
     setAreaSelected({})
 
-    setTimeout(function () {
-      Snackbar.show({
-        text: 'Контроль в зоне успешно закончен',
-        textColor: colors.SUCCESS,
-        backgroundColor: colors.LIGHT_SUCCESS,
-        duration: Snackbar.LENGTH_SHORT,
-      });
-    }, 500)
+    setTimeout(() => {
+      Snackbar.show({ text: 'Контроль в зоне успешно завершён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+    }, constant.snackbarDelay)
   }
 
   const api = createInstance();
@@ -89,17 +76,14 @@ const ControlScreen = ({ navigation, route }) => {
     api.get('/control/index/')
       .then(res => {
         setTableData(res.data)
-        console.log(res.data)
         setIsLoading(false)
       })
       .catch(e => {
         setIsLoading(false)
-        Snackbar.show({
-          text: e.response.data.msg,
-          textColor: colors.LIGHT_DANGER,
-          backgroundColor: colors.DANGER,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setTimeout(() => {
+          Vibration.vibrate(constant.vibroTimeShort)
+          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
+        }, constant.snackbarDelay)
       });
   }, [])
 
@@ -113,6 +97,7 @@ const ControlScreen = ({ navigation, route }) => {
           ref={areaRef}
           onChangeText={setArea}
           placeholder="Код зоны"
+          placeholderTextColor={colors.GRAY_500}
           value={area}
           selectTextOnFocus={true}
           onSubmitEditing={() => {
@@ -127,10 +112,11 @@ const ControlScreen = ({ navigation, route }) => {
           value={control}
           selectTextOnFocus={true}
           placeholder="Контроль"
+          placeholderTextColor={colors.GRAY_500}
           keyboardType="numeric"
           onSubmitEditing={() => {
-            if (!control) setTimeout(() => controlRef.current.focus(), 150)
-            else if (!area) setTimeout(() => areaRef.current.focus(), 150)
+            if (!control) setTimeout(() => controlRef.current.focus(), constant.refDelay)
+            else if (!area) setTimeout(() => areaRef.current.focus(), constant.refDelay)
             else handlePressSave()
           }}
         />
@@ -169,7 +155,7 @@ const ControlScreen = ({ navigation, route }) => {
         >
           <Dialog.Title style={styles.dialogTitle}>{areaSelected.title}</Dialog.Title>
           <View>
-            <Dialog.Button label="Закончить контроль" style={styles.dialogBtn} onPress={handlePressFinish} />
+            <Dialog.Button label="Завершить контроль" style={styles.dialogBtn} onPress={handlePressFinish} />
           </View>
 
           <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setContextModalVisible(!contextModalVisible)} />
@@ -201,7 +187,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: sizes.body4,
     backgroundColor: colors.WHITE,
-    color: colors.GRAY_600,
+    color: colors.GRAY_700,
     borderWidth: 1,
     borderColor: colors.GRAY_300,
     borderRadius: 7,
@@ -233,7 +219,7 @@ export const styles = StyleSheet.create({
   },
 
   dialogHeader: { padding: 0, margin: 0, marginBottom: 15, },
-  dialogContent: { borderRadius: sizes.radius },
+  dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE },
   dialogFooter: { justifyContent: 'center' },
   dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700 },
   dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },

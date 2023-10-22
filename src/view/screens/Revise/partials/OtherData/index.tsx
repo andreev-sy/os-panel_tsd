@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, FlatList, StyleSheet } from 'react-native';
+import { View, ScrollView, FlatList, StyleSheet, Vibration } from 'react-native';
 import { colors, sizes } from '../../../../themes/variables';
 import Spinner from 'react-native-loading-spinner-overlay';
 import OtherBody from './OtherBody';
 import OtherHead from './OtherHead';
 import createInstance from '../../../../helpers/AxiosInstance';
-import Snackbar from "react-native-snackbar";
+import Snackbar from 'react-native-snackbar';
 
 function OtherData({ navigation, area }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,12 +21,10 @@ function OtherData({ navigation, area }) {
       })
       .catch(e => {
         setIsLoading(false)
-        Snackbar.show({
-          text: e.response.data.msg,
-          textColor: colors.LIGHT_DANGER,
-          backgroundColor: colors.DANGER,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setTimeout(() => {
+          Vibration.vibrate(constant.vibroTimeShort)
+          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
+        }, constant.snackbarDelay)
       });
   }, [])
 

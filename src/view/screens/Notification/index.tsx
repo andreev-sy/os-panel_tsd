@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
-import { colors, sizes } from '../../themes/variables';
-import Snackbar from "react-native-snackbar";
+import { View, FlatList, StyleSheet, Vibration } from 'react-native';
+import { colors, constant, sizes } from '../../themes/variables';
+import Snackbar from 'react-native-snackbar';
 import NotificationRow from './partials/NotificationRow';
 import createInstance from '../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -14,25 +14,19 @@ function NotificationScreen({ navigation, route }) {
   const onPressEvent = useCallback((notification) => {
     const index = notificationData.findIndex(el => el.id === notification.id);
     if (index !== -1) {
-      api.get('/notification/update/?id=' + notification.id)
+      api.get(`/notification/update/?id=${notification.id}`)
         .then(res => {
           notificationData[index]['viewed'] = true;
           setNotificationData(notificationData);
-
-          Snackbar.show({
-            text: 'Уведомление прочитано',
-            textColor: colors.SUCCESS,
-            backgroundColor: colors.LIGHT_SUCCESS,
-            duration: Snackbar.LENGTH_SHORT,
-          });
+          setTimeout(() => {
+            Snackbar.show({ text: 'Уведомление прочитано', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          }, constant.snackbarDelay)
         })
         .catch(e => {
-          Snackbar.show({
-            text: e.response.data.msg,
-            textColor: colors.LIGHT_DANGER,
-            backgroundColor: colors.DANGER,
-            duration: Snackbar.LENGTH_SHORT,
-          });
+          setTimeout(() => {
+            Vibration.vibrate(constant.vibroTimeShort)
+            Snackbar.show({ text: e.response.data.msg, textColor: colors.LIGHT_DANGER, backgroundColor: colors.DANGER, duration: Snackbar.LENGTH_SHORT })
+          }, constant.snackbarDelay)
         });
     }
   }, []);
@@ -40,19 +34,17 @@ function NotificationScreen({ navigation, route }) {
   const api = createInstance();
 
   useEffect(() => {
-    api.get('/notification/index/')
-      .then(res => { 
-        setNotificationData(res.data) 
+    api.get(`/notification/index/`)
+      .then(res => {
+        setNotificationData(res.data)
         setIsLoading(false)
       })
       .catch(e => {
         setIsLoading(false)
-        Snackbar.show({
-          text: e.response.data.msg,
-          textColor: colors.LIGHT_DANGER,
-          backgroundColor: colors.DANGER,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setTimeout(() => {
+          Vibration.vibrate(constant.vibroTimeShort)
+          Snackbar.show({ text: e.response.data.msg, textColor: colors.LIGHT_DANGER, backgroundColor: colors.DANGER, duration: Snackbar.LENGTH_SHORT })
+        }, constant.snackbarDelay)
       });
   }, []);
 
@@ -76,13 +68,8 @@ function NotificationScreen({ navigation, route }) {
 
 
 export const styles = StyleSheet.create({
-  wrapper: {
-    paddingVertical: sizes.padding,
-    backgroundColor: colors.BG,
-  },
-  inner: {
-    paddingHorizontal: sizes.padding,
-  },
+  wrapper: { paddingVertical: sizes.padding, backgroundColor: colors.BG },
+  inner: { paddingHorizontal: sizes.padding, },
 });
 
 export default NotificationScreen;

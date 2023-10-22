@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
-import { colors, sizes } from '../../../themes/variables';
+import { colors, constant, sizes } from '../../../themes/variables';
 
 const NotificationRow = ({ notification, onPressEvent }) => {
     console.log('render notification' + notification.id);
     return (
         <TouchableOpacity
             style={styles.wrapper}
-            activeOpacity={0.8}
+            activeOpacity={constant.activeOpacity}
             disabled={!notification.viewed}
             accessibilityRole="button"
             onPress={() => onPressEvent(notification)}

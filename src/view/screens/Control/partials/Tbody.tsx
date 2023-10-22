@@ -1,11 +1,12 @@
 import React, { memo } from 'react';
 import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
-import { colors, constant, sizes } from '../../../themes/variables';
+import { colors, sizes } from '../../../themes/variables';
 
 const Tbody = ({ area, onPressEvent }) => {
   console.log('render area' + area.id);
   let widthArr = [100, 50, 50]
   let numberOfLines = parseInt(area.id)
+
   return (
     <TouchableNativeFeedback
       accessibilityRole="button"
@@ -37,11 +38,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 8,
   },
-  tbodyBorderRight: {
-    borderRightColor: colors.GRAY_600,
-    borderRightWidth: 1,
-  }
-
+  tbodyBorderRight: { borderRightColor: colors.GRAY_600, borderRightWidth: 1, }
 });
 
 export default memo(Tbody)

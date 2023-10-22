@@ -28,11 +28,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 8,
   },
-  theadBorderRight: {
-    borderRightColor: colors.GRAY_600,
-    borderRightWidth: 1,
-  }
-
+  theadBorderRight: { borderRightColor: colors.GRAY_600, borderRightWidth: 1, }
 });
 
 export default Thead;

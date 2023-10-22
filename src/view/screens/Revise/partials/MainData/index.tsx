@@ -1,11 +1,11 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { View, Text, Switch, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Alert, Keyboard } from 'react-native';
+import { View, Text, Switch, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 import { colors, constant, sizes } from '../../../../themes/variables';
 import Dialog from 'react-native-dialog';
 import MainBody from './MainBody';
 import MainHead from './MainHead';
 import createInstance from '../../../../helpers/AxiosInstance';
-import Snackbar from "react-native-snackbar";
+import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 function MainData({ navigation, area }) {
@@ -35,15 +35,15 @@ function MainData({ navigation, area }) {
         setItem({})
         setNewScan('')
         setContextModalVisible(!contextModalVisible)
-        setTimeout(() => { Snackbar.show({ text: 'Факт успешно сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, }); }, constant.snackbarDelay)
+        setTimeout(() => { 
+          Snackbar.show({ text: 'Факт успешно сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, }); 
+        }, constant.snackbarDelay)
       })
       .catch(e => {
-        Snackbar.show({
-          text: e.response.data.msg,
-          textColor: colors.LIGHT_DANGER,
-          backgroundColor: colors.DANGER,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setTimeout(() => {
+          Vibration.vibrate(constant.vibroTimeShort)
+          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
+        }, constant.snackbarDelay)
       });
   }
 
@@ -55,15 +55,15 @@ function MainData({ navigation, area }) {
         setItem({})
         setNewScan('')
         setContextModalVisible(!contextModalVisible)
-        setTimeout(() => { Snackbar.show({ text: 'Факт успешно сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, }); }, constant.snackbarDelay)
+        setTimeout(() => { 
+          Snackbar.show({ text: 'Факт успешно сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, }); 
+        }, constant.snackbarDelay)
       })
       .catch(e => {
-        Snackbar.show({
-          text: e.response.data.msg,
-          textColor: colors.LIGHT_DANGER,
-          backgroundColor: colors.DANGER,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setTimeout(() => {
+          Vibration.vibrate(constant.vibroTimeShort)
+          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
+        }, constant.snackbarDelay)
       });
   }
 
@@ -76,12 +76,10 @@ function MainData({ navigation, area }) {
       })
       .catch(e => {
         setIsLoading(false)
-        Snackbar.show({
-          text: e.response.data.msg,
-          textColor: colors.LIGHT_DANGER,
-          backgroundColor: colors.DANGER,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setTimeout(() => {
+          Vibration.vibrate(constant.vibroTimeShort)
+          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
+        }, constant.snackbarDelay)
       });
   }, [])
 
@@ -112,12 +110,13 @@ function MainData({ navigation, area }) {
           visible={contextModalVisible}
           onBackdropPress={() => setContextModalVisible(!contextModalVisible)}
         >
-          <Dialog.Title style={styles.dialogTitle}>Артикул - {item.article}</Dialog.Title>
+          <Dialog.Title style={styles.dialogTitle}>{item.name} ({item.article})</Dialog.Title>
           <View>
 
             <TextInput
               style={styles.dialogInput}
               placeholder="Факт"
+              placeholderTextColor={colors.GRAY_500}
               ref={newScanRef}
               autoCorrect={false}
               selectTextOnFocus={true}
@@ -172,7 +171,7 @@ export const styles = StyleSheet.create({
   tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0 },
-  dialogContent: { borderRadius: sizes.radius },
+  dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE  },
   dialogFooter: { justifyContent: 'center' },
   dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700, marginBottom: 15, },
   dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },
@@ -187,7 +186,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     fontSize: sizes.body4,
     backgroundColor: colors.WHITE,
-    color: colors.GRAY_600,
+    color: colors.GRAY_700,
     borderWidth: 1,
     borderColor: colors.GRAY_300,
     borderRadius: 7,

@@ -2,22 +2,20 @@ import React, { useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { colors, constant, sizes } from '../../../themes/variables';
-import Dialog from "react-native-dialog";
+import Dialog from 'react-native-dialog';
 
 const ActionScan = ({ navigation, route }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const handleFinishPress = () => {
-        Alert.alert("", "Вы точно хотите закончить сканирование?", [
-            { text: "Отмена" },
-            { text: "Да", onPress: () => { } },
+        Alert.alert('', 'Вы точно хотите завершить сканирование?', [
+            { text: 'Отмена' }, { text: 'Да', onPress: () => { } },
         ])
     };
 
     const handleNullPress = () => {
-        Alert.alert("", "Вы точно хотите обнулить зону?", [
-            { text: "Отмена" },
-            { text: "Да", onPress: () => { } },
+        Alert.alert('', 'Вы точно хотите обнулить зону?', [
+            { text: 'Отмена' }, { text: 'Да', onPress: () => { } },
         ])
     };
 
@@ -47,7 +45,7 @@ const ActionScan = ({ navigation, route }) => {
                             onPress={handleNullPress}
                         />
                         <Dialog.Button
-                            label="Закончить сканирование"
+                            label="Завершить сканирование"
                             style={styles.dialogBtn}
                             onPress={handleFinishPress}
                         />
@@ -67,7 +65,7 @@ export const styles = StyleSheet.create({
     actionDots: { marginRight: 3 },
 
     dialogHeader: { padding: 0, margin: 0 },
-    dialogContent: { borderRadius: sizes.radius },
+    dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE  },
     dialogFooter: { justifyContent: 'center' },
     dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700, marginBottom: 10, },
     dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },

@@ -1,6 +1,6 @@
 import React, {memo} from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import { colors, sizes } from '../../../themes/variables';
+import { colors, constant, sizes } from '../../../themes/variables';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AreaRow = ({ area, onPressEvent }) => {
@@ -8,7 +8,7 @@ const AreaRow = ({ area, onPressEvent }) => {
   return (
     <TouchableOpacity
       style={styles.wrapper}
-      activeOpacity={0.8}
+      activeOpacity={constant.activeOpacity}
       accessibilityRole="button"
       onPress={() => onPressEvent(area)}
     >

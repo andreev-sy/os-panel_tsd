@@ -65,6 +65,7 @@ function ProfileScreen({ navigation, route }) {
           <TextInput
             style={styles.formInput}
             placeholder="Адрес API"
+            placeholderTextColor={colors.GRAY_500}
             value={baseUrl}
             onChange={setNewBaseUrl}
           />
@@ -146,7 +147,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: sizes.body3,
     backgroundColor: colors.WHITE,
-    color: colors.GRAY_600,
+    color: colors.GRAY_700,
     borderWidth: 1,
     borderColor: colors.GRAY_300,
     borderRadius: sizes.radius,

@@ -1,12 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { View, TextInput, TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
-import Spinner from 'react-native-loading-spinner-overlay';
 import { AuthContext } from '../../../context/AuthContext';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function LoginScreen() {
     const { isLoading, login } = useContext(AuthContext);
-
     const [baseUrl, setBaseUrl] = useState('135.181.78.213:1333');
     const [username, setUsername] = useState('api');
     const [password, setPassword] = useState('api');
@@ -18,18 +17,21 @@ function LoginScreen() {
                 <TextInput
                     style={styles.input}
                     placeholder="Адрес API"
+                    placeholderTextColor={colors.GRAY_500}
                     value={baseUrl}
                     onChangeText={setBaseUrl}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Логин"
+                    placeholderTextColor={colors.GRAY_500}
                     value={username}
                     onChangeText={setUsername}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Пароль"
+                    placeholderTextColor={colors.GRAY_500}
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry={true}
@@ -38,7 +40,7 @@ function LoginScreen() {
                     style={styles.btn}
                     activeOpacity={constant.activeOpacity}
                     accessibilityRole="button"
-                    onPress={ () => login(username, password, baseUrl) }
+                    onPress={() => login(username, password, baseUrl)}
                 >
                     <Text style={styles.btnText}>Войти</Text>
                 </TouchableOpacity>
@@ -54,7 +56,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 10,
         fontSize: sizes.body3,
         backgroundColor: colors.WHITE,
-        color: colors.GRAY_600,
+        color: colors.GRAY_700,
         borderWidth: 1,
         borderColor: colors.GRAY_300,
         borderRadius: sizes.radius,
@@ -72,9 +74,9 @@ export const styles = StyleSheet.create({
     btnText: {
         color: colors.WHITE,
         fontSize: sizes.body3,
-        fontWeight: '400' 
+        fontWeight: '400'
     },
-    title:{
+    title: {
         textAlign: 'center',
         marginBottom: 30,
         fontSize: sizes.h1,
@@ -92,7 +94,7 @@ export const styles = StyleSheet.create({
     },
     inner: {
         paddingHorizontal: sizes.padding,
-        flexGrow: 1, 
+        flexGrow: 1,
         justifyContent: 'center',
         gap: 10,
     },

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, FlatList, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native';
+import { View, FlatList, StyleSheet, TextInput, TouchableOpacity, Text, Vibration } from 'react-native';
 import AreaRow from './partials/AreaRow';
 import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
-import Snackbar from "react-native-snackbar";
+import Snackbar from 'react-native-snackbar';
 import createInstance from '../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useFocusEffect } from '@react-navigation/native';
@@ -32,28 +32,24 @@ function ReviseScreen({ navigation, route }) {
     }
 
     setAreaBarcode('');
-    Snackbar.show({
-      text: 'Введенный штрихкод не совпадает с выбраной зоной',
-      textColor: colors.DANGER,
-      backgroundColor: colors.LIGHT_DANGER,
-      duration: Snackbar.LENGTH_SHORT,
-    });
+    setTimeout( () => {
+      Vibration.vibrate(constant.vibroTimeShort)
+      Snackbar.show({ text: 'Введенный штрихкод не совпадает с выбраной зоной', textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
+    }, constant.snackbarDelay)
   };
 
   const reviseIndex = () => {
-    api.get('/revise/index/')
+    api.get(`/revise/index/`)
       .then(res => { 
         setListData(res?.data) 
         setIsLoading(false)
       })
       .catch(e => {
         setIsLoading(false)
-        Snackbar.show({
-          text: e.response.data.msg,
-          textColor: colors.LIGHT_DANGER,
-          backgroundColor: colors.DANGER,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setTimeout(() => {
+          Vibration.vibrate(constant.vibroTimeShort)
+          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+        }, constant.snackbarDelay)
       });
   }
 
@@ -87,6 +83,7 @@ function ReviseScreen({ navigation, route }) {
             <TextInput
               style={styles.dialogInput}
               placeholder="Штрихкод зоны"
+              placeholderTextColor={colors.GRAY_500}
               // ref={areaScanRef}
               autoFocus={true}
               autoCorrect={false}
@@ -120,7 +117,7 @@ export const styles = StyleSheet.create({
   inner: { paddingHorizontal: sizes.padding, },
 
   dialogHeader: { padding: 0, margin: 0 },
-  dialogContent: { borderRadius: sizes.radius },
+  dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE  },
   dialogFooter: { justifyContent: 'center' },
   dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700, marginBottom: 15, },
   dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },
@@ -133,7 +130,7 @@ export const styles = StyleSheet.create({
       width: '100%',
       fontSize: sizes.body3,
       backgroundColor: colors.WHITE,
-      color: colors.GRAY_600,
+      color: colors.GRAY_700,
       borderWidth: 1,
       borderColor: colors.GRAY_300,
       borderRadius: 7,

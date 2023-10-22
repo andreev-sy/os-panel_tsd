@@ -8,10 +8,7 @@ import OtherData from './partials/OtherData/';
 function ReviseAreaScreen({ navigation, route }) {
 
   const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: 'main', title: 'На сверку' },
-    { key: 'other', title: 'Другие товары' },
-  ]);
+  const [routes] = useState([ { key: 'main', title: 'На сверку' }, { key: 'other', title: 'Другие товары' } ]);
 
   console.log('render ReviseAreaScreen')
 

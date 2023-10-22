@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import Snackbar from 'react-native-snackbar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors } from '../../../themes/variables';
 import Badge from '../../../components/Badge';
 import createInstance from '../../../helpers/AxiosInstance';
-import Snackbar from 'react-native-snackbar';
+import { colors, constant } from '../../../themes/variables';
 
 function HeaderHome({ navigation }) {
     const [notificationCount, setNotificationCount] = useState(0);
@@ -13,27 +13,20 @@ function HeaderHome({ navigation }) {
 
     useEffect(() => {
         api.get('/notification/count/')
-            .then(res => { setNotificationCount(parseInt(res.data)) })
+            .then(res => { 
+                setNotificationCount(parseInt(res.data)) 
+            })
             .catch(e => { 
-                Snackbar.show({
-                    text: e.response.data.msg,
-                    textColor: colors.LIGHT_DANGER,
-                    backgroundColor: colors.DANGER,
-                    duration: Snackbar.LENGTH_SHORT,
-                    action: {
-                      text: 'СКРЫТЬ',
-                      textColor: colors.LIGHT_DANGER,
-                      onPress: () => { /* Do something. */ },
-                    },
-                  });
+                setTimeout( () => {
+                    Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
+                }, constant.snackbarDelay )
             });
     }, []);
 
-
     return (
-        <View style={{ display: 'flex', flexDirection: 'row', gap: 10, paddingRight: 10 }}>
+        <View style={styles.wrapper}>
             <TouchableOpacity
-                activeOpacity={0.8}
+                activeOpacity={constant.activeOpacity}
                 accessibilityRole="button"
                 onPress={() => navigation.navigate('NotificationStackRoute') }
             >
@@ -41,7 +34,7 @@ function HeaderHome({ navigation }) {
                 { notificationCount > 0 ? <Badge color={ colors.SUCCESS } /> : '' }
             </TouchableOpacity>
             <TouchableOpacity
-                activeOpacity={0.8}
+                activeOpacity={constant.activeOpacity}
                 accessibilityRole="button"
                 onPress={() => navigation.navigate('ProfileStackRoute') }
             >
@@ -50,6 +43,11 @@ function HeaderHome({ navigation }) {
         </View>
     );
 }
+
+export const styles = StyleSheet.create({
+    wrapper: { display: 'flex', flexDirection: 'row', gap: 10, paddingRight: 10 },
+});
+
 
 export default HeaderHome;
 

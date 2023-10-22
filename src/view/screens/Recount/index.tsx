@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { TextInput, Text, View, FlatList, Alert, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { TextInput, Text, View, FlatList, Alert, StyleSheet, TouchableOpacity, ScrollView, Vibration } from 'react-native';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
-import { colors, sizes } from '../../themes/variables';
-import Dialog from "react-native-dialog";
-import Snackbar from "react-native-snackbar";
+import { colors, constant, sizes } from '../../themes/variables';
+import Dialog from 'react-native-dialog';
+import Snackbar from 'react-native-snackbar';
 import createInstance from '../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -15,6 +15,7 @@ const ReacountScreen = ({ navigation, route }) => {
   const [contextModalVisible, setContextModalVisible] = useState(false);
   const [area, setArea] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const api = createInstance();
 
   console.log('render ReacountScreen')
 
@@ -25,9 +26,8 @@ const ReacountScreen = ({ navigation, route }) => {
   }, []);
 
   const handlePressFinish = () => {
-    Alert.alert("", "Вы точно хотите закончить пересчет в зоне?", [
-      { text: "Отмена" },
-      { text: "Да", onPress: () => finishArea() },
+    Alert.alert('', 'Вы точно хотите завершить пересчёт в зоне?', [
+      { text: 'Отмена' }, { text: 'Да', onPress: () => finishArea() }
     ])
   };
 
@@ -41,32 +41,22 @@ const ReacountScreen = ({ navigation, route }) => {
     setArea({})
 
     setTimeout(function () {
-      Snackbar.show({
-        text: 'Пересчет в зоне успешно закончен',
-        textColor: colors.SUCCESS,
-        backgroundColor: colors.LIGHT_SUCCESS,
-        duration: Snackbar.LENGTH_SHORT,
-      });
-    }, 500)
+      Snackbar.show({ text: 'Пересчёт в зоне успешно завершён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
+    }, constant.snackbarDelay)
   }
 
-
-  const api = createInstance();
-
   useEffect(() => {
-    api.get('/recount/index/')
+    api.get(`/recount/index/`)
       .then(res => { 
         setTableData(res.data) 
         setIsLoading(false)
       })
       .catch(e => {
         setIsLoading(false)
-        Snackbar.show({
-          text: e.response.data.msg,
-          textColor: colors.LIGHT_DANGER,
-          backgroundColor: colors.DANGER,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setTimeout(() => {
+          Vibration.vibrate(constant.vibroTimeShort)
+          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+        }, constant.snackbarDelay)
       });
   }, [])
 
@@ -79,6 +69,7 @@ const ReacountScreen = ({ navigation, route }) => {
           style={styles.input}
           onChangeText={onChangeText}
           placeholder="Зона"
+          placeholderTextColor={colors.GRAY_500} 
           value={text}
         />
         <TextInput
@@ -86,11 +77,12 @@ const ReacountScreen = ({ navigation, route }) => {
           onChangeText={onChangeNumber}
           value={number}
           placeholder="Количество"
+          placeholderTextColor={colors.GRAY_500} 
           keyboardType="numeric"
         />
         <TouchableOpacity
           style={styles.btn}
-          activeOpacity={0.8}
+          activeOpacity={constant.activeOpacity}
           accessibilityRole="button"
         >
           <Text style={styles.btnText}>Ок</Text>
@@ -112,7 +104,6 @@ const ReacountScreen = ({ navigation, route }) => {
             renderItem={({ item }) => <Tbody area={item} onPressEvent={onPressEvent} />}
           />
         </ScrollView>
-
       </View>
 
       <View>
@@ -123,11 +114,10 @@ const ReacountScreen = ({ navigation, route }) => {
           visible={contextModalVisible}
           onBackdropPress={() => setContextModalVisible(!contextModalVisible)}
         >
-          <Dialog.Title style={styles.dialogTitle}>Зона -{area.code}</Dialog.Title>
+          <Dialog.Title style={styles.dialogTitle}>{area.title}</Dialog.Title>
           <View>
-            <Dialog.Button label="Закончить пересчет" style={styles.dialogBtn} onPress={handlePressFinish} />
+            <Dialog.Button label="Завершить пересчет" style={styles.dialogBtn} onPress={handlePressFinish} />
           </View>
-
           <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setContextModalVisible(!contextModalVisible)} />
         </Dialog.Container>
       </View>
@@ -157,7 +147,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: sizes.body4,
     backgroundColor: colors.WHITE,
-    color: colors.GRAY_600,
+    color: colors.GRAY_700,
     borderWidth: 1,
     borderColor: colors.GRAY_300,
     borderRadius: 7,
@@ -184,7 +174,7 @@ export const styles = StyleSheet.create({
   tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0, marginBottom: 15, },
-  dialogContent: { borderRadius: sizes.radius },
+  dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE  },
   dialogFooter: { justifyContent: 'center' },
   dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700 },
   dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },

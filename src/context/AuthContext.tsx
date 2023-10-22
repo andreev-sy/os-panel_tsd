@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Snackbar from "react-native-snackbar";
+import Snackbar from 'react-native-snackbar';
 import { colors } from '../view/themes/variables';
 
 export const AuthContext = createContext();

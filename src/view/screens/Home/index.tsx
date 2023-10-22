@@ -1,11 +1,11 @@
 import React, { useState, useContext, useRef, useEffect, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, TouchableOpacity, Text, StyleSheet, TextInput } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, TextInput, Vibration } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
 import createInstance from '../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Dialog from "react-native-dialog";
+import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
 
 function HomeScreen({ navigation, route }) {
@@ -21,7 +21,7 @@ function HomeScreen({ navigation, route }) {
     const handlePressScan = () => {
         setAreaScan(false)
         setModalScanVisible(true)
-        setTimeout(() => areaScanRef.current.focus(), 150)
+        setTimeout(() => areaScanRef.current.focus(), constant.refDelay)
     }
 
     const handlePressModalScan = () => {
@@ -32,8 +32,11 @@ function HomeScreen({ navigation, route }) {
             })
             .catch(e => {
                 console.log(e)
-                // Snackbar.show({ text: e.response.data.msg, textColor: colors.LIGHT_DANGER, backgroundColor: colors.DANGER, duration: Snackbar.LENGTH_SHORT, });
-                // setTimeout(() => areaScanRef.current.focus(), 150)
+                setTimeout(() => areaScanRef.current.focus(), constant.refDelay)
+                setTimeout(() => {
+                    Vibration.vibrate(constant.vibroTimeShort)
+                    Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+                }, constant.snackbarDelay)
             });
     }
 
@@ -46,10 +49,14 @@ function HomeScreen({ navigation, route }) {
     const siteIndex = () => {
         api.get(`/site/index/`)
             .then(res => {
-                if (res.data) setHomeData(res.data);
+                if (res.data) 
+                    setHomeData(res.data);
             })
             .catch(e => {
-                Snackbar.show({ text: e.response.data.msg, textColor: colors.LIGHT_DANGER, backgroundColor: colors.DANGER, duration: Snackbar.LENGTH_SHORT, });
+                setTimeout(() => {
+                    Vibration.vibrate(constant.vibroTimeShort)
+                    Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+                }, constant.snackbarDelay)
             });
     }
 
@@ -62,7 +69,7 @@ function HomeScreen({ navigation, route }) {
             <View style={styles.topWrapper}>
                 <TouchableOpacity
                     style={[styles.topBtn, styles.topBtnSuccess]}
-                    activeOpacity={0.8}
+                    activeOpacity={constant.activeOpacity}
                     accessibilityRole="button"
                     onPress={handlePressScan}
                 >
@@ -70,7 +77,7 @@ function HomeScreen({ navigation, route }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.topBtn, styles.topBtnPrimary]}
-                    activeOpacity={0.8}
+                    activeOpacity={constant.activeOpacity}
                     accessibilityRole="button"
                     onPress={handlePressControl}
                 >
@@ -144,6 +151,7 @@ function HomeScreen({ navigation, route }) {
                         <TextInput
                             style={styles.dialogInput}
                             placeholder="Штрихкод зоны"
+                            placeholderTextColor={colors.GRAY_500}
                             ref={areaScanRef}
                             autoCorrect={false}
                             selectTextOnFocus={true}
@@ -174,7 +182,8 @@ export const styles = StyleSheet.create({
     wrapper: {
         flexDirection: 'column',
         padding: sizes.padding,
-        backgroundColor: colors.BG
+        backgroundColor: colors.BG, 
+        height: '100%'
     },
     topWrapper: {
         paddingVertical: 8,
@@ -230,13 +239,9 @@ export const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: colors.WHITE,
         shadowColor: colors.GRAY_500,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
+        shadowOffset: { width: 0, height: 2, },
         shadowOpacity: 0.23,
         shadowRadius: 2.62,
-
         elevation: 4,
     },
     botHr: {
@@ -258,7 +263,7 @@ export const styles = StyleSheet.create({
     botJobCountDisabled: { color: colors.GRAY_800 },
 
     dialogHeader: { padding: 0, margin: 0 },
-    dialogContent: { borderRadius: sizes.radius },
+    dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE },
     dialogFooter: { justifyContent: 'center' },
     dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700, marginBottom: 15, },
     dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },
@@ -271,7 +276,7 @@ export const styles = StyleSheet.create({
         width: '100%',
         fontSize: sizes.body3,
         backgroundColor: colors.WHITE,
-        color: colors.GRAY_600,
+        color: colors.GRAY_700,
         borderWidth: 1,
         borderColor: colors.GRAY_300,
         borderRadius: 7,
