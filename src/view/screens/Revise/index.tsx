@@ -41,14 +41,14 @@ function ReviseScreen({ navigation, route }) {
   const reviseIndex = () => {
     api.get(`/revise/index/`)
       .then(res => { 
-        setListData(res?.data) 
+        setListData(res.data) 
         setIsLoading(false)
       })
       .catch(e => {
         setIsLoading(false)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
-          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
         }, constant.snackbarDelay)
       });
   }

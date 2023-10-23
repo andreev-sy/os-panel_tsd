@@ -14,8 +14,11 @@ function createInstance() {
     instance.interceptors.response.use(
         (response) => response,
         (error) => {
-            if (error.response)
+            if (error.response){
                 if (error.response.status == '401') logout();
+                const { status, data } = error.response;
+                return Promise.reject({ status, ...data });
+            }
 
             return error;
         }

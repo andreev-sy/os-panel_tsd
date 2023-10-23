@@ -28,7 +28,7 @@ const ControlScreen = ({ navigation, route }) => {
 
   const handlePressSave = () => {
     setIsLoading(true)
-    api.post('/control/update/', { area, control })
+    api.post(`/control/update/`, { area, control })
       .then(res => {
         setTableData(res.data)
         setArea('')
@@ -44,7 +44,7 @@ const ControlScreen = ({ navigation, route }) => {
         setTimeout(() => areaRef.current.focus(), constant.refDelay)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
-          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
+          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
       });
   };
@@ -73,7 +73,7 @@ const ControlScreen = ({ navigation, route }) => {
   const api = createInstance();
 
   useEffect(() => {
-    api.get('/control/index/')
+    api.get(`/control/index/`)
       .then(res => {
         setTableData(res.data)
         setIsLoading(false)
@@ -82,7 +82,7 @@ const ControlScreen = ({ navigation, route }) => {
         setIsLoading(false)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
-          Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
+          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
         }, constant.snackbarDelay)
       });
   }, [])

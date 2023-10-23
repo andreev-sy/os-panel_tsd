@@ -27,15 +27,13 @@ function HomeScreen({ navigation, route }) {
     const handlePressModalScan = () => {
         api.get(`/scan/verify/?area_barcode=${areaScan}`)
             .then(res => {
-                console.log(res)
                 navigation.navigate('ScanAreaStackRoute', { headerTitle: 'Зона ' + res.data.title, area: res.data })
             })
             .catch(e => {
-                console.log(e)
                 setTimeout(() => areaScanRef.current.focus(), constant.refDelay)
                 setTimeout(() => {
                     Vibration.vibrate(constant.vibroTimeShort)
-                    Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+                    Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
                 }, constant.snackbarDelay)
             });
     }
@@ -49,13 +47,12 @@ function HomeScreen({ navigation, route }) {
     const siteIndex = () => {
         api.get(`/site/index/`)
             .then(res => {
-                if (res.data) 
-                    setHomeData(res.data);
+                setHomeData(res.data);
             })
             .catch(e => {
                 setTimeout(() => {
                     Vibration.vibrate(constant.vibroTimeShort)
-                    Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+                    Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
                 }, constant.snackbarDelay)
             });
     }

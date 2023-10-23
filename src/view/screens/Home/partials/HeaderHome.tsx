@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Snackbar from 'react-native-snackbar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Badge from '../../../components/Badge';
 import createInstance from '../../../helpers/AxiosInstance';
 import { colors, constant } from '../../../themes/variables';
+import { useFocusEffect } from '@react-navigation/native';
 
 function HeaderHome({ navigation }) {
-    const [notificationCount, setNotificationCount] = useState(0);
+    const [notification, setNotification] = useState(1);
 
     const api = createInstance();
 
-    useEffect(() => {
-        api.get('/notification/count/')
+    const notificationCount = () => {
+        console.log('notificationCount')
+        api.get(`/notification/count/`)
             .then(res => { 
-                setNotificationCount(parseInt(res.data)) 
+                setNotification(parseInt(res.data)) 
             })
             .catch(e => { 
                 setTimeout( () => {
-                    Snackbar.show({ text: e.response.data.msg, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
+                    Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
                 }, constant.snackbarDelay )
             });
-    }, []);
+    }
+
+    // useFocusEffect( useCallback(() => { notificationCount() }, []) );
+    // useEffect(() => { notificationCount() });
+
 
     return (
         <View style={styles.wrapper}>
@@ -31,7 +37,7 @@ function HeaderHome({ navigation }) {
                 onPress={() => navigation.navigate('NotificationStackRoute') }
             >
                 <MaterialCommunityIcons name="bell" color={colors.BLACK} size={25} />
-                { notificationCount > 0 ? <Badge color={ colors.SUCCESS } /> : '' }
+                { notification > 0 ? <Badge color={ colors.SUCCESS } /> : '' }
             </TouchableOpacity>
             <TouchableOpacity
                 activeOpacity={constant.activeOpacity}
