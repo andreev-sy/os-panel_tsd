@@ -2,10 +2,12 @@ import React, {memo} from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { colors, constant, sizes } from '../../../themes/variables';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { fixFloat } from '../../../helpers/Utilitites';
+import { fixFloat } from '../../../../helpers/Utilitites';
 
 const AreaRow = ({ area, onPressEvent }) => {
+  
   console.log('render area'+area.id);
+
   return (
     <TouchableOpacity
       style={styles.wrapper}

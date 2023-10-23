@@ -5,7 +5,7 @@ import Tbody from './partials/Tbody';
 import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
-import createInstance from '../../helpers/AxiosInstance';
+import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const ReacountScreen = ({ navigation, route }) => {
@@ -45,19 +45,24 @@ const ReacountScreen = ({ navigation, route }) => {
     }, constant.snackbarDelay)
   }
 
-  useEffect(() => {
+  const recountIndex = () => {
     api.get(`/recount/index/`)
-      .then(res => { 
-        setTableData(res.data) 
-        setIsLoading(false)
-      })
-      .catch(e => {
-        setIsLoading(false)
-        setTimeout(() => {
-          Vibration.vibrate(constant.vibroTimeShort)
-          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
-        }, constant.snackbarDelay)
-      });
+    .then(res => { 
+      setTableData(res.data) 
+      setIsLoading(false)
+    })
+    .catch(e => {
+      setIsLoading(false)
+      setTimeout(() => {
+        Vibration.vibrate(constant.vibroTimeShort)
+        Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+      }, constant.snackbarDelay)
+    });
+  }
+
+  useEffect(() => {
+    console.log('axios useEffect recountIndex')
+    recountIndex()
   }, [])
 
  

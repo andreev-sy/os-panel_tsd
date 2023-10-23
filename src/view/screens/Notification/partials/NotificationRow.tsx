@@ -3,7 +3,9 @@ import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { colors, constant, sizes } from '../../../themes/variables';
 
 const NotificationRow = ({ notification, onPressEvent }) => {
+    
     console.log('render notification' + notification.id);
+
     return (
         <TouchableOpacity
             style={styles.wrapper}

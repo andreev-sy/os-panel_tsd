@@ -3,12 +3,14 @@ import { View, FlatList, StyleSheet, Vibration } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import Snackbar from 'react-native-snackbar';
 import NotificationRow from './partials/NotificationRow';
-import createInstance from '../../helpers/AxiosInstance';
+import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 function NotificationScreen({ navigation, route }) {
   const [notificationData, setNotificationData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const api = createInstance();
+
   console.log('render NotificationScreen')
 
   const onPressEvent = useCallback((notification) => {
@@ -31,9 +33,8 @@ function NotificationScreen({ navigation, route }) {
     }
   }, []);
 
-  const api = createInstance();
 
-  useEffect(() => {
+  const notificationIndex = () => {
     api.get(`/notification/index/`)
       .then(res => {
         setNotificationData(res.data)
@@ -46,6 +47,11 @@ function NotificationScreen({ navigation, route }) {
           Snackbar.show({ text: e.message, textColor: colors.LIGHT_DANGER, backgroundColor: colors.DANGER, duration: Snackbar.LENGTH_SHORT })
         }, constant.snackbarDelay)
       });
+  }
+
+  useEffect(() => {
+    console.log('axios useEffect notificationIndex')
+    notificationIndex()
   }, []);
 
 

@@ -3,14 +3,14 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View, TouchableOpacity, Text, StyleSheet, TextInput, Vibration } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
-import createInstance from '../../helpers/AxiosInstance';
+import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
 
 function HomeScreen({ navigation, route }) {
-    const { isLoading, baseUrl, userInfo, } = useContext(AuthContext);
-    const [homeData, setHomeData] = useState({});
+    const { isLoading } = useContext(AuthContext);
+    const [homeData, setHomeData] = useState({ 'job': 0, 'scan': 0, 'control': 0, 'recount': 0, 'revise': 0 });
     const [modalScanVisible, setModalScanVisible] = useState(false);
     const [areaScan, setAreaScan] = useState(false);
     const areaScanRef = useRef(null);
@@ -47,6 +47,7 @@ function HomeScreen({ navigation, route }) {
     const siteIndex = () => {
         api.get(`/site/index/`)
             .then(res => {
+                if(res.data)
                 setHomeData(res.data);
             })
             .catch(e => {
@@ -57,8 +58,17 @@ function HomeScreen({ navigation, route }) {
             });
     }
 
-    useFocusEffect( useCallback(() => { siteIndex() }, []) );
-    useEffect(() => { siteIndex() }, [isLoading]);
+    useFocusEffect( 
+        useCallback(() => { 
+            console.log('axios useFocusEffect siteIndex');
+            siteIndex() 
+        }, []) 
+    );
+    
+    useEffect(() => { 
+        console.log('axios useEffect siteIndex');
+        siteIndex() 
+    }, [isLoading]);
 
     return (
         <View style={styles.wrapper}>

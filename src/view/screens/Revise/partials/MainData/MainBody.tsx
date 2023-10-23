@@ -1,10 +1,10 @@
 import React, {memo} from 'react';
 import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { colors, constant, sizes } from '../../../../themes/variables';
-import { fixFloat } from '../../../../helpers/Utilitites';
+import { fixFloat } from '../../../../../helpers/Utilitites';
 
 const MainBody = ({ item, onPressEvent }) => {
-  console.log('render main'+item.id);
+  console.log('render mainData '+item.id);
 
   let widthArr = [130, 140, 80, 80, 80, 140]
   let numberOfLines = parseInt(item.id)

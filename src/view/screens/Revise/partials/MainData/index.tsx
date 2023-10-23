@@ -1,10 +1,10 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { View, Text, Switch, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
+import { View, Text, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 import { colors, constant, sizes } from '../../../../themes/variables';
+import createInstance from '../../../../../helpers/AxiosInstance';
 import Dialog from 'react-native-dialog';
 import MainBody from './MainBody';
 import MainHead from './MainHead';
-import createInstance from '../../../../helpers/AxiosInstance';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -17,8 +17,7 @@ function MainData({ navigation, area }) {
   const newScanRef = useRef(null);
   const api = createInstance();
 
-  console.log('render main');
-  console.log('area', area)
+  console.log('render MainData');
 
   const onPressEvent = useCallback((item) => {
     setItem(item)
@@ -35,8 +34,8 @@ function MainData({ navigation, area }) {
         setItem({})
         setNewScan('')
         setContextModalVisible(!contextModalVisible)
-        setTimeout(() => { 
-          Snackbar.show({ text: 'Факт успешно сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, }); 
+        setTimeout(() => {
+          Snackbar.show({ text: 'Факт успешно сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
         }, constant.snackbarDelay)
       })
       .catch(e => {
@@ -55,8 +54,8 @@ function MainData({ navigation, area }) {
         setItem({})
         setNewScan('')
         setContextModalVisible(!contextModalVisible)
-        setTimeout(() => { 
-          Snackbar.show({ text: 'Факт успешно сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, }); 
+        setTimeout(() => {
+          Snackbar.show({ text: 'Факт успешно сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
         }, constant.snackbarDelay)
       })
       .catch(e => {
@@ -67,8 +66,7 @@ function MainData({ navigation, area }) {
       });
   }
 
-  
-  useEffect(() => {
+  const reviseView = () => {
     api.get(`/revise/view/?area_id=${area.id}`)
       .then(res => {
         setTableData(res.data)
@@ -81,6 +79,11 @@ function MainData({ navigation, area }) {
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
         }, constant.snackbarDelay)
       });
+  }
+
+  useEffect(() => {
+    console.log('axios useEffect reviseView')
+    reviseView()
   }, [])
 
 
@@ -171,7 +174,7 @@ export const styles = StyleSheet.create({
   tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0 },
-  dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE  },
+  dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE },
   dialogFooter: { justifyContent: 'center' },
   dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700, marginBottom: 15, },
   dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },

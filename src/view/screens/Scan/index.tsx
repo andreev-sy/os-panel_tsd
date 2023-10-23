@@ -4,7 +4,7 @@ import AreaRow from './partials/AreaRow';
 import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
-import createInstance from '../../helpers/AxiosInstance';
+import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -39,7 +39,7 @@ function ScanScreen({ navigation, route }) {
   };
 
   const scanIndex = () => {
-    api.get('/scan/index/')
+    api.get(`/scan/index/`)
       .then(res => { 
         setListData(res.data) 
         setIsLoading(false)
@@ -50,11 +50,20 @@ function ScanScreen({ navigation, route }) {
           Vibration.vibrate(constant.vibroTimeShort)
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
         }, constant.snackbarDelay)
-      });
+      })
   }
 
-  useFocusEffect( useCallback( () => { scanIndex() }, []) );
-  useEffect(() => { scanIndex() }, [])
+  useFocusEffect( 
+    useCallback( () => { 
+      console.log('axios useFocusEffect scanIndex')
+      scanIndex() 
+    }, []) 
+  );
+  
+  useEffect(() => { 
+    console.log('axios useEffect scanIndex')
+    scanIndex() 
+  }, [])
 
 
   return (

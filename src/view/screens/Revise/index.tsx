@@ -4,7 +4,7 @@ import AreaRow from './partials/AreaRow';
 import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
 import Snackbar from 'react-native-snackbar';
-import createInstance from '../../helpers/AxiosInstance';
+import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -15,6 +15,7 @@ function ReviseScreen({ navigation, route }) {
   const [areaBarcode, setAreaBarcode] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const api = createInstance();
+  
   console.log('render ReviseScreen')
 
   const onPressEvent = useCallback((area) => {
@@ -53,8 +54,17 @@ function ReviseScreen({ navigation, route }) {
       });
   }
 
-  useFocusEffect( useCallback( () => { reviseIndex() }, []) );
-  useEffect(() => { reviseIndex() }, [])
+  useFocusEffect( 
+    useCallback( () => { 
+      console.log('axios useFocusEffect reviseIndex')
+      reviseIndex() 
+    }, []) 
+  );
+
+  useEffect(() => { 
+    console.log('axios useEffect reviseIndex')
+    reviseIndex() 
+  }, [])
 
   return (
     <View style={styles.wrapper}>

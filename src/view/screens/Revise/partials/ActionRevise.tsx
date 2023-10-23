@@ -3,7 +3,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { View, TouchableOpacity, StyleSheet, Alert, Vibration } from 'react-native';
 import { colors, constant, sizes } from '../../../themes/variables';
 import Dialog from 'react-native-dialog';
-import createInstance from '../../../helpers/AxiosInstance';
+import createInstance from '../../../../helpers/AxiosInstance';
 import Snackbar from 'react-native-snackbar';
 
 const ActionRevise = ({ navigation, area }) => {

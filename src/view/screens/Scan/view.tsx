@@ -7,6 +7,7 @@ import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { AuthContext } from '../../../context/AuthContext';
+import createInstance from '../../../helpers/AxiosInstance';
 
 function ScanAreaScreen({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,6 +20,7 @@ function ScanAreaScreen({ navigation, route }) {
   const [isEdit, setIsEdit] = useState(false);
   const barcodeRef = useRef(null);
   const countRef = useRef(null);
+  const api = createInstance();
   
   console.log('render ScanAreaScreen')
   console.log(route.params.area)
@@ -98,7 +100,7 @@ function ScanAreaScreen({ navigation, route }) {
     console.log(barcode)
   }
 
-  useEffect(() => {
+  const scanView = () => {
     const data = [];
     for (let i = 1; i <= 100000; i++) {
       data.push({
@@ -112,6 +114,11 @@ function ScanAreaScreen({ navigation, route }) {
     }
     setTableData(data)
     setIsLoading(false)
+  }
+
+  useEffect(() => {
+    console.log('axios usEffect scanView')
+    scanView()
   },[])
 
 

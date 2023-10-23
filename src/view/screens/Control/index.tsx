@@ -6,7 +6,7 @@ import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
-import createInstance from '../../helpers/AxiosInstance';
+import createInstance from '../../../helpers/AxiosInstance';
 
 const ControlScreen = ({ navigation, route }) => {
   const [area, setArea] = useState('');
@@ -17,6 +17,7 @@ const ControlScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(true);
   const areaRef = useRef(null);
   const controlRef = useRef(null);
+  const api = createInstance();
 
   console.log('render ControlScreen')
 
@@ -70,9 +71,7 @@ const ControlScreen = ({ navigation, route }) => {
     }, constant.snackbarDelay)
   }
 
-  const api = createInstance();
-
-  useEffect(() => {
+  const controlIndex = () => {
     api.get(`/control/index/`)
       .then(res => {
         setTableData(res.data)
@@ -85,8 +84,12 @@ const ControlScreen = ({ navigation, route }) => {
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
         }, constant.snackbarDelay)
       });
-  }, [])
+  }
 
+  useEffect(() => { 
+    console.log('axios useEffect controlIndex')
+    controlIndex() 
+  }, [])
 
   return (
     <View style={styles.wrapper}>

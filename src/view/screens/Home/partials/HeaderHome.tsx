@@ -3,7 +3,7 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Snackbar from 'react-native-snackbar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Badge from '../../../components/Badge';
-import createInstance from '../../../helpers/AxiosInstance';
+import createInstance from '../../../../helpers/AxiosInstance';
 import { colors, constant } from '../../../themes/variables';
 import { useFocusEffect } from '@react-navigation/native';
 
