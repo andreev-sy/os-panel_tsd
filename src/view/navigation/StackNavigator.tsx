@@ -30,7 +30,7 @@ const HomeStackNavigator = () => {
       <Stack.Screen
         name="HomeStackRoute"
         component={HomeScreen}
-        options={({ navigation }) => ({
+        options={({ navigation, route }) => ({
           title: 'Выбор действия',
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
@@ -40,7 +40,7 @@ const HomeStackNavigator = () => {
       <Stack.Screen
         name="ScanStackRoute"
         component={ScanScreen}
-        options={({ navigation }) => ({
+        options={({ navigation, route }) => ({
           title: 'Скан',
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
@@ -50,10 +50,8 @@ const HomeStackNavigator = () => {
       <Stack.Screen
         name="ScanAreaStackRoute"
         component={ScanAreaScreen}
-        // options={({ route }) => ({ title: route.params.headerTitle })}
         options={({ navigation, route }) => ({
-          // headerTitle: (props) => <Title {...props} />,
-          title: 'Скан: ' + route.params.headerTitle,
+          title: 'Скан: ' + route.params?.headerTitle,
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => <HeaderBack navigation={navigation} />,
@@ -64,7 +62,6 @@ const HomeStackNavigator = () => {
         name="ControlStackRoute"
         component={ControlScreen}
         options={({ navigation, route }) => ({
-          // headerTitle: (props) => <Title {...props} />,
           title: 'Контроль',
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
@@ -75,7 +72,6 @@ const HomeStackNavigator = () => {
         name="RecountStackRoute"
         component={RecountScreen}
         options={({ navigation, route }) => ({
-          // headerTitle: (props) => <Title {...props} />,
           title: 'Пересчёт',
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
@@ -86,7 +82,6 @@ const HomeStackNavigator = () => {
         name="ReviseStackRoute"
         component={ReviseScreen}
         options={({ navigation, route }) => ({
-          // headerTitle: (props) => <Title {...props} />,
           title: 'Сверка',
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
@@ -96,21 +91,18 @@ const HomeStackNavigator = () => {
       <Stack.Screen
         name="ReviseAreaStackRoute"
         component={ReviseAreaScreen}
-        // options={({ route }) => ({ title: route.params.headerTitle })}
         options={({ navigation, route }) => ({
-          // headerTitle: (props) => <Title {...props} />,
-          title: 'Сверка: ' + route.params.headerTitle,
+          title: 'Сверка: ' + route.params?.headerTitle,
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => <HeaderBack navigation={navigation} />,
-          headerRight: () => <ActionRevise navigation={navigation} area={route.params.area} />,
+          headerRight: () => <ActionRevise navigation={navigation} area={route.params?.area} />,
         })}
       />
       <Stack.Screen
         name="ProfileStackRoute"
         component={ProfileScreen}
         options={({ navigation, route }) => ({
-          // headerTitle: (props) => <Title {...props} />,
           title: 'Профиль',
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
@@ -121,7 +113,6 @@ const HomeStackNavigator = () => {
         name="NotificationStackRoute"
         component={NotificationScreen}
         options={({ navigation, route }) => ({
-          // headerTitle: (props) => <Title {...props} />,
           title: 'Уведомления',
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
