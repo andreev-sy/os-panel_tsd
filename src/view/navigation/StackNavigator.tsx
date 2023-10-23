@@ -1,8 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import Title from '../components/Title';
 import HeaderBack from '../components/HeaderBack';
 import HeaderHome from '../screens/Home/partials/HeaderHome';
 import HomeScreen from '../screens/Home';
@@ -51,7 +50,7 @@ const HomeStackNavigator = () => {
         name="ScanAreaStackRoute"
         component={ScanAreaScreen}
         options={({ navigation, route }) => ({
-          title: 'Скан: ' + route.params?.headerTitle,
+          title: `Скан: ${route.params?.headerTitle}`,
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => <HeaderBack navigation={navigation} />,
@@ -92,7 +91,7 @@ const HomeStackNavigator = () => {
         name="ReviseAreaStackRoute"
         component={ReviseAreaScreen}
         options={({ navigation, route }) => ({
-          title: 'Сверка: ' + route.params?.headerTitle,
+          title: `Сверка: ${route.params?.headerTitle}`,
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => <HeaderBack navigation={navigation} />,
