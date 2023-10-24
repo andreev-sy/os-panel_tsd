@@ -58,17 +58,25 @@ const ControlScreen = ({ navigation, route }) => {
   };
 
   const finishArea = () => {
-    const index = tableData.findIndex(el => el.id === areaSelected.id);
-    if (index !== -1) {
-      tableData.splice(index, 1); // Удаляем элемент из массива
-      setTableData([...tableData]); // Обновляем состояние массива
-    }
-    setContextModalVisible(!contextModalVisible)
-    setAreaSelected({})
+    api.post(`/control/finish/`, { 'area': areaSelected.id })
+      .then(res => {
+        console.log(res.data)
+        setTableData(res.data);
+        setContextModalVisible(!contextModalVisible)
+        setAreaSelected({})
 
-    setTimeout(() => {
-      Snackbar.show({ text: 'Контроль в зоне успешно завершён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
-    }, constant.snackbarDelay)
+        if (res.data.length == 0) navigation.goBack()
+        setTimeout(() => {
+          Snackbar.show({ text: 'Контроль в зоне успешно завершён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
+        }, constant.snackbarDelay)
+      })
+      .catch(e => {
+        setContextModalVisible(!contextModalVisible)
+        setTimeout(() => {
+          Vibration.vibrate(constant.vibroTimeShort)
+          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+        }, constant.snackbarDelay)
+      });
   }
 
   const controlIndex = () => {
@@ -104,8 +112,8 @@ const ControlScreen = ({ navigation, route }) => {
           value={area}
           selectTextOnFocus={true}
           onSubmitEditing={() => {
-            if (!area) setTimeout(() => areaRef.current.focus(), 150)
-            else setTimeout(() => controlRef.current.focus(), 150)
+            if (!area) setTimeout(() => areaRef.current.focus(), constant.refDelay)
+            else setTimeout(() => controlRef.current.focus(), constant.refDelay)
           }}
         />
         <TextInput

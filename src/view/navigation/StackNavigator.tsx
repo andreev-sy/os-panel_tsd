@@ -5,9 +5,11 @@ import { StyleSheet } from 'react-native';
 import HeaderBack from '../components/HeaderBack';
 import HeaderHome from '../screens/Home/partials/HeaderHome';
 import HomeScreen from '../screens/Home';
+import ScanMainScreen from '../screens/Scan/view-main';
 import ScanScreen from '../screens/Scan';
 import ScanAreaScreen from '../screens/Scan/view';
 import LoginScreen from '../screens/Login';
+import ControlMainScreen from '../screens/Control/index-main';
 import ControlScreen from '../screens/Control';
 import RecountScreen from '../screens/Recount';
 import ReviseScreen from '../screens/Revise';
@@ -16,6 +18,7 @@ import ProfileScreen from '../screens/Profile';
 import NotificationScreen from '../screens/Notification';
 import SplashScreen from '../screens/Splash';
 
+import ActionScanMain from '../screens/Scan/partials/ActionScanMain';
 import ActionScan from '../screens/Scan/partials/ActionScan';
 import ActionRevise from '../screens/Revise/partials/ActionRevise';
 import ActionNotification from '../screens/Notification/partials/ActionNotification';
@@ -54,12 +57,33 @@ const HomeStackNavigator = () => {
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => <HeaderBack navigation={navigation} />,
-          headerRight: () => <ActionScan navigation={navigation} route={route} />,
+          headerRight: () => <ActionScan navigation={navigation}  area={route.params?.area} />,
+        })}
+      />
+      <Stack.Screen
+        name="ScanMainStackRoute"
+        component={ScanMainScreen}
+        options={({ navigation, route }) => ({
+          title: `Скан: ${route.params?.headerTitle}`,
+          headerStyle: styles.header,
+          headerTitleStyle: styles.headerTitle,
+          headerLeft: () => <HeaderBack navigation={navigation} />,
+          headerRight: () => <ActionScanMain navigation={navigation}  area={route.params?.area} />,
         })}
       />
       <Stack.Screen
         name="ControlStackRoute"
         component={ControlScreen}
+        options={({ navigation, route }) => ({
+          title: 'Контроль',
+          headerStyle: styles.header,
+          headerTitleStyle: styles.headerTitle,
+          headerLeft: () => <HeaderBack navigation={navigation} />,
+        })}
+      />
+      <Stack.Screen
+        name="ControlMainStackRoute"
+        component={ControlMainScreen}
         options={({ navigation, route }) => ({
           title: 'Контроль',
           headerStyle: styles.header,

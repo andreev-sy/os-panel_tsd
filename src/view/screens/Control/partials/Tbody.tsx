@@ -13,8 +13,8 @@ const Tbody = ({ area, onPressEvent }) => {
       accessibilityRole="button"
       onLongPress={() => onPressEvent(area)}
       background={TouchableNativeFeedback.Ripple(colors.GRAY_200, false)}
-    >
-      <View style={styles.tbody}>
+    > 
+      <View style={[styles.tbody, parseFloat(area.control) > 0 ? styles.isReady : {}]}>
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] } ]}>{area.code}</Text>
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{area.row}</Text>
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, { width: widthArr[2] } ]}>{area.control}</Text>
@@ -40,7 +40,9 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 8,
   },
-  tbodyBorderRight: { borderRightColor: colors.GRAY_600, borderRightWidth: 1, }
+  tbodyBorderRight: { borderRightColor: colors.GRAY_600, borderRightWidth: 1, },
+  isReady: { backgroundColor: colors.LIGHT_SUCCESS, }
+
 });
 
 export default memo(Tbody)

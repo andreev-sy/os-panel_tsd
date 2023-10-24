@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
-import { colors } from '../view/themes/variables';
+import { colors, constant } from '../view/themes/variables';
 
 export const AuthContext = createContext();
 
@@ -32,14 +32,9 @@ export const AuthProvider = ({ children }) => {
       })
       .catch(e => {
         setIsLoading(false);
-        setTimeout(function () {
-          Snackbar.show({
-            text: e.response.data.message,
-            textColor: colors.DANGER,
-            backgroundColor: colors.LIGHT_DANGER,
-            duration: Snackbar.LENGTH_SHORT,
-          });
-        }, 500)
+        setTimeout(() => {
+          Snackbar.show({ text: 'Не удалось авторизоваться. Проверьте правильность введенного адреса АПИ, и подключение к интернету.', textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
+        }, constant.snackbarDelay)
       });
   };
 
@@ -53,6 +48,9 @@ export const AuthProvider = ({ children }) => {
     setBaseUrl('');
 
     setIsLoading(false);
+    setTimeout(() => {
+      Snackbar.show({ text: 'Необходимо авторизоваться', textColor: colors.PRIMARY, backgroundColor: colors.LIGHT_PRIMARY, duration: Snackbar.LENGTH_SHORT });
+    }, constant.snackbarDelay)
   };
 
   const isLoggedIn = async () => {
@@ -73,6 +71,7 @@ export const AuthProvider = ({ children }) => {
           })
           .catch(e => {
             setSplashLoading(false);
+           
             logout();
           });
       } else {

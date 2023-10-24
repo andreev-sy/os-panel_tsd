@@ -14,7 +14,7 @@ const Tbody = ({ area, onPressEvent }) => {
       onLongPress={() => onPressEvent(area)}
       background={TouchableNativeFeedback.Ripple(colors.GRAY_200, false)}
     >
-      <View style={styles.tbody}>
+      <View style={[styles.tbody, area.is_recount == 1 ? styles.isReady : {}]}>
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] } ]}>{area.row}</Text>
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{area.code}</Text>
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] } ]}>{area.scan}</Text>
@@ -22,7 +22,6 @@ const Tbody = ({ area, onPressEvent }) => {
         <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, { width: widthArr[4] } ]}>{ fixFloat(area.gap) }</Text>
       </View>
   </TouchableNativeFeedback>
-
   );
 }
 
@@ -45,7 +44,8 @@ export const styles = StyleSheet.create({
   tbodyBorderRight: {
     borderRightColor: colors.GRAY_600,
     borderRightWidth: 1,
-  }
+  },
+  isReady: { backgroundColor: colors.LIGHT_SUCCESS, }
 
 });
 

@@ -18,20 +18,20 @@ const ActionRevise = ({ navigation, area }) => {
     };
 
     function finishArea() {
-        api.get(`/revise/finish/?area_id=${area.id}`)
-            .then(res => {
-                setModalVisible(!modalVisible)
-                navigation.goBack()
-                setTimeout(() => { 
-                    Snackbar.show({ text: 'Сверка в зоне успешно завершена', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, }); 
-                }, constant.snackbarDelay)
-            })
-            .catch(e => {
-                setTimeout(() => {
-                    Vibration.vibrate(constant.vibroTimeShort)
-                    Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
-                }, constant.snackbarDelay)
-            });
+        api.post(`/revise/finish/`, { 'area': area.id })
+         .then(res => {
+             setModalVisible(!modalVisible)
+             navigation.goBack()
+             setTimeout(() => {
+                 Snackbar.show({ text: 'Сверка в зоне успешно завершена', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
+             }, constant.snackbarDelay)
+         })
+         .catch(e => {
+             setTimeout(() => {
+                 Vibration.vibrate(constant.vibroTimeShort)
+                 Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+             }, constant.snackbarDelay)
+         });
     };
 
     return (

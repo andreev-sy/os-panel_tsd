@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { TextInput, Text, View, FlatList, Alert, StyleSheet, TouchableOpacity, ScrollView, Vibration } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
-import Dialog from 'react-native-dialog';
-import Snackbar from 'react-native-snackbar';
-import createInstance from '../../../helpers/AxiosInstance';
-import { colors, constant, sizes } from '../../themes/variables';
+import { TextInput, Text, View, FlatList, Alert, StyleSheet, ScrollView, TouchableOpacity, Vibration } from 'react-native';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
+import { colors, constant, sizes } from '../../themes/variables';
+import Dialog from 'react-native-dialog';
+import Snackbar from 'react-native-snackbar';
+import Spinner from 'react-native-loading-spinner-overlay';
+import createInstance from '../../../helpers/AxiosInstance';
 
-const ReacountScreen = ({ navigation, route }) => {
+const ControlMainScreen = ({ navigation, route }) => {
   const [area, setArea] = useState('');
   const [control, setControl] = useState('');
   const [tableData, setTableData] = useState([]);
@@ -19,7 +19,7 @@ const ReacountScreen = ({ navigation, route }) => {
   const controlRef = useRef(null);
   const api = createInstance();
 
-  console.log('render ReacountScreen')
+  console.log('render ControlMainScreen')
 
   const onPressEvent = useCallback((area) => {
     console.log(area)
@@ -29,7 +29,7 @@ const ReacountScreen = ({ navigation, route }) => {
 
   const handlePressSave = () => {
     setIsLoading(true)
-    api.post(`/recount/update/`, { area, control })
+    api.post(`/control/update/`, { area, control })
       .then(res => {
         setTableData(res.data)
         setArea('')
@@ -37,7 +37,7 @@ const ReacountScreen = ({ navigation, route }) => {
         setIsLoading(false)
         setTimeout(() => areaRef.current.focus(), constant.refDelay)
         setTimeout(() => {
-          Snackbar.show({ text: 'Пересчет сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          Snackbar.show({ text: 'Контроль сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
       })
       .catch(e => {
@@ -51,13 +51,14 @@ const ReacountScreen = ({ navigation, route }) => {
   };
 
   const handlePressFinish = () => {
-    Alert.alert('', 'Вы точно хотите завершить пересчёт в зоне?', [
-      { text: 'Отмена' }, { text: 'Да', onPress: () => finishArea() }
+    Alert.alert('', 'Вы точно хотите завершить контроль в зоне?', [
+      { text: 'Отмена' },
+      { text: 'Да', onPress: () => finishArea() },
     ])
   };
 
   const finishArea = () => {
-    api.post(`/recount/finish/`, { 'area': areaSelected.id })
+    api.post(`/control/finish/`, { 'area': areaSelected.id })
       .then(res => {
         console.log(res.data)
         setTableData(res.data);
@@ -66,7 +67,7 @@ const ReacountScreen = ({ navigation, route }) => {
 
         if (res.data.length == 0) navigation.goBack()
         setTimeout(() => {
-          Snackbar.show({ text: 'Пересчёт в зоне успешно завершён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
+          Snackbar.show({ text: 'Контроль в зоне успешно завершён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
         }, constant.snackbarDelay)
       })
       .catch(e => {
@@ -78,8 +79,8 @@ const ReacountScreen = ({ navigation, route }) => {
       });
   }
 
-  const recountIndex = () => {
-    api.get(`/recount/index/`)
+  const controlIndex = () => {
+    api.get(`/control/index/`)
       .then(res => {
         setTableData(res.data)
         setIsLoading(false)
@@ -88,16 +89,15 @@ const ReacountScreen = ({ navigation, route }) => {
         setIsLoading(false)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
-          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
         }, constant.snackbarDelay)
       });
   }
 
-  useEffect(() => {
-    console.log('axios useEffect recountIndex')
-    recountIndex()
+  useEffect(() => { 
+    console.log('axios useEffect controlIndex')
+    controlIndex() 
   }, [])
-
 
   return (
     <View style={styles.wrapper}>
@@ -107,11 +107,9 @@ const ReacountScreen = ({ navigation, route }) => {
           style={styles.input}
           ref={areaRef}
           onChangeText={setArea}
-          value={area}
           placeholder="Код зоны"
-          autoCorrect={false}
-          editable={tableData ? true : false}
           placeholderTextColor={colors.GRAY_500}
+          value={area}
           selectTextOnFocus={true}
           onSubmitEditing={() => {
             if (!area) setTimeout(() => areaRef.current.focus(), constant.refDelay)
@@ -120,15 +118,13 @@ const ReacountScreen = ({ navigation, route }) => {
         />
         <TextInput
           style={styles.input}
-          placeholder="Контроль"
-          autoCorrect={false}
-          editable={tableData ? true : false}
-          placeholderTextColor={colors.GRAY_500}
-          selectTextOnFocus={true}
-          keyboardType="numeric"
           ref={controlRef}
-          value={control}
           onChangeText={setControl}
+          value={control}
+          selectTextOnFocus={true}
+          placeholder="Контроль"
+          placeholderTextColor={colors.GRAY_500}
+          keyboardType="numeric"
           onSubmitEditing={() => {
             if (!control) setTimeout(() => controlRef.current.focus(), constant.refDelay)
             else if (!area) setTimeout(() => areaRef.current.focus(), constant.refDelay)
@@ -150,6 +146,7 @@ const ReacountScreen = ({ navigation, route }) => {
         <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
           <Thead />
           <FlatList
+            // contentContainerStyle={{ flexDirection: 'column' }}
             removeClippedSubviews={false}
             initialNumToRender={1}
             maxToRenderPerBatch={20}
@@ -171,8 +168,9 @@ const ReacountScreen = ({ navigation, route }) => {
         >
           <Dialog.Title style={styles.dialogTitle}>{areaSelected.title}</Dialog.Title>
           <View>
-            <Dialog.Button label="Завершить пересчет" style={styles.dialogBtn} onPress={handlePressFinish} />
+            <Dialog.Button label="Завершить контроль" style={styles.dialogBtn} onPress={handlePressFinish} />
           </View>
+
           <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setContextModalVisible(!contextModalVisible)} />
         </Dialog.Container>
       </View>
@@ -190,9 +188,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  tableWrapper: { flex: 1, flexDirection: 'column', width: '100%' },
-  tableInner: { flexGrow: 1, flexDirection: 'column' },
-
   form: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -212,7 +207,6 @@ export const styles = StyleSheet.create({
     elevation: 3,
     flexBasis: '40%'
   },
-  btnDisabled: { opacity: 0.6 },
   btn: {
     height: 48,
     width: 50,
@@ -222,11 +216,16 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.PRIMARY,
     borderRadius: sizes.radius,
   },
+  btnDisabled: { opacity: 0.6 },
   btnText: {
     color: colors.WHITE,
     fontSize: sizes.body4,
     fontWeight: '400'
   },
+
+
+  tableWrapper: { flex: 1, flexDirection: 'column', width: '100%', },
+  tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0, marginBottom: 15, },
   dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE },
@@ -238,4 +237,4 @@ export const styles = StyleSheet.create({
 });
 
 
-export default ReacountScreen;
+export default ControlMainScreen;

@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, FlatList, StyleSheet, TextInput, TouchableOpacity, Text, Vibration } from 'react-native';
-import AreaRow from './partials/AreaRow';
-import { colors, constant, sizes } from '../../themes/variables';
+import { useFocusEffect } from '@react-navigation/native';
 import Dialog from "react-native-dialog";
 import Snackbar from 'react-native-snackbar';
-import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { useFocusEffect } from '@react-navigation/native';
+import AreaRow from './partials/AreaRow';
+import { colors, constant, sizes } from '../../themes/variables';
+import createInstance from '../../../helpers/AxiosInstance';
 
 function ReviseScreen({ navigation, route }) {
   const [listData, setListData] = useState([]);
@@ -14,6 +14,7 @@ function ReviseScreen({ navigation, route }) {
   const [areaSelect, setAreaSelect] = useState({});
   const [areaBarcode, setAreaBarcode] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const areaRef = useRef(null);
   const api = createInstance();
   
   console.log('render ReviseScreen')
@@ -22,10 +23,10 @@ function ReviseScreen({ navigation, route }) {
     console.log(area)
     setAreaSelect(area)
     setmodalVisible(!modalVisible)
+    setTimeout(() => areaRef.current.focus(), constant.refDelay)
   }, []);
 
   const handlePressEnter = () => {
-    // сверяем введный ШК с ШК из выбранной зоны
     if (areaBarcode.trim() == areaSelect?.barcode) {
       navigation.navigate('ReviseAreaStackRoute', { headerTitle: areaSelect?.title, area: areaSelect })
       setmodalVisible(!modalVisible)
@@ -44,6 +45,7 @@ function ReviseScreen({ navigation, route }) {
       .then(res => { 
         setListData(res.data) 
         setIsLoading(false)
+        if(res.data.length == 0) navigation.goBack()
       })
       .catch(e => {
         setIsLoading(false)
@@ -93,10 +95,10 @@ function ReviseScreen({ navigation, route }) {
             <TextInput
               style={styles.dialogInput}
               placeholder="Штрихкод зоны"
-              placeholderTextColor={colors.GRAY_500}
-              // ref={areaScanRef}
-              autoFocus={true}
+              placeholderTextColor={colors.GRAY_500} 
               autoCorrect={false}
+              ref={areaRef}
+              selectTextOnFocus={true}
               onChangeText={setAreaBarcode}
               onSubmitEditing={handlePressEnter}
             />

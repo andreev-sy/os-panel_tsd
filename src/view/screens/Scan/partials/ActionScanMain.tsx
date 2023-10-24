@@ -4,7 +4,7 @@ import { View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { colors, constant, sizes } from '../../../themes/variables';
 import Dialog from 'react-native-dialog';
 
-const ActionScan = ({ navigation, area }) => {
+const ActionScanMain = ({ navigation, area }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const handleFinishPress = () => {
@@ -74,4 +74,4 @@ export const styles = StyleSheet.create({
     dialogClose: { fontSize: sizes.body4, color: colors.SECONDARY, textTransform: 'none' },
 });
 
-export default ActionScan;
+export default ActionScanMain;

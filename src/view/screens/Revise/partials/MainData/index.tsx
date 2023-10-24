@@ -28,27 +28,11 @@ function MainData({ navigation, area }) {
 
   // сохраняем новое значние скана
   const handlePressSaveScan = () => {
-    api.get(`/revise/update/?area_id=${area.id}&area_item_id=${item.id}&new_scan=${newScan}`)
-      .then(res => {
-        setTableData(res.data)
-        setItem({})
-        setNewScan('')
-        setContextModalVisible(!contextModalVisible)
-        setTimeout(() => {
-          Snackbar.show({ text: 'Факт успешно сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
-        }, constant.snackbarDelay)
-      })
-      .catch(e => {
-        setTimeout(() => {
-          Vibration.vibrate(constant.vibroTimeShort)
-          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
-        }, constant.snackbarDelay)
-      });
-  }
-
-  // подтверждаем скан
-  const handlePressAgreeScan = () => {
-    api.get(`/revise/update/?area_id=${area.id}&area_item_id=${item.id}`)
+    api.post(`/revise/update/`, {
+      'area': area.id,
+      'area_item': item.id,
+      'scan': newScan
+    })
       .then(res => {
         setTableData(res.data)
         setItem({})
@@ -113,7 +97,7 @@ function MainData({ navigation, area }) {
           visible={contextModalVisible}
           onBackdropPress={() => setContextModalVisible(!contextModalVisible)}
         >
-          <Dialog.Title style={styles.dialogTitle}>{item.name} ({item.article})</Dialog.Title>
+          <Dialog.Title style={styles.dialogTitle}>Товар {item.article}</Dialog.Title>
           <View>
 
             <TextInput
@@ -143,7 +127,7 @@ function MainData({ navigation, area }) {
               style={[styles.dialogBtnFill, styles.dialogBtnFillSuccess]}
               activeOpacity={constant.activeOpacity}
               accessibilityRole="button"
-              onPress={handlePressAgreeScan}
+              onPress={handlePressSaveScan}
             >
               <Text style={styles.dialogBtnFillText}>Подтвердить факт</Text>
             </TouchableOpacity>

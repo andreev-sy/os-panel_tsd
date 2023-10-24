@@ -27,7 +27,7 @@ function HomeScreen({ navigation, route }) {
     const handlePressModalScan = () => {
         api.get(`/scan/verify/?area_barcode=${areaScan}`)
             .then(res => {
-                navigation.navigate('ScanAreaStackRoute', { headerTitle: 'Зона ' + res.data.title, area: res.data })
+                navigation.navigate('ScanMainStackRoute', { headerTitle: 'Зона ' + res.data.title, area: res.data })
             })
             .catch(e => {
                 setTimeout(() => areaScanRef.current.focus(), constant.refDelay)
@@ -38,7 +38,10 @@ function HomeScreen({ navigation, route }) {
             });
     }
 
-    const handlePressControl = () => navigation.navigate('ControlStackRoute')
+    const handlePressControl = () => {
+        navigation.navigate('ControlMainStackRoute')
+    }
+
     const handlePressScanJob = () => navigation.navigate('ScanStackRoute')
     const handlePressControlJob = () => navigation.navigate('ControlStackRoute')
     const handlePressRecountJob = () => navigation.navigate('RecountStackRoute')

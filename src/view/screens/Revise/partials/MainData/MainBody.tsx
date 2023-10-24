@@ -15,7 +15,7 @@ const MainBody = ({ item, onPressEvent }) => {
       onLongPress={() => onPressEvent(item)}
       background={TouchableNativeFeedback.Ripple(colors.GRAY_200, false)}
     >
-        <View style={[styles.tbody, item.is_revise == 1 ? styles.isRevise : {}]}>
+        <View style={[styles.tbody, item.is_revise == 1 ? styles.isReady : {}]}>
           <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] } ]}>{item.article}</Text>
           <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{item.name}</Text>
           <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] } ]}>{item.plan}</Text>
@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     borderRightColor: colors.GRAY_600,
     borderRightWidth: 1,
   },
-  isRevise: { backgroundColor: colors.LIGHT_SUCCESS, }
+  isReady: { backgroundColor: colors.LIGHT_SUCCESS, }
 });
 
 export default memo(MainBody)

@@ -6,7 +6,6 @@ import MainData from './partials/MainData';
 import OtherData from './partials/OtherData/';
 
 function ReviseAreaScreen({ navigation, route }) {
-
   const [index, setIndex] = useState(0);
   const [routes] = useState([ { key: 'main', title: 'На сверку' }, { key: 'other', title: 'Другие товары' } ]);
 
