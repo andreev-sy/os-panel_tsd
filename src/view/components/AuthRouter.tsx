@@ -3,9 +3,10 @@ import { SplashStackNavigator, LoginStackNavigator, HomeStackNavigator } from '.
 import { NavigationContainer } from '@react-navigation/native';
 import {AuthContext} from '../../context/AuthContext';
 
+
 function AuthRouter() {
-    const {userInfo, splashLoading} = useContext(AuthContext);
- 
+    const {userInfo, splashLoading, baseUrl} = useContext(AuthContext);
+
     return (
         <NavigationContainer>
             { splashLoading ? (

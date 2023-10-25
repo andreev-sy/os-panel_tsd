@@ -7,16 +7,18 @@ import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
+import RNEventSource from 'react-native-event-source'
 
 function HomeScreen({ navigation, route }) {
-    const { isLoading } = useContext(AuthContext);
+    const { isLoading, baseUrl } = useContext(AuthContext);
     const [homeData, setHomeData] = useState({ 'job': 0, 'scan': 0, 'control': 0, 'recount': 0, 'revise': 0 });
     const [modalScanVisible, setModalScanVisible] = useState(false);
     const [areaScan, setAreaScan] = useState(false);
     const areaScanRef = useRef(null);
     const api = createInstance();
 
-    console.log('render HomeScreen')
+
+
 
     const handlePressScan = () => {
         setAreaScan(false)
@@ -50,8 +52,8 @@ function HomeScreen({ navigation, route }) {
     const siteIndex = () => {
         api.get(`/site/index/`)
             .then(res => {
-                if(res.data)
-                setHomeData(res.data);
+                if (res.data)
+                    setHomeData(res.data);
             })
             .catch(e => {
                 setTimeout(() => {
@@ -61,17 +63,39 @@ function HomeScreen({ navigation, route }) {
             });
     }
 
-    useFocusEffect( 
-        useCallback(() => { 
+    const notificationGetMessage = () => {
+        console.log('getMessage')
+        const options = { 
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive'
+            },
+        }
+
+        const eventSource = new RNEventSource(`http://${baseUrl}/api/notification/get-message/`, options)
+        
+        eventSource.addEventListener('message', (event) => {
+          console.log(event)
+        })
+        
+        return () => { eventSource.close() }
+    }
+
+    useFocusEffect(
+        useCallback(() => {
             console.log('axios useFocusEffect siteIndex');
-            siteIndex() 
-        }, []) 
+            siteIndex()
+        }, [])
     );
-    
-    useEffect(() => { 
+
+    useEffect(() => {
         console.log('axios useEffect siteIndex');
-        siteIndex() 
+        siteIndex()
+        // notificationGetMessage()
     }, [isLoading]);
+
 
     return (
         <View style={styles.wrapper}>
@@ -192,7 +216,7 @@ export const styles = StyleSheet.create({
     wrapper: {
         flexDirection: 'column',
         padding: sizes.padding,
-        backgroundColor: colors.BG, 
+        backgroundColor: colors.BG,
         height: '100%'
     },
     topWrapper: {

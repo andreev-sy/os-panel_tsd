@@ -12,8 +12,6 @@ const ControlMainScreen = ({ navigation, route }) => {
   const [area, setArea] = useState('');
   const [control, setControl] = useState('');
   const [tableData, setTableData] = useState([]);
-  const [contextModalVisible, setContextModalVisible] = useState(false);
-  const [areaSelected, setAreaSelected] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const areaRef = useRef(null);
   const controlRef = useRef(null);
@@ -21,15 +19,11 @@ const ControlMainScreen = ({ navigation, route }) => {
 
   console.log('render ControlMainScreen')
 
-  const onPressEvent = useCallback((area) => {
-    console.log(area)
-    setAreaSelected(area)
-    setContextModalVisible(!contextModalVisible)
-  }, []);
-
+  const onPressEvent = () => {}
+  
   const handlePressSave = () => {
     setIsLoading(true)
-    api.post(`/control/update/`, { area, control })
+    api.post(`/control-main/update/`, { area, control })
       .then(res => {
         setTableData(res.data)
         setArea('')
@@ -50,37 +44,8 @@ const ControlMainScreen = ({ navigation, route }) => {
       });
   };
 
-  const handlePressFinish = () => {
-    Alert.alert('', 'Вы точно хотите завершить контроль в зоне?', [
-      { text: 'Отмена' },
-      { text: 'Да', onPress: () => finishArea() },
-    ])
-  };
-
-  const finishArea = () => {
-    api.post(`/control/finish/`, { 'area': areaSelected.id })
-      .then(res => {
-        console.log(res.data)
-        setTableData(res.data);
-        setContextModalVisible(!contextModalVisible)
-        setAreaSelected({})
-
-        if (res.data.length == 0) navigation.goBack()
-        setTimeout(() => {
-          Snackbar.show({ text: 'Контроль в зоне успешно завершён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
-        }, constant.snackbarDelay)
-      })
-      .catch(e => {
-        setContextModalVisible(!contextModalVisible)
-        setTimeout(() => {
-          Vibration.vibrate(constant.vibroTimeShort)
-          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
-        }, constant.snackbarDelay)
-      });
-  }
-
-  const controlIndex = () => {
-    api.get(`/control/index/`)
+  const controlMainIndex = () => {
+    api.get(`/control-main/index/`)
       .then(res => {
         setTableData(res.data)
         setIsLoading(false)
@@ -95,8 +60,8 @@ const ControlMainScreen = ({ navigation, route }) => {
   }
 
   useEffect(() => { 
-    console.log('axios useEffect controlIndex')
-    controlIndex() 
+    console.log('axios useEffect controlMainIndex')
+    controlMainIndex() 
   }, [])
 
   return (
@@ -142,38 +107,23 @@ const ControlMainScreen = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.tableWrapper}>
-        <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
-          <Thead />
-          <FlatList
-            // contentContainerStyle={{ flexDirection: 'column' }}
-            removeClippedSubviews={false}
-            initialNumToRender={1}
-            maxToRenderPerBatch={20}
-            windowSize={2}
-            data={tableData}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <Tbody area={item} onPressEvent={onPressEvent} />}
-          />
-        </ScrollView>
-      </View>
-
-      <View>
-        <Dialog.Container
-          headerStyle={styles.dialogHeader}
-          contentStyle={styles.dialogContent}
-          footerStyle={styles.dialogFooter}
-          visible={contextModalVisible}
-          onBackdropPress={() => setContextModalVisible(!contextModalVisible)}
-        >
-          <Dialog.Title style={styles.dialogTitle}>{areaSelected.title}</Dialog.Title>
-          <View>
-            <Dialog.Button label="Завершить контроль" style={styles.dialogBtn} onPress={handlePressFinish} />
+      { tableData.length > 0 ?
+           <View style={styles.tableWrapper}>
+            <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
+              <Thead />
+              <FlatList
+                // contentContainerStyle={{ flexDirection: 'column' }}
+                removeClippedSubviews={false}
+                initialNumToRender={1}
+                maxToRenderPerBatch={20}
+                windowSize={2}
+                data={tableData}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => <Tbody area={item} onPressEvent={onPressEvent} />}
+              />
+            </ScrollView>
           </View>
-
-          <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setContextModalVisible(!contextModalVisible)} />
-        </Dialog.Container>
-      </View>
+      : '' }
 
     </View>
   );
@@ -226,13 +176,6 @@ export const styles = StyleSheet.create({
 
   tableWrapper: { flex: 1, flexDirection: 'column', width: '100%', },
   tableInner: { flexGrow: 1, flexDirection: 'column' },
-
-  dialogHeader: { padding: 0, margin: 0, marginBottom: 15, },
-  dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE },
-  dialogFooter: { justifyContent: 'center' },
-  dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700 },
-  dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },
-  dialogClose: { fontSize: sizes.body4, color: colors.SECONDARY, textTransform: 'none' },
 
 });
 
