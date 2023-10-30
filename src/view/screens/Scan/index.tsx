@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, FlatList, StyleSheet, TextInput, TouchableOpacity, Text, Vibration } from 'react-native';
 import AreaRow from './partials/AreaRow';
 import { colors, constant, sizes } from '../../themes/variables';
@@ -8,19 +8,19 @@ import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useFocusEffect } from '@react-navigation/native';
 
-
-
 function ScanScreen({ navigation, route }) {
   const [listData, setListData] = useState([]);
   const [modalVisible, setmodalVisible] = useState(false);
   const [areaSelect, setAreaSelect] = useState({});
   const [areaBarcode, setAreaBarcode] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const areaBarcodeRef = useRef(null);
   const api = createInstance();
 
   const onPressEvent = useCallback((area) => {
     console.log(area)
     setAreaSelect(area)
+    setTimeout(() => areaBarcodeRef.current.focus(), constant.refDelay)
     setmodalVisible(!modalVisible)
   }, []);
 
@@ -30,7 +30,7 @@ function ScanScreen({ navigation, route }) {
       navigation.navigate('ScanAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect })
       setmodalVisible(!modalVisible)
     }else{
-      setAreaBarcode('');
+      setTimeout(() => areaBarcodeRef.current.focus(), constant.refDelay)
       setTimeout( () => {
         Vibration.vibrate(constant.vibroTimeMedium)
         Snackbar.show({ text: 'Введенный штрихкод не совпадает с выбраной зоной', textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
@@ -95,8 +95,8 @@ function ScanScreen({ navigation, route }) {
               style={styles.dialogInput}
               placeholder="Штрихкод зоны"
               placeholderTextColor={colors.GRAY_500}
-              // ref={areaScanRef}
-              autoFocus={true}
+              ref={areaBarcodeRef}
+              selectTextOnFocus={true}
               autoCorrect={false}
               onChangeText={setAreaBarcode}
               onSubmitEditing={handlePressEnter}

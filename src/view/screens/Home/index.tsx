@@ -13,17 +13,14 @@ function HomeScreen({ navigation, route }) {
     const { isLoading, baseUrl } = useContext(AuthContext);
     const [homeData, setHomeData] = useState({ 'job': 0, 'scan': 0, 'control': 0, 'recount': 0, 'revise': 0 });
     const [modalScanVisible, setModalScanVisible] = useState(false);
-    const [areaScan, setAreaScan] = useState(false);
+    const [areaScan, setAreaScan] = useState('');
     const areaScanRef = useRef(null);
     const api = createInstance();
 
-
-
-
     const handlePressScan = () => {
-        setAreaScan(false)
-        setModalScanVisible(true)
+        setAreaScan('')
         setTimeout(() => areaScanRef.current.focus(), constant.refDelay)
+        setModalScanVisible(!modalScanVisible)
     }
 
     const handlePressModalScan = () => {
@@ -65,19 +62,11 @@ function HomeScreen({ navigation, route }) {
 
     const notificationGetMessage = () => {
         console.log('getMessage')
-        const options = { 
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Cache-Control': 'no-cache',
-                'Connection': 'keep-alive'
-            },
-        }
-
-        const eventSource = new RNEventSource(`http://${baseUrl}/api/notification/get-message/`, options)
+      
+        const eventSource = new RNEventSource(`http://135.181.78.213:1333/site/get-message/`)
         
         eventSource.addEventListener('message', (event) => {
-          console.log(event)
+          console.log(event.data)
         })
         
         return () => { eventSource.close() }
@@ -187,7 +176,6 @@ function HomeScreen({ navigation, route }) {
                             placeholder="Штрихкод зоны"
                             placeholderTextColor={colors.GRAY_500}
                             ref={areaScanRef}
-                            autoCorrect={false}
                             selectTextOnFocus={true}
                             onChangeText={setAreaScan}
                             onSubmitEditing={handlePressModalScan}

@@ -106,11 +106,11 @@ const ControlScreen = ({ navigation, route }) => {
         <TextInput
           style={styles.input}
           ref={areaRef}
-          onChangeText={setArea}
           placeholder="Код зоны"
           placeholderTextColor={colors.GRAY_500}
           value={area}
           selectTextOnFocus={true}
+          onChangeText={setArea}
           onSubmitEditing={() => {
             if (!area) setTimeout(() => areaRef.current.focus(), constant.refDelay)
             else setTimeout(() => controlRef.current.focus(), constant.refDelay)
