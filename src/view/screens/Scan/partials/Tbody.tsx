@@ -4,7 +4,8 @@ import { colors, sizes } from '../../../themes/variables';
 
 const Tbody = ({ item, onPressEvent }) => {
   console.log('render item'+item.id);
-  let widthArr = [130, 140, 140, 100, 150]
+  let widthArr = [130, 140, 140, 100, 200]
+  let numberOfLines = parseInt(item.id)
 
   return (
     <TouchableNativeFeedback
@@ -13,11 +14,11 @@ const Tbody = ({ item, onPressEvent }) => {
       background={TouchableNativeFeedback.Ripple(colors.GRAY_200, false)}
     >
         <View style={styles.tbody}>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] } ]}>{item.article}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{item.name}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] } ]}>{item.param1}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[3] } ]}>{item.scanCount}</Text>
-          <Text numberOfLines={item.id} style={[ styles.tbodyText, { width: widthArr[4] } ]}>{item.barcode}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[0] } ]}>{item.article}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[1] } ]}>{item.name}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[2] } ]}>{item.param1}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, styles.tbodyBorderRight, { width: widthArr[3] } ]}>{item.scan}</Text>
+          <Text numberOfLines={numberOfLines} style={[ styles.tbodyText, { width: widthArr[4] } ]}>{item.barcode}</Text>
         </View>
     </TouchableNativeFeedback>
 

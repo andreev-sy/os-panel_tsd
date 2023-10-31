@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { colors, sizes } from '../../../themes/variables';
 
 const Thead = () => {
-  let widthArr = [130, 140, 140, 100, 150]
+  let widthArr = [130, 140, 140, 100, 200]
 
   return (
     <View style={styles.thead}>

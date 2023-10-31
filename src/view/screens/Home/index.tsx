@@ -7,7 +7,6 @@ import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
-import RNEventSource from 'react-native-event-source'
 
 function HomeScreen({ navigation, route }) {
     const { isLoading, baseUrl } = useContext(AuthContext);
@@ -60,17 +59,6 @@ function HomeScreen({ navigation, route }) {
             });
     }
 
-    const notificationGetMessage = () => {
-        console.log('getMessage')
-      
-        const eventSource = new RNEventSource(`http://135.181.78.213:1333/site/get-message/`)
-        
-        eventSource.addEventListener('message', (event) => {
-          console.log(event.data)
-        })
-        
-        return () => { eventSource.close() }
-    }
 
     useFocusEffect(
         useCallback(() => {
@@ -82,7 +70,6 @@ function HomeScreen({ navigation, route }) {
     useEffect(() => {
         console.log('axios useEffect siteIndex');
         siteIndex()
-        // notificationGetMessage()
     }, [isLoading]);
 
 

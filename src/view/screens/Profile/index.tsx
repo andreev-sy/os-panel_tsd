@@ -1,38 +1,12 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
-import axios from 'axios';
 
 function ProfileScreen({ navigation, route }) {
   const { userInfo, baseUrl, logout } = useContext(AuthContext);
 
   console.log('render ProfileScreen')
-
-  useEffect(() => {
-    console.log('useEffect')
-
-    var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
-
-    xhr.addEventListener("readystatechange", function () {
-        console.log(this)
-        if (this.readyState === 4) {
-            console.log(this.responseText);
-        }
-    });
-
-    xhr.open("GET", "http://135.181.78.213:1333/site/get-message/");
-    xhr.setRequestHeader("Accept", "text/event-stream");
-    xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
-    xhr.setRequestHeader("Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7");
-
-    xhr.send();
-    
-
-  }, [])
-
-
 
   return (
     <View style={styles.wrapper}>

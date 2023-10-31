@@ -13,11 +13,11 @@ const ActionRevise = ({ navigation, area }) => {
     const handleFinishPress = () => {
         Alert.alert('', 'Вы точно хотите завершить сверку?', [
             { text: 'Отмена' },
-            { text: 'Да', onPress: () => finishArea() },
+            { text: 'Да', onPress: () => finish() },
         ])
     };
 
-    function finishArea() {
+    function finish() {
         api.post(`/revise/finish/`, { 'area': area.id })
          .then(res => {
              setModalVisible(!modalVisible)
