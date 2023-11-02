@@ -9,7 +9,6 @@ import FindRow from './partials/FindRow';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { AuthContext } from '../../../context/AuthContext';
 import createInstance from '../../../helpers/AxiosInstance';
-import Autocomplete from '../../components/Autocomplete';
 
 function ScanAreaScreen({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -102,6 +101,16 @@ function ScanAreaScreen({ navigation, route }) {
     Alert.alert('', 'Вы точно хотите завершить сканирование?', [
       { text: 'Отмена' }, { text: 'Да', onPress: () => finish() },
     ])
+  };
+
+  const handlePressClose = () => {
+    // navigation.goBack()
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'HomeStackRoute', params: { modal: true } }],
+    });
+
   };
 
   const finish = () => {
@@ -318,6 +327,19 @@ function ScanAreaScreen({ navigation, route }) {
         }
       </View>
 
+      {
+        route.params.main ?
+          <TouchableOpacity
+            style={[styles.btn, styles.btnClose]}
+            activeOpacity={constant.activeOpacity}
+            accessibilityRole="button"
+            onPress={handlePressClose}
+          >
+            <Text style={styles.btnText}>Закрыть</Text>
+          </TouchableOpacity>
+          : ''
+      }
+
       <View style={styles.tableWrapper}>
         <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
           <Thead />
@@ -333,14 +355,19 @@ function ScanAreaScreen({ navigation, route }) {
         </ScrollView>
       </View>
 
-      <TouchableOpacity
-        style={styles.btn}
-        activeOpacity={constant.activeOpacity}
-        accessibilityRole="button"
-        onPress={handlePressFinish}
-      >
-        <Text style={styles.btnText}>Завершить сканирование</Text>
-      </TouchableOpacity>
+      {
+        !route.params.main ?
+          <TouchableOpacity
+            style={[styles.btn, styles.btnFinish]}
+            activeOpacity={constant.activeOpacity}
+            accessibilityRole="button"
+            onPress={handlePressFinish}
+          >
+            <Text style={styles.btnText}>Завершить сканирование</Text>
+          </TouchableOpacity>
+          : ''
+      }
+
 
       <View>
         <Dialog.Container
@@ -393,7 +420,7 @@ function ScanAreaScreen({ navigation, route }) {
                 keyExtractor={(item) => item.item?.id}
                 renderItem={({ item }) => <FindRow item={item} onPressEvent={onPressFindEvent} />}
               />
-            :
+              :
               ''
           }
 
@@ -438,7 +465,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: sizes.padding
   },
-  form: { marginBottom: 12, },
+  form: { marginBottom: 8, },
   editLabel: { marginLeft: 16, fontSize: sizes.body4 },
   formSwitch: {
     flexDirection: 'row',
@@ -505,8 +532,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.SUCCESS,
     borderRadius: sizes.radius,
-    marginTop: 8,
   },
+  btnFinish: { marginTop: 8,},
+  btnClose: { marginBottom: 8,},
   btnText: { color: colors.WHITE, fontSize: sizes.body4, fontWeight: '400' },
 
   tableWrapper: { flex: 1, flexDirection: 'column', width: '100%' },

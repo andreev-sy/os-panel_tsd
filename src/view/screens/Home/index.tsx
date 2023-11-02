@@ -25,7 +25,7 @@ function HomeScreen({ navigation, route }) {
     const handlePressModalScan = () => {
         api.get(`/scan/verify/?area_barcode=${areaScan}`)
             .then(res => {
-                navigation.navigate('ScanMainStackRoute', { headerTitle: 'Зона ' + res.data.title, area: res.data })
+                navigation.navigate('ScanAreaStackRoute', { headerTitle: res.data.title, area: res.data, main: true })
             })
             .catch(e => {
                 setTimeout(() => areaScanRef.current.focus(), constant.refDelay)
@@ -70,6 +70,10 @@ function HomeScreen({ navigation, route }) {
     useEffect(() => {
         console.log('axios useEffect siteIndex');
         siteIndex()
+        if(route.params?.modal === true){
+            setModalScanVisible(route.params?.modal)
+            setTimeout(() => areaScanRef.current.focus(), constant.refDelay)
+        }
     }, [isLoading]);
 
 

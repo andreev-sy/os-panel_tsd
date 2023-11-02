@@ -6,7 +6,7 @@ import Dialog from 'react-native-dialog';
 import createInstance from '../../../../helpers/AxiosInstance';
 import Snackbar from 'react-native-snackbar';
 
-const ActionScan = ({ navigation, area }) => {
+const ActionScan = ({ navigation, area, main }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const api = createInstance();
 
@@ -81,11 +81,15 @@ const ActionScan = ({ navigation, area }) => {
                             style={styles.dialogBtn}
                             onPress={handleNullPress}
                         />
-                        <Dialog.Button
-                            label="Завершить сканирование"
-                            style={styles.dialogBtn}
-                            onPress={handleFinishPress}
-                        />
+                        {
+                            !main ?
+                                <Dialog.Button
+                                    label="Завершить сканирование"
+                                    style={styles.dialogBtn}
+                                    onPress={handleFinishPress}
+                                />
+                            : ''
+                        }
                     </View>
                     <Dialog.Button
                         label="Закрыть"
