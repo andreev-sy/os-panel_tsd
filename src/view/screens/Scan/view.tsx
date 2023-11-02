@@ -9,18 +9,19 @@ import FindRow from './partials/FindRow';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { AuthContext } from '../../../context/AuthContext';
 import createInstance from '../../../helpers/AxiosInstance';
+import Autocomplete from '../../components/Autocomplete';
 
 function ScanAreaScreen({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuto, setIsAuto] = useState(true);
   const [count, setCount] = useState('1');
-  const [barcode, setBarcode] = useState('2380023880284');
+  const [barcode, setBarcode] = useState('');
   const [contextModalVisible, setContextModalVisible] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [findData, setFindData] = useState([]);
-  const [findModalVisible, setFindModalVisible] = useState(false);
   const [item, setitem] = useState({});
   const [isEdit, setIsEdit] = useState(false);
+  const [barcodeList, setBarcodeList] = useState([]);
   const barcodeRef = useRef(null);
   const countRef = useRef(null);
   const api = createInstance();
@@ -34,7 +35,7 @@ function ScanAreaScreen({ navigation, route }) {
 
   const onPressFindEvent = useCallback((item) => {
     setIsLoading(true)
-    api.post(`/scan/add/`, { 'item': item.item.id, 'count': item.count, 'area': route.params?.area.id })
+    api.post(`/scan/add/`, { 'item': item.item?.id, 'count': item.count, 'area': route.params?.area.id })
       .then(res => {
         setTableData(res.data)
         setBarcode('')
@@ -56,10 +57,27 @@ function ScanAreaScreen({ navigation, route }) {
 
   }, []);
 
+  const handleSearch = async (text) => {
+    setBarcode(text);
+    if (!isAuto) {
+      if (text.length >= 3) {
+        api.get(`/scan/search/?query=${text}`)
+          .then(res => {
+            console.log(res.data)
+            setBarcodeList(res.data)
+          })
+      } else {
+        setBarcodeList([]);
+      }
+    }
+  };
+
+
   const handleAutoSwitch = () => {
     if (isEdit) setIsEdit(false);
     setBarcode('');
     setCount('');
+    setBarcodeList([]);
     setIsAuto(!isAuto);
     setCount(!isAuto ? '1' : '');
     setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
@@ -131,8 +149,8 @@ function ScanAreaScreen({ navigation, route }) {
   }
 
   const handlePressSave = () => {
+    setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
     setIsLoading(true)
-
     if (isEdit) {
       api.post(`/scan/update/`, { 'new_scan': count, 'area_item': item.id })
         .then(res => {
@@ -157,8 +175,9 @@ function ScanAreaScreen({ navigation, route }) {
     } else {
       api.post(`/scan/add/`, { 'barcode': barcode, 'count': count, 'area': route.params?.area.id })
         .then(res => {
-          if (res.data.msg?.length > 0) {
-            setFindData(res.data.find)
+          console.log(res.data)
+          if (res.data?.msg?.length > 0) {
+            setFindData(res.data?.find)
             setIsLoading(false)
             setTimeout(() => {
               Snackbar.show({ text: res.data.msg, textColor: colors.INFO, backgroundColor: colors.LIGHT_INFO, duration: Snackbar.LENGTH_LONG });
@@ -176,6 +195,7 @@ function ScanAreaScreen({ navigation, route }) {
           }
         })
         .catch(e => {
+          console.log(e)
           setIsLoading(false)
           setTimeout(() => {
             Vibration.vibrate(constant.vibroTimeShort)
@@ -226,22 +246,36 @@ function ScanAreaScreen({ navigation, route }) {
           {isEdit ? <Text style={styles.editLabel}>Редактирование</Text> : ''}
         </View>
         <View style={styles.formRow}>
-          <TextInput
-            style={[styles.formInput, styles.formInputBarcode]}
-            ref={barcodeRef}
-            value={barcode}
-            inputMode={isAuto ? 'none' : 'text'}
-            placeholder="Штрихкод"
-            placeholderTextColor={colors.GRAY_500}
-            autoCorrect={false}
-            selectTextOnFocus={true}
-            onChangeText={setBarcode}
-            onSubmitEditing={() => {
-              if (!barcode) setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
-              else if (isAuto) handlePressSave()
-              else setTimeout(() => countRef.current.focus(), constant.refDelay)
-            }}
-          />
+          <View style={styles.formSearch}>
+            <TextInput
+              style={[styles.formInput, styles.formInputBarcode]}
+              ref={barcodeRef}
+              value={barcode}
+              inputMode={isAuto ? 'none' : 'text'}
+              placeholder="Штрихкод"
+              placeholderTextColor={colors.GRAY_500}
+              autoCorrect={false}
+              selectTextOnFocus={true}
+              onChangeText={handleSearch}
+              onSubmitEditing={() => {
+                if (!barcode) setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
+                else if (isAuto) handlePressSave()
+                else setTimeout(() => countRef.current.focus(), constant.refDelay)
+              }}
+            />
+            {
+              barcodeList.length > 0 ?
+                <View style={styles.listWrapper}>
+                  <FlatList
+                    data={barcodeList}
+                    renderItem={({ item }) => (<Text style={styles.listText} onPress={() => { if (item.value !== '') { setBarcode(item.value); setBarcodeList([]); } }}>{item.label}</Text>)}
+                    keyExtractor={(item) => item.value}
+                  />
+                </View>
+                : ''
+            }
+
+          </View>
           <TextInput
             style={[styles.formInput, styles.formInputCount, !isAuto ? styles.formInputLong : {}]}
             ref={countRef}
@@ -348,15 +382,20 @@ function ScanAreaScreen({ navigation, route }) {
         >
           <Dialog.Title style={styles.dialogTitle}>Выберите товар из списка</Dialog.Title>
 
-          <FlatList
-            removeClippedSubviews={false}
-            initialNumToRender={1}
-            maxToRenderPerBatch={20}
-            windowSize={2}
-            data={findData}
-            keyExtractor={(item) => item.item.id}
-            renderItem={({ item }) => <FindRow item={item} onPressEvent={onPressFindEvent} />}
-          />
+          {
+            findData.length > 0 ?
+              <FlatList
+                removeClippedSubviews={false}
+                initialNumToRender={1}
+                maxToRenderPerBatch={20}
+                windowSize={2}
+                data={findData}
+                keyExtractor={(item) => item.item?.id}
+                renderItem={({ item }) => <FindRow item={item} onPressEvent={onPressFindEvent} />}
+              />
+            :
+              ''
+          }
 
           <Dialog.Button
             label="Закрыть"
@@ -379,6 +418,26 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
+  listWrapper: {
+    position: 'absolute',
+    zIndex: 1,
+    left: 0,
+    top: 42,
+    borderRadius: sizes.radius,
+    maxHeight: 160,
+    width: '100%',
+    backgroundColor: colors.WHITE,
+    borderWidth: 1,
+    borderColor: colors.GRAY_300,
+    elevation: 3,
+  },
+  listText: {
+    color: colors.GRAY_600,
+    fontSize: sizes.body4,
+    fontWeight: '400',
+    paddingVertical: 7,
+    paddingHorizontal: sizes.padding
+  },
   form: { marginBottom: 12, },
   editLabel: { marginLeft: 16, fontSize: sizes.body4 },
   formSwitch: {
@@ -398,6 +457,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 5,
   },
+  formSearch: {
+    height: 40,
+    flexBasis: '56%'
+  },
   formInput: {
     height: 40,
     paddingHorizontal: 10,
@@ -406,10 +469,10 @@ export const styles = StyleSheet.create({
     color: colors.GRAY_700,
     borderWidth: 1,
     borderColor: colors.GRAY_300,
-    borderRadius: 7,
+    borderRadius: sizes.radius,
     elevation: 3,
   },
-  formInputBarcode: { flexBasis: '56%' },
+  formInputBarcode: { width: '100%', height: '100%' },
   formInputCount: { flexBasis: '28%' },
   formInputLong: { flexBasis: '42%' },
   formBottomBtn: {

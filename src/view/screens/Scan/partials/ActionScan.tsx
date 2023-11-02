@@ -26,6 +26,7 @@ const ActionScan = ({ navigation, area }) => {
         api.post(`/scan/nullable/`, { 'area': area.id })
             .then(res => {
                 setModalVisible(!modalVisible)
+                navigation.replace('ScanAreaStackRoute', { headerTitle: area.title, area: area });
                 setTimeout(() => {
                     Snackbar.show({ text: 'Зона успешно обнулена', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
                 }, constant.snackbarDelay)

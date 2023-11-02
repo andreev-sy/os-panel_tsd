@@ -4,7 +4,8 @@ import { colors, constant, sizes } from '../../../themes/variables';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const FindRow = ({ item, onPressEvent }) => {
-  console.log('render item'+item);
+  console.log('render item'+item)
+  const dataItem = item.item
   return (
     <TouchableOpacity
       style={styles.wrapper}
@@ -13,11 +14,11 @@ const FindRow = ({ item, onPressEvent }) => {
       onLongPress={() => onPressEvent(item)}
     >
       <View>
-        <Text style={styles.title}>Артикул: {item.item.article}</Text>
-        { item.item.name.length > 0 ? <Text style={styles.text}>Наименование: {item.item.name}</Text> : '' }
-        { item.item.param1.length > 0 ? <Text style={styles.text}>Параметр1: {item.item.param1}</Text> : '' }
-        { item.item.param2.length > 0 ? <Text style={styles.text}>Параметр2: {item.item.param2}</Text> : '' }
-        { item.item.param3.length > 0 ? <Text style={styles.text}>Параметр3: {item.item.param3}</Text> : '' }
+        <Text style={styles.title}>Артикул: {dataItem.article}</Text>
+        { dataItem.name.length > 0 ? <Text style={styles.text}>Наименование: {dataItem.name}</Text> : '' }
+        { dataItem.param1.length > 0 ? <Text style={styles.text}>Параметр1: {dataItem.param1}</Text> : '' }
+        { dataItem.param2.length > 0 ? <Text style={styles.text}>Параметр2: {dataItem.param2}</Text> : '' }
+        { dataItem.param3.length > 0 ? <Text style={styles.text}>Параметр3: {dataItem.param3}</Text> : '' }
       </View>
     </TouchableOpacity>
   );
