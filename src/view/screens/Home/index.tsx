@@ -18,7 +18,7 @@ function HomeScreen({ navigation, route }) {
 
     const handlePressScan = () => {
         setAreaScan('')
-        setTimeout(() => areaScanRef.current.focus(), constant.refDelay)
+        setTimeout(() => areaScanRef?.current?.focus(), constant.refDelay)
         setModalScanVisible(!modalScanVisible)
     }
 
@@ -28,7 +28,7 @@ function HomeScreen({ navigation, route }) {
                 navigation.navigate('ScanAreaStackRoute', { headerTitle: res.data.title, area: res.data, main: true })
             })
             .catch(e => {
-                setTimeout(() => areaScanRef.current.focus(), constant.refDelay)
+                setTimeout(() => areaScanRef?.current?.focus(), constant.refDelay)
                 setTimeout(() => {
                     Vibration.vibrate(constant.vibroTimeShort)
                     Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
@@ -72,7 +72,7 @@ function HomeScreen({ navigation, route }) {
         siteIndex()
         if(route.params?.modal === true){
             setModalScanVisible(route.params?.modal)
-            setTimeout(() => areaScanRef.current.focus(), constant.refDelay)
+            setTimeout(() => areaScanRef?.current?.focus(), constant.refDelay)
         }
     }, [isLoading]);
 

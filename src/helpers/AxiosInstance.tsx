@@ -15,7 +15,10 @@ function createInstance() {
         (response) => response,
         (error) => {
             if (error.response){
-                if (error.response.status == '401') logout();
+                if (error.response.status == '401'){
+                    logout();
+                    return false;
+                }
                 const { status, data } = error.response;
                 return Promise.reject({ status, ...data });
             }

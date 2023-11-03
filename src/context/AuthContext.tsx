@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       .catch(e => {
         setIsLoading(false);
         setTimeout(() => {
-          Snackbar.show({ text: 'Не удалось авторизоваться. Проверьте правильность введенного адреса АПИ, и подключение к интернету.', textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
+          Snackbar.show({ text: 'Неверные данные, или нет подключения к сети', textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
       });
   };
@@ -71,7 +71,6 @@ export const AuthProvider = ({ children }) => {
           })
           .catch(e => {
             setSplashLoading(false);
-           
             logout();
           });
       } else {

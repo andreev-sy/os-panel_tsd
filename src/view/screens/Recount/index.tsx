@@ -35,14 +35,14 @@ const ReacountScreen = ({ navigation, route }) => {
         setArea('')
         setControl('')
         setIsLoading(false)
-        setTimeout(() => areaRef.current.focus(), constant.refDelay)
+        setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
           Snackbar.show({ text: 'Пересчет сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
       })
       .catch(e => {
         setIsLoading(false)
-        setTimeout(() => areaRef.current.focus(), constant.refDelay)
+        setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
@@ -114,8 +114,8 @@ const ReacountScreen = ({ navigation, route }) => {
           placeholderTextColor={colors.GRAY_500}
           selectTextOnFocus={true}
           onSubmitEditing={() => {
-            if (!area) setTimeout(() => areaRef.current.focus(), constant.refDelay)
-            else setTimeout(() => controlRef.current.focus(), constant.refDelay)
+            if (!area) setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
+            else setTimeout(() => controlRef?.current?.focus(), constant.refDelay)
           }}
         />
         <TextInput
@@ -130,8 +130,8 @@ const ReacountScreen = ({ navigation, route }) => {
           value={control}
           onChangeText={setControl}
           onSubmitEditing={() => {
-            if (!control) setTimeout(() => controlRef.current.focus(), constant.refDelay)
-            else if (!area) setTimeout(() => areaRef.current.focus(), constant.refDelay)
+            if (!control) setTimeout(() => controlRef?.current?.focus(), constant.refDelay)
+            else if (!area) setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
             else handlePressSave()
           }}
         />

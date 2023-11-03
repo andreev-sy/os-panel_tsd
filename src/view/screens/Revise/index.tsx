@@ -23,7 +23,7 @@ function ReviseScreen({ navigation, route }) {
     console.log(area)
     setAreaSelect(area)
     setmodalVisible(!modalVisible)
-    setTimeout(() => areaRef.current.focus(), constant.refDelay)
+    setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
   }, []);
 
   const handlePressEnter = () => {

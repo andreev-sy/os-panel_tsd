@@ -7,6 +7,7 @@ import MainBody from './MainBody';
 import MainHead from './MainHead';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { useFocusEffect } from '@react-navigation/native';
 
 function MainData({ navigation, area }) {
   const [contextModalVisible, setContextModalVisible] = useState(false);
@@ -22,7 +23,7 @@ function MainData({ navigation, area }) {
   const onPressEvent = useCallback((item) => {
     setItem(item)
     setContextModalVisible(!contextModalVisible)
-    setTimeout(() => newScanRef.current.focus(), constant.refDelay)
+    setTimeout(() => newScanRef?.current?.focus(), constant.refDelay)
   }, []);
 
 
@@ -65,10 +66,17 @@ function MainData({ navigation, area }) {
       });
   }
 
-  useEffect(() => {
-    console.log('axios useEffect reviseView')
-    reviseView()
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      console.log('axios useEffect reviseView')
+      reviseView()
+    }, [])
+  )
+
+  // useEffect(() => {
+  //   console.log('axios useEffect reviseView')
+  //   reviseView()
+  // }, [])
 
 
   return (

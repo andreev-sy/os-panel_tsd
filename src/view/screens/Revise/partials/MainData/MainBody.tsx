@@ -6,7 +6,7 @@ import { fixFloat } from '../../../../../helpers/Utilitites';
 const MainBody = ({ item, onPressEvent }) => {
   console.log('render mainData '+item.id);
 
-  let widthArr = [130, 140, 80, 80, 80, 140]
+  let widthArr = [130, 140, 80, 80, 80, 200]
   let numberOfLines = parseInt(item.id)
 
   return (

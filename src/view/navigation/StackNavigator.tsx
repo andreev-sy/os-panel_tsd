@@ -5,7 +5,6 @@ import { StyleSheet } from 'react-native';
 import HeaderBack from '../components/HeaderBack';
 import HeaderHome from '../screens/Home/partials/HeaderHome';
 import HomeScreen from '../screens/Home';
-import ScanMainScreen from '../screens/Scan/view-main';
 import ScanScreen from '../screens/Scan';
 import ScanAreaScreen from '../screens/Scan/view';
 import LoginScreen from '../screens/Login';
@@ -18,7 +17,6 @@ import ProfileScreen from '../screens/Profile';
 import NotificationScreen from '../screens/Notification';
 import SplashScreen from '../screens/Splash';
 
-import ActionScanMain from '../screens/Scan/partials/ActionScanMain';
 import ActionScan from '../screens/Scan/partials/ActionScan';
 import ActionRevise from '../screens/Revise/partials/ActionRevise';
 import ActionNotification from '../screens/Notification/partials/ActionNotification';
@@ -58,17 +56,6 @@ const HomeStackNavigator = () => {
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => route.params?.main === false ? <HeaderBack navigation={navigation} /> : false,
           headerRight: () => <ActionScan navigation={navigation} area={route.params?.area} main={route.params?.main} />,
-        })}
-      />
-      <Stack.Screen
-        name="ScanMainStackRoute"
-        component={ScanMainScreen}
-        options={({ navigation, route }) => ({
-          title: `Скан: ${route.params?.headerTitle}`,
-          headerStyle: styles.header,
-          headerTitleStyle: styles.headerTitle,
-          headerLeft: () => <HeaderBack navigation={navigation} />,
-          headerRight: () => <ActionScanMain navigation={navigation}  area={route.params?.area} />,
         })}
       />
       <Stack.Screen

@@ -5,7 +5,7 @@ import { fixFloat } from '../../../../../helpers/Utilitites';
 
 const OtherBody = ({ item }) => {
   console.log('render otherData' + item.id);
-  let widthArr = [130, 140, 80, 140]
+  let widthArr = [130, 140, 80, 200]
   let numberOfLines = parseInt(item.id)
 
   return (

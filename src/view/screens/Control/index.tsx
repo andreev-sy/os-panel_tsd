@@ -35,14 +35,14 @@ const ControlScreen = ({ navigation, route }) => {
         setArea('')
         setControl('')
         setIsLoading(false)
-        setTimeout(() => areaRef.current.focus(), constant.refDelay)
+        setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
           Snackbar.show({ text: 'Контроль сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
       })
       .catch(e => {
         setIsLoading(false)
-        setTimeout(() => areaRef.current.focus(), constant.refDelay)
+        setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
@@ -112,8 +112,8 @@ const ControlScreen = ({ navigation, route }) => {
           selectTextOnFocus={true}
           onChangeText={setArea}
           onSubmitEditing={() => {
-            if (!area) setTimeout(() => areaRef.current.focus(), constant.refDelay)
-            else setTimeout(() => controlRef.current.focus(), constant.refDelay)
+            if (!area) setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
+            else setTimeout(() => controlRef?.current?.focus(), constant.refDelay)
           }}
         />
         <TextInput
@@ -126,8 +126,8 @@ const ControlScreen = ({ navigation, route }) => {
           placeholderTextColor={colors.GRAY_500}
           keyboardType="numeric"
           onSubmitEditing={() => {
-            if (!control) setTimeout(() => controlRef.current.focus(), constant.refDelay)
-            else if (!area) setTimeout(() => areaRef.current.focus(), constant.refDelay)
+            if (!control) setTimeout(() => controlRef?.current?.focus(), constant.refDelay)
+            else if (!area) setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
             else handlePressSave()
           }}
         />

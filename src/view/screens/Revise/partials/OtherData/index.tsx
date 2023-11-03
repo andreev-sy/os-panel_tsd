@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, FlatList, StyleSheet, Vibration } from 'react-native';
 import { colors, sizes } from '../../../../themes/variables';
 import createInstance from '../../../../../helpers/AxiosInstance';
@@ -6,6 +6,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import OtherBody from './OtherBody';
 import OtherHead from './OtherHead';
 import Snackbar from 'react-native-snackbar';
+import { useFocusEffect } from '@react-navigation/native';
 
 function OtherData({ navigation, area }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -29,10 +30,18 @@ function OtherData({ navigation, area }) {
       });
   }
 
-  useEffect(() => {
-    console.log('axios useEffect reviseOther')
-    reviseOther()
-  }, [])
+  
+  useFocusEffect(
+    useCallback(() => {
+      console.log('axios useEffect reviseOther')
+      reviseOther()
+    }, [])
+  )
+
+  // useEffect(() => {
+  //   console.log('axios useEffect reviseOther')
+  //   reviseOther()
+  // }, [])
 
   return (
     <View style={styles.wrapper}>

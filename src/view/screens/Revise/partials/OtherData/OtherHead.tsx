@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { colors, sizes } from '../../../../themes/variables';
 
 const OtherHead = () => {
-  let widthArr = [130, 140, 80, 140]
+  let widthArr = [130, 140, 80, 200]
 
   return (
     <View style={styles.thead}>

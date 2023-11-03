@@ -20,7 +20,7 @@ function ScanScreen({ navigation, route }) {
   const onPressEvent = useCallback((area) => {
     console.log(area)
     setAreaSelect(area)
-    setTimeout(() => areaBarcodeRef.current.focus(), constant.refDelay)
+    setTimeout(() => areaBarcodeRef?.current?.focus(), constant.refDelay)
     setmodalVisible(!modalVisible)
   }, []);
 
@@ -30,7 +30,7 @@ function ScanScreen({ navigation, route }) {
       navigation.navigate('ScanAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect, main: false })
       setmodalVisible(!modalVisible)
     }else{
-      setTimeout(() => areaBarcodeRef.current.focus(), constant.refDelay)
+      setTimeout(() => areaBarcodeRef?.current?.focus(), constant.refDelay)
       setTimeout( () => {
         Vibration.vibrate(constant.vibroTimeMedium)
         Snackbar.show({ text: 'Введенный штрихкод не совпадает с выбраной зоной', textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });

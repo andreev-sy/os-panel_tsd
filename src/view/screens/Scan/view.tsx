@@ -39,7 +39,7 @@ function ScanAreaScreen({ navigation, route }) {
         setTableData(res.data)
         setBarcode('')
         if (!isAuto) setCount('')
-        else setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
+        else setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
         setFindData([])
         setIsLoading(false)
         setTimeout(() => {
@@ -79,7 +79,7 @@ function ScanAreaScreen({ navigation, route }) {
     setBarcodeList([]);
     setIsAuto(!isAuto);
     setCount(!isAuto ? '1' : '');
-    setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
+    setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
   };
 
   const handlePressEdit = () => {
@@ -91,7 +91,7 @@ function ScanAreaScreen({ navigation, route }) {
     if (isAuto) setIsAuto(false);
 
     setContextModalVisible(!contextModalVisible)
-    setTimeout(() => countRef.current.focus(), constant.refDelay)
+    setTimeout(() => countRef?.current?.focus(), constant.refDelay)
     setTimeout(() => {
       Snackbar.show({ text: 'Данные о товаре занесены в форму', textColor: colors.PRIMARY, backgroundColor: colors.LIGHT_PRIMARY, duration: Snackbar.LENGTH_SHORT });
     }, constant.snackbarDelay)
@@ -158,7 +158,7 @@ function ScanAreaScreen({ navigation, route }) {
   }
 
   const handlePressSave = () => {
-    setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
+    setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
     setIsLoading(true)
     if (isEdit) {
       api.post(`/scan/update/`, { 'new_scan': count, 'area_item': item.id })
@@ -195,7 +195,7 @@ function ScanAreaScreen({ navigation, route }) {
           } else {
             setTableData(res.data)
             setBarcode('')
-            if (isAuto) setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
+            if (isAuto) setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
             else setCount('')
             setIsLoading(false)
             setTimeout(() => {
@@ -233,7 +233,7 @@ function ScanAreaScreen({ navigation, route }) {
   useEffect(() => {
     console.log('axios usEffect scanView')
     scanView()
-    if (isAuto) setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
+    if (isAuto) setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
   }, [])
 
 
@@ -267,9 +267,9 @@ function ScanAreaScreen({ navigation, route }) {
               selectTextOnFocus={true}
               onChangeText={handleSearch}
               onSubmitEditing={() => {
-                if (!barcode) setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
+                if (!barcode) setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
                 else if (isAuto) handlePressSave()
-                else setTimeout(() => countRef.current.focus(), constant.refDelay)
+                else setTimeout(() => countRef?.current?.focus(), constant.refDelay)
               }}
             />
             {
@@ -297,8 +297,8 @@ function ScanAreaScreen({ navigation, route }) {
             autoCorrect={false}
             selectTextOnFocus={true}
             onSubmitEditing={() => {
-              if (!count) setTimeout(() => countRef.current.focus(), constant.refDelay)
-              else if (!barcode) setTimeout(() => barcodeRef.current.focus(), constant.refDelay)
+              if (!count) setTimeout(() => countRef?.current?.focus(), constant.refDelay)
+              else if (!barcode) setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
               else handlePressSave()
             }}
           />

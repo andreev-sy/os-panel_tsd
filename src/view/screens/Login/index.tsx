@@ -40,6 +40,7 @@ function LoginScreen() {
                     style={styles.btn}
                     activeOpacity={constant.activeOpacity}
                     accessibilityRole="button"
+                    disabled={ (!username || !baseUrl) ? true : false }
                     onPress={() => login(username, password, baseUrl)}
                 >
                     <Text style={styles.btnText}>Войти</Text>
