@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef, useEffect, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, TouchableOpacity, Text, StyleSheet, TextInput, Vibration } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, TextInput, Vibration, RefreshControl, SafeAreaView, ScrollView } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
 import createInstance from '../../../helpers/AxiosInstance';
@@ -10,6 +10,7 @@ import Snackbar from 'react-native-snackbar';
 
 function HomeScreen({ navigation, route }) {
     const { isLoading, baseUrl } = useContext(AuthContext);
+    const [refreshing, setRefreshing] = useState(false);
     const [homeData, setHomeData] = useState({ 'job': 0, 'scan': 0, 'control': 0, 'recount': 0, 'revise': 0 });
     const [modalScanVisible, setModalScanVisible] = useState(false);
     const [areaScan, setAreaScan] = useState('');
@@ -76,9 +77,20 @@ function HomeScreen({ navigation, route }) {
         }
     }, [isLoading]);
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true)
+        siteIndex()
+        setRefreshing(false)
+    }, []);
 
     return (
-        <View style={styles.wrapper}>
+        <SafeAreaView style={styles.wrapper}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+                <View style={styles.wrapper}>
             <Spinner visible={isLoading} animation="fade" />
             <View style={styles.topWrapper}>
                 <TouchableOpacity
@@ -188,13 +200,17 @@ function HomeScreen({ navigation, route }) {
             </View>
 
         </View>
+      </ScrollView>
+    </SafeAreaView>
+
+
     );
 }
 
 export const styles = StyleSheet.create({
+    scrollView: { padding: sizes.padding, },
     wrapper: {
         flexDirection: 'column',
-        padding: sizes.padding,
         backgroundColor: colors.BG,
         height: '100%'
     },
