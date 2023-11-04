@@ -1,9 +1,4 @@
-1) Добавить на все экраны refreshControl https://reactnative.dev/docs/refreshcontrol
-   В Home уже сделано, сделать аналогично везде
-2) Перепроверить все экраны на скролл, возможно надо всё поменять на SafeAreaView и scrollView
-3) Выбор товара в скане, модалка растягивается на всю высоту
-4) Пересмотерть права access_edit_products
-5) Настроить табы внутри revise/view/
+2) Пересмотреть права access_edit_products
 
 
 // SUCCESS

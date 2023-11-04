@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, SafeAreaView, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
 
@@ -9,7 +9,7 @@ function ProfileScreen({ navigation, route }) {
   console.log('render ProfileScreen')
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <View style={styles.inner}>
         <View>
           <View style={styles.boxWrapper}>
@@ -57,7 +57,7 @@ function ProfileScreen({ navigation, route }) {
           <Text style={styles.btnLogoutText}>Выход</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

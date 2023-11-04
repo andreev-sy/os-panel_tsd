@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, FlatList, StyleSheet, TextInput, TouchableOpacity, Text, Vibration } from 'react-native';
+import { View, FlatList, RefreshControl, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, Vibration } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Dialog from "react-native-dialog";
 import Snackbar from 'react-native-snackbar';
@@ -9,6 +9,7 @@ import { colors, constant, sizes } from '../../themes/variables';
 import createInstance from '../../../helpers/AxiosInstance';
 
 function ReviseScreen({ navigation, route }) {
+  const [refreshing, setRefreshing] = useState(false);
   const [listData, setListData] = useState([]);
   const [modalVisible, setmodalVisible] = useState(false);
   const [areaSelect, setAreaSelect] = useState({});
@@ -26,7 +27,7 @@ function ReviseScreen({ navigation, route }) {
     setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
   }, []);
 
-  const handlePressEnter = () => {
+  const handlePressEnter = async () => {
     if (areaBarcode.trim() == areaSelect?.barcode) {
       navigation.navigate('ReviseAreaStackRoute', { headerTitle: areaSelect?.title, area: areaSelect })
       setmodalVisible(!modalVisible)
@@ -40,12 +41,16 @@ function ReviseScreen({ navigation, route }) {
     }, constant.snackbarDelay)
   };
 
-  const reviseIndex = () => {
+  const reviseIndex = async (showSuccess=false) => {
     api.get(`/revise/index/`)
       .then(res => { 
         setListData(res.data) 
         setIsLoading(false)
         if(res.data.length == 0) navigation.goBack()
+        if (showSuccess)
+          setTimeout(() => {
+            Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          }, constant.snackbarDelay)
       })
       .catch(e => {
         setIsLoading(false)
@@ -68,8 +73,15 @@ function ReviseScreen({ navigation, route }) {
     reviseIndex() 
   }, [])
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    reviseIndex(true)
+    setRefreshing(false)
+  }, []);
+
+
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Spinner visible={isLoading} animation="fade" />
       <FlatList
         contentContainerStyle={styles.inner}
@@ -80,6 +92,7 @@ function ReviseScreen({ navigation, route }) {
         data={listData}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <AreaRow area={item} onPressEvent={onPressEvent} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
 
       <View>
@@ -119,7 +132,7 @@ function ReviseScreen({ navigation, route }) {
       </View>
 
 
-    </View>
+    </SafeAreaView>
   );
 }
 

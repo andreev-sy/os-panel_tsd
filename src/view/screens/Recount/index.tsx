@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { TextInput, Text, View, FlatList, Alert, StyleSheet, TouchableOpacity, ScrollView, Vibration } from 'react-native';
+import { SafeAreaView, TextInput, Text, View, FlatList, Alert, StyleSheet, RefreshControl, TouchableOpacity, ScrollView, Vibration } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
@@ -9,6 +9,7 @@ import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
 
 const ReacountScreen = ({ navigation, route }) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [area, setArea] = useState('');
   const [control, setControl] = useState('');
   const [tableData, setTableData] = useState([]);
@@ -27,7 +28,7 @@ const ReacountScreen = ({ navigation, route }) => {
     setContextModalVisible(!contextModalVisible)
   }, []);
 
-  const handlePressSave = () => {
+  const handlePressSave = async () => {
     setIsLoading(true)
     api.post(`/recount/update/`, { area, control })
       .then(res => {
@@ -56,7 +57,7 @@ const ReacountScreen = ({ navigation, route }) => {
     ])
   };
 
-  const finishArea = () => {
+  const finishArea = async () => {
     api.post(`/recount/finish/`, { 'area': areaSelected.id })
       .then(res => {
         console.log(res.data)
@@ -78,11 +79,16 @@ const ReacountScreen = ({ navigation, route }) => {
       });
   }
 
-  const recountIndex = () => {
+  const recountIndex = async (showSuccess=false) => {
     api.get(`/recount/index/`)
       .then(res => {
+        console.log(res.data)
         setTableData(res.data)
         setIsLoading(false)
+        if (showSuccess)
+          setTimeout(() => {
+            Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          }, constant.snackbarDelay)
       })
       .catch(e => {
         setIsLoading(false)
@@ -98,9 +104,14 @@ const ReacountScreen = ({ navigation, route }) => {
     recountIndex()
   }, [])
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    recountIndex(true)
+    setRefreshing(false)
+  }, []);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Spinner visible={isLoading} animation="fade" />
       <View style={styles.form}>
         <TextInput
@@ -157,6 +168,7 @@ const ReacountScreen = ({ navigation, route }) => {
             data={tableData}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <Tbody area={item} onPressEvent={onPressEvent} />}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           />
         </ScrollView>
       </View>
@@ -177,7 +189,7 @@ const ReacountScreen = ({ navigation, route }) => {
         </Dialog.Container>
       </View>
 
-    </View>
+    </SafeAreaView>
   );
 }
 

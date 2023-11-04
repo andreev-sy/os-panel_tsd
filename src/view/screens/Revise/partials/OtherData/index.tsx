@@ -1,28 +1,29 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, FlatList, StyleSheet, Vibration } from 'react-native';
-import { colors, sizes } from '../../../../themes/variables';
+import { View, ScrollView, FlatList, StyleSheet, Vibration, RefreshControl, SafeAreaView } from 'react-native';
+import { colors, sizes, constant } from '../../../../themes/variables';
 import createInstance from '../../../../../helpers/AxiosInstance';
-import Spinner from 'react-native-loading-spinner-overlay';
 import OtherBody from './OtherBody';
 import OtherHead from './OtherHead';
 import Snackbar from 'react-native-snackbar';
 import { useFocusEffect } from '@react-navigation/native';
 
-function OtherData({ navigation, area }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [tableData, setTableData] = useState([]);
+function OtherData({ navigation, data, area }) {
+  const [refreshing, setRefreshing] = useState(false);
+  const [tableData, setTableData] = useState(data);
   const api = createInstance();
 
   console.log('render other');
 
-  const reviseOther = () => {
+  const reviseOther = async (showSuccess = false) => {
     api.get(`/revise/other/?area_id=${area.id}`)
       .then(res => {
         setTableData(res.data)
-        setIsLoading(false)
+        if (showSuccess)
+          setTimeout(() => {
+            Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          }, constant.snackbarDelay)
       })
       .catch(e => {
-        setIsLoading(false)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
@@ -30,22 +31,14 @@ function OtherData({ navigation, area }) {
       });
   }
 
-  
-  useFocusEffect(
-    useCallback(() => {
-      console.log('axios useEffect reviseOther')
-      reviseOther()
-    }, [])
-  )
-
-  // useEffect(() => {
-  //   console.log('axios useEffect reviseOther')
-  //   reviseOther()
-  // }, [])
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    reviseOther(true)
+    setRefreshing(false)
+  }, []);
 
   return (
-    <View style={styles.wrapper}>
-      <Spinner visible={isLoading} animation="fade" />
+    <View style={styles.inner}>
       <View style={styles.tableWrapper}>
         <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
           <OtherHead />
@@ -57,6 +50,7 @@ function OtherData({ navigation, area }) {
             data={tableData}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <OtherBody item={item} />}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           />
         </ScrollView>
       </View>
@@ -66,15 +60,11 @@ function OtherData({ navigation, area }) {
 
 
 export const styles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: colors.BG,
-    padding: sizes.padding,
+  inner: { 
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    padding: sizes.padding,
   },
-
-  tableWrapper: { flexDirection: 'column', width: '100%' },
+  tableWrapper: { flex: 1, flexDirection: 'column', width: '100%' },
   tableInner: { flexGrow: 1, flexDirection: 'column' },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { View, Text, Switch, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Alert, Vibration } from 'react-native';
+import { View, Text, Switch, TextInput, ScrollView, RefreshControl, SafeAreaView, FlatList, StyleSheet, TouchableOpacity, Alert, Vibration } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
@@ -11,6 +11,7 @@ import { AuthContext } from '../../../context/AuthContext';
 import createInstance from '../../../helpers/AxiosInstance';
 
 function ScanAreaScreen({ navigation, route }) {
+  const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuto, setIsAuto] = useState(true);
   const [count, setCount] = useState('1');
@@ -57,20 +58,12 @@ function ScanAreaScreen({ navigation, route }) {
   }, []);
 
   const handleSearch = async (text) => {
-    setBarcode(text);
+    setBarcode(text)
     if (!isAuto) {
-      if (text.length >= 3) {
-        api.get(`/scan/search/?query=${text}`)
-          .then(res => {
-            console.log(res.data)
-            setBarcodeList(res.data)
-          })
-      } else {
-        setBarcodeList([]);
-      }
+      if (text.length >= 3) api.get(`/scan/search/?query=${text}`).then(res => { setBarcodeList(res.data) })
+      else setBarcodeList([])
     }
   };
-
 
   const handleAutoSwitch = () => {
     if (isEdit) setIsEdit(false);
@@ -82,7 +75,7 @@ function ScanAreaScreen({ navigation, route }) {
     setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
   };
 
-  const handlePressEdit = () => {
+  const handlePressEdit = async () => {
     const arr_barcode = item.barcode.split(',');
     setBarcode(arr_barcode[0])
     setCount(item.scan)
@@ -97,23 +90,11 @@ function ScanAreaScreen({ navigation, route }) {
     }, constant.snackbarDelay)
   };
 
-  const handlePressFinish = () => {
-    Alert.alert('', 'Вы точно хотите завершить сканирование?', [
-      { text: 'Отмена' }, { text: 'Да', onPress: () => finish() },
-    ])
-  };
+  const handlePressFinish = () => Alert.alert('', 'Вы точно хотите завершить сканирование?', [ { text: 'Отмена' }, { text: 'Да', onPress: () => finish() } ])
 
-  const handlePressClose = () => {
-    // navigation.goBack()
+  const handlePressClose = () => navigation.reset({ index: 0, routes: [{ name: 'HomeStackRoute', params: { modal: true } }] })
 
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'HomeStackRoute', params: { modal: true } }],
-    });
-
-  };
-
-  const finish = () => {
+  const finish = async () => {
     api.post(`/scan/finish/`, { 'area': route.params?.area.id })
       .then(res => {
         navigation.goBack()
@@ -135,7 +116,7 @@ function ScanAreaScreen({ navigation, route }) {
     ])
   };
 
-  const deleteItem = () => {
+  const deleteItem = async () => {
     setIsLoading(true)
 
     api.post(`/scan/delete/`, { 'area': route.params?.area.id, 'area_item': item.id })
@@ -157,7 +138,7 @@ function ScanAreaScreen({ navigation, route }) {
       });
   }
 
-  const handlePressSave = () => {
+  const handlePressSave = async () => {
     setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
     setIsLoading(true)
     if (isEdit) {
@@ -214,11 +195,15 @@ function ScanAreaScreen({ navigation, route }) {
     }
   };
 
-  const scanView = () => {
+  const scanView = async (showSuccess=false) => {
     api.get(`/scan/view/?area_id=${route.params?.area.id}`)
       .then(res => {
         setTableData(res.data)
         setIsLoading(false)
+        if (showSuccess)
+          setTimeout(() => {
+            Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          }, constant.snackbarDelay)
       })
       .catch(e => {
         setIsLoading(false)
@@ -236,12 +221,16 @@ function ScanAreaScreen({ navigation, route }) {
     if (isAuto) setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
   }, [])
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    scanView(true)
+    setRefreshing(false)
+  }, []);
+
 
   return (
-    <View style={styles.wrapper}>
-
+    <SafeAreaView style={styles.wrapper}>
       <Spinner visible={isLoading} animation="fade" />
-
       <View style={styles.form}>
         <View style={styles.formSwitch}>
           <Text style={styles.formSwitchText}>Авто</Text>
@@ -351,6 +340,7 @@ function ScanAreaScreen({ navigation, route }) {
             data={tableData}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <Tbody item={item} onPressEvent={onPressEvent} />}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           />
         </ScrollView>
       </View>
@@ -399,7 +389,7 @@ function ScanAreaScreen({ navigation, route }) {
         </Dialog.Container>
       </View>
 
-      <View>
+      <View >
         <Dialog.Container
           headerStyle={styles.dialogHeader}
           contentStyle={styles.dialogContent}
@@ -408,14 +398,13 @@ function ScanAreaScreen({ navigation, route }) {
           onBackdropPress={() => setFindData([])}
         >
           <Dialog.Title style={styles.dialogTitle}>Выберите товар из списка</Dialog.Title>
-
           {
             findData.length > 0 ?
               <FlatList
                 removeClippedSubviews={false}
                 initialNumToRender={1}
-                maxToRenderPerBatch={20}
-                windowSize={2}
+                maxToRenderPerBatch={10}
+                windowSize={1}
                 data={findData}
                 keyExtractor={(item) => item.item?.id}
                 renderItem={({ item }) => <FindRow item={item} onPressEvent={onPressFindEvent} />}
@@ -423,7 +412,6 @@ function ScanAreaScreen({ navigation, route }) {
               :
               ''
           }
-
           <Dialog.Button
             label="Закрыть"
             style={styles.dialogClose}
@@ -432,7 +420,7 @@ function ScanAreaScreen({ navigation, route }) {
         </Dialog.Container>
       </View>
 
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -541,7 +529,7 @@ export const styles = StyleSheet.create({
   tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0 },
-  dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE },
+  dialogContent: { borderRadius: sizes.radius, backgroundColor: colors.WHITE, maxHeight: '84%' },
   dialogFooter: { justifyContent: 'center' },
   dialogTitle: { textAlign: 'center', fontSize: sizes.h4, fontWeight: '500', color: colors.GRAY_700, marginBottom: 15, },
   dialogBtn: { fontSize: sizes.body3, color: colors.BLACK, textTransform: 'none' },

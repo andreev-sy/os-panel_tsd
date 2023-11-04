@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, FlatList, StyleSheet, TextInput, TouchableOpacity, Text, Vibration } from 'react-native';
+import { View, FlatList, StyleSheet, RefreshControl, SafeAreaView, TextInput, TouchableOpacity, Text, Vibration } from 'react-native';
 import AreaRow from './partials/AreaRow';
 import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from "react-native-dialog";
@@ -9,6 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { useFocusEffect } from '@react-navigation/native';
 
 function ScanScreen({ navigation, route }) {
+  const [refreshing, setRefreshing] = useState(false);
   const [listData, setListData] = useState([]);
   const [modalVisible, setmodalVisible] = useState(false);
   const [areaSelect, setAreaSelect] = useState({});
@@ -24,7 +25,7 @@ function ScanScreen({ navigation, route }) {
     setmodalVisible(!modalVisible)
   }, []);
 
-  const handlePressEnter = () => {
+  const handlePressEnter = async () => {
     // сверяем введный ШК с ШК из выбранной зоны
     if (areaBarcode.trim() == areaSelect.barcode) {
       navigation.navigate('ScanAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect, main: false })
@@ -38,11 +39,15 @@ function ScanScreen({ navigation, route }) {
      }
   };
 
-  const scanIndex = () => {
+  const scanIndex = async (showSuccess = false) => {
     api.get(`/scan/index/`)
       .then(res => { 
         setListData(res.data) 
         setIsLoading(false)
+        if (showSuccess)
+          setTimeout(() => {
+            Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          }, constant.snackbarDelay)
       })
       .catch(e => {
         setIsLoading(false)
@@ -65,9 +70,15 @@ function ScanScreen({ navigation, route }) {
     scanIndex() 
   }, [])
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    scanIndex(true)
+    setRefreshing(false)
+  }, []);
+
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Spinner visible={isLoading} animation="fade" />
 
       <FlatList
@@ -79,6 +90,7 @@ function ScanScreen({ navigation, route }) {
         data={listData}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <AreaRow area={item} onPressEvent={onPressEvent} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
 
       <View>
@@ -114,7 +126,7 @@ function ScanScreen({ navigation, route }) {
         </Dialog.Container>
       </View>
 
-    </View>
+    </SafeAreaView>
   );
 }
 

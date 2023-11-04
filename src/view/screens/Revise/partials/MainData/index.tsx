@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { View, Text, TextInput, ScrollView, FlatList, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
+import React, { useState, useRef, useCallback } from 'react';
+import { View, Text, TextInput, ScrollView, RefreshControl, FlatList, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 import { colors, constant, sizes } from '../../../../themes/variables';
 import createInstance from '../../../../../helpers/AxiosInstance';
 import Dialog from 'react-native-dialog';
@@ -7,14 +7,13 @@ import MainBody from './MainBody';
 import MainHead from './MainHead';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { useFocusEffect } from '@react-navigation/native';
 
-function MainData({ navigation, area }) {
+function MainData({ navigation, data, area }) {
+  const [refreshing, setRefreshing] = useState(false);
   const [contextModalVisible, setContextModalVisible] = useState(false);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState(data);
   const [item, setItem] = useState({});
   const [newScan, setNewScan] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const newScanRef = useRef(null);
   const api = createInstance();
 
@@ -26,14 +25,9 @@ function MainData({ navigation, area }) {
     setTimeout(() => newScanRef?.current?.focus(), constant.refDelay)
   }, []);
 
-
   // сохраняем новое значние скана
-  const handlePressSaveScan = () => {
-    api.post(`/revise/update/`, {
-      'area': area.id,
-      'area_item': item.id,
-      'scan': newScan
-    })
+  const handlePressSaveScan = async () => {
+    api.post(`/revise/update/`, { 'area': area.id, 'area_item': item.id, 'scan': newScan })
       .then(res => {
         setTableData(res.data)
         setItem({})
@@ -51,14 +45,16 @@ function MainData({ navigation, area }) {
       });
   }
 
-  const reviseView = () => {
+  const reviseView = async (showSuccess=false) => {
     api.get(`/revise/view/?area_id=${area.id}`)
       .then(res => {
         setTableData(res.data)
-        setIsLoading(false)
+        if (showSuccess)
+          setTimeout(() => {
+            Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          }, constant.snackbarDelay)
       })
       .catch(e => {
-        setIsLoading(false)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
@@ -66,22 +62,14 @@ function MainData({ navigation, area }) {
       });
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      console.log('axios useEffect reviseView')
-      reviseView()
-    }, [])
-  )
-
-  // useEffect(() => {
-  //   console.log('axios useEffect reviseView')
-  //   reviseView()
-  // }, [])
-
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    reviseView(true)
+    setRefreshing(false)
+  }, []);
 
   return (
-    <View style={styles.wrapper}>
-      <Spinner visible={isLoading} animation="fade" />
+    <View style={styles.inner}>
       <View style={styles.tableWrapper}>
         <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
           <MainHead />
@@ -93,6 +81,7 @@ function MainData({ navigation, area }) {
             data={tableData}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <MainBody item={item} onPressEvent={onPressEvent} />}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           />
         </ScrollView>
       </View>
@@ -107,7 +96,6 @@ function MainData({ navigation, area }) {
         >
           <Dialog.Title style={styles.dialogTitle}>Товар {item.article}</Dialog.Title>
           <View>
-
             <TextInput
               style={styles.dialogInput}
               placeholder="Факт"
@@ -154,15 +142,11 @@ function MainData({ navigation, area }) {
 
 
 export const styles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: colors.BG,
-    padding: sizes.padding,
+  inner: { 
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    padding: sizes.padding,
   },
-
-  tableWrapper: { flexDirection: 'column', width: '100%' },
+  tableWrapper: { flex: 1, flexDirection: 'column', width: '100%' },
   tableInner: { flexGrow: 1, flexDirection: 'column' },
 
   dialogHeader: { padding: 0, margin: 0 },

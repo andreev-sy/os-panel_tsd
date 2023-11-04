@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { TextInput, Text, View, FlatList, Alert, StyleSheet, ScrollView, TouchableOpacity, Vibration } from 'react-native';
+import { TextInput, Text, View, FlatList, Alert, SafeAreaView, RefreshControl, StyleSheet, ScrollView, TouchableOpacity, Vibration } from 'react-native';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
 import { colors, constant, sizes } from '../../themes/variables';
@@ -9,6 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import createInstance from '../../../helpers/AxiosInstance';
 
 const ControlScreen = ({ navigation, route }) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [area, setArea] = useState('');
   const [control, setControl] = useState('');
   const [tableData, setTableData] = useState([]);
@@ -27,7 +28,7 @@ const ControlScreen = ({ navigation, route }) => {
     setContextModalVisible(!contextModalVisible)
   }, []);
 
-  const handlePressSave = () => {
+  const handlePressSave = async () => {
     setIsLoading(true)
     api.post(`/control/update/`, { area, control })
       .then(res => {
@@ -57,7 +58,7 @@ const ControlScreen = ({ navigation, route }) => {
     ])
   };
 
-  const finishArea = () => {
+  const finishArea = async () => {
     api.post(`/control/finish/`, { 'area': areaSelected.id })
       .then(res => {
         console.log(res.data)
@@ -79,11 +80,15 @@ const ControlScreen = ({ navigation, route }) => {
       });
   }
 
-  const controlIndex = () => {
+  const controlIndex = async (showSuccess = false) => {
     api.get(`/control/index/`)
       .then(res => {
         setTableData(res.data)
         setIsLoading(false)
+        if (showSuccess)
+          setTimeout(() => {
+            Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          }, constant.snackbarDelay)
       })
       .catch(e => {
         setIsLoading(false)
@@ -94,14 +99,22 @@ const ControlScreen = ({ navigation, route }) => {
       });
   }
 
-  useEffect(() => { 
+  useEffect(() => {
     console.log('axios useEffect controlIndex')
-    controlIndex() 
+    controlIndex()
   }, [])
 
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    controlIndex(true)
+    setRefreshing(false)
+  }, []);
+
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Spinner visible={isLoading} animation="fade" />
+
       <View style={styles.form}>
         <TextInput
           style={styles.input}
@@ -143,7 +156,10 @@ const ControlScreen = ({ navigation, route }) => {
       </View>
 
       <View style={styles.tableWrapper}>
-        <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
+        <ScrollView
+          horizontal={true}
+          contentContainerStyle={styles.tableInner}
+        >
           <Thead />
           <FlatList
             // contentContainerStyle={{ flexDirection: 'column' }}
@@ -154,6 +170,7 @@ const ControlScreen = ({ navigation, route }) => {
             data={tableData}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <Tbody area={item} onPressEvent={onPressEvent} />}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           />
         </ScrollView>
       </View>
@@ -174,8 +191,7 @@ const ControlScreen = ({ navigation, route }) => {
           <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setContextModalVisible(!contextModalVisible)} />
         </Dialog.Container>
       </View>
-
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -183,10 +199,10 @@ const ControlScreen = ({ navigation, route }) => {
 export const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: colors.BG,
-    padding: sizes.padding,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
+    padding: sizes.padding
   },
   form: {
     flexDirection: 'row',

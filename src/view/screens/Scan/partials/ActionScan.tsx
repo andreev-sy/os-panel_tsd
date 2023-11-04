@@ -22,7 +22,7 @@ const ActionScan = ({ navigation, area, main }) => {
         ])
     };
 
-    const nullable = () => {
+    const nullable = async () => {
         api.post(`/scan/nullable/`, { 'area': area.id })
             .then(res => {
                 setModalVisible(!modalVisible)
@@ -39,7 +39,7 @@ const ActionScan = ({ navigation, area, main }) => {
             });
     }
 
-    const finish = () => {
+    const finish = async () => {
         api.post(`/scan/finish/`, { 'area': area.id })
             .then(res => {
                 setModalVisible(!modalVisible)

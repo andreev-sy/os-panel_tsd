@@ -16,8 +16,8 @@ const ActionRevise = ({ navigation, area }) => {
             { text: 'Да', onPress: () => finish() },
         ])
     };
-
-    function finish() {
+    
+    const finish = async () => {
         api.post(`/revise/finish/`, { 'area': area.id })
          .then(res => {
              setModalVisible(!modalVisible)

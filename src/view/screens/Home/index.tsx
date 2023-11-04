@@ -23,7 +23,7 @@ function HomeScreen({ navigation, route }) {
         setModalScanVisible(!modalScanVisible)
     }
 
-    const handlePressModalScan = () => {
+    const handlePressModalScan = async () => {
         api.get(`/scan/verify/?area_barcode=${areaScan}`)
             .then(res => {
                 navigation.navigate('ScanAreaStackRoute', { headerTitle: res.data.title, area: res.data, main: true })
@@ -46,11 +46,14 @@ function HomeScreen({ navigation, route }) {
     const handlePressRecountJob = () => navigation.navigate('RecountStackRoute')
     const handlePressReviseJob = () => navigation.navigate('ReviseStackRoute')
 
-    const siteIndex = () => {
+    const siteIndex = async (showSuccess = false) => {
         api.get(`/site/index/`)
             .then(res => {
-                if (res.data)
-                    setHomeData(res.data);
+                if (res.data) setHomeData(res.data);
+                if (showSuccess)
+                    setTimeout(() => {
+                        Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+                    }, constant.snackbarDelay)
             })
             .catch(e => {
                 setTimeout(() => {
@@ -71,149 +74,144 @@ function HomeScreen({ navigation, route }) {
     useEffect(() => {
         console.log('axios useEffect siteIndex');
         siteIndex()
-        if(route.params?.modal === true){
+        if (route.params?.modal === true) {
             setModalScanVisible(route.params?.modal)
             setTimeout(() => areaScanRef?.current?.focus(), constant.refDelay)
         }
     }, [isLoading]);
 
-    const onRefresh = React.useCallback(() => {
+    const onRefresh = useCallback(() => {
         setRefreshing(true)
-        siteIndex()
+        siteIndex(true)
         setRefreshing(false)
     }, []);
 
     return (
         <SafeAreaView style={styles.wrapper}>
-      <ScrollView
-        contentContainerStyle={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-                <View style={styles.wrapper}>
             <Spinner visible={isLoading} animation="fade" />
-            <View style={styles.topWrapper}>
-                <TouchableOpacity
-                    style={[styles.topBtn, styles.topBtnSuccess]}
-                    activeOpacity={constant.activeOpacity}
-                    accessibilityRole="button"
-                    onPress={handlePressScan}
-                >
-                    <Text style={[styles.topBtnText, styles.topBtnTextSuccess]}>Скан</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.topBtn, styles.topBtnPrimary]}
-                    activeOpacity={constant.activeOpacity}
-                    accessibilityRole="button"
-                    onPress={handlePressControl}
-                >
-                    <Text style={[styles.topBtnText, styles.topBtnTextPrimary]}>Контроль</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.botWrapper}>
-                <View style={styles.botTitle}>
-                    <Text style={styles.botTitleText}>Задания</Text>
-                    <View style={styles.botTitleBadge}>
-                        <Text style={styles.botTitleBadgeText}>{homeData.job}</Text>
+            <ScrollView
+                contentContainerStyle={styles.inner}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+                <View style={styles.topWrapper}>
+                    <TouchableOpacity
+                        style={[styles.topBtn, styles.topBtnSuccess]}
+                        activeOpacity={constant.activeOpacity}
+                        accessibilityRole="button"
+                        onPress={handlePressScan}
+                    >
+                        <Text style={[styles.topBtnText, styles.topBtnTextSuccess]}>Скан</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.topBtn, styles.topBtnPrimary]}
+                        activeOpacity={constant.activeOpacity}
+                        accessibilityRole="button"
+                        onPress={handlePressControl}
+                    >
+                        <Text style={[styles.topBtnText, styles.topBtnTextPrimary]}>Контроль</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.botWrapper}>
+                    <View style={styles.botTitle}>
+                        <Text style={styles.botTitleText}>Задания</Text>
+                        <View style={styles.botTitleBadge}>
+                            <Text style={styles.botTitleBadgeText}>{homeData.job}</Text>
+                        </View>
                     </View>
-                </View>
-                <View style={styles.botJobs}>
-                    <TouchableOpacity
-                        style={[styles.botJob, homeData.scan > 0 ? {} : styles.botJobDisabled]}
-                        activeOpacity={constant.activeOpacity}
-                        disabled={homeData.scan > 0 ? false : true}
-                        accessibilityRole="button"
-                        onPress={handlePressScanJob}
-                    >
-                        <Text style={[styles.botJobText, homeData.scan > 0 ? {} : styles.botJobTextDisabled]}>Скан</Text>
-                        <Text style={[styles.botJobCount, homeData.scan > 0 ? {} : styles.botJobCountDisabled]}>{homeData.scan}</Text>
-                    </TouchableOpacity>
-                    <View style={styles.botHr} />
-                    <TouchableOpacity
-                        style={[styles.botJob, homeData.control > 0 ? {} : styles.botJobDisabled]}
-                        activeOpacity={constant.activeOpacity}
-                        disabled={homeData.control > 0 ? false : true}
-                        accessibilityRole="button"
-                        onPress={handlePressControlJob}
-                    >
-                        <Text style={[styles.botJobText, homeData.control > 0 ? {} : styles.botJobTextDisabled]}>Контроль</Text>
-                        <Text style={[styles.botJobCount, homeData.control > 0 ? {} : styles.botJobCountDisabled]}>{homeData.control}</Text>
-                    </TouchableOpacity>
-                    <View style={styles.botHr} />
-                    <TouchableOpacity
-                        style={[styles.botJob, homeData.recount > 0 ? {} : styles.botJobDisabled]}
-                        activeOpacity={constant.activeOpacity}
-                        disabled={homeData.recount > 0 ? false : true}
-                        accessibilityRole="button"
-                        onPress={handlePressRecountJob}
-                    >
-                        <Text style={[styles.botJobText, homeData.recount > 0 ? {} : styles.botJobTextDisabled]}>Пересчёт</Text>
-                        <Text style={[styles.botJobCount, homeData.recount > 0 ? {} : styles.botJobCountDisabled]}>{homeData.recount}</Text>
-                    </TouchableOpacity>
-                    <View style={styles.botHr} />
-                    <TouchableOpacity
-                        style={[styles.botJob, homeData.revise > 0 ? {} : styles.botJobDisabled]}
-                        activeOpacity={constant.activeOpacity}
-                        disabled={homeData.revise > 0 ? false : true}
-                        accessibilityRole="button"
-                        onPress={handlePressReviseJob}
-                    >
-                        <Text style={[styles.botJobText, homeData.revise > 0 ? {} : styles.botJobTextDisabled]}>Сверка</Text>
-                        <Text style={[styles.botJobCount, homeData.revise > 0 ? {} : styles.botJobCountDisabled]}>{homeData.revise}</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            <View>
-                <Dialog.Container
-                    headerStyle={styles.dialogHeader}
-                    contentStyle={styles.dialogContent}
-                    footerStyle={styles.dialogFooter}
-                    visible={modalScanVisible}
-                    onBackdropPress={() => setModalScanVisible(!modalScanVisible)}
-                >
-                    <Dialog.Title style={styles.dialogTitle}>Войти в зону</Dialog.Title>
-                    <View>
-                        <TextInput
-                            style={styles.dialogInput}
-                            placeholder="Штрихкод зоны"
-                            placeholderTextColor={colors.GRAY_500}
-                            ref={areaScanRef}
-                            selectTextOnFocus={true}
-                            onChangeText={setAreaScan}
-                            onSubmitEditing={handlePressModalScan}
-                        />
-
+                    <View style={styles.botJobs}>
                         <TouchableOpacity
-                            style={styles.dialogBtnFill}
+                            style={[styles.botJob, homeData.scan > 0 ? {} : styles.botJobDisabled]}
                             activeOpacity={constant.activeOpacity}
+                            disabled={homeData.scan > 0 ? false : true}
                             accessibilityRole="button"
-                            onPress={handlePressModalScan}
+                            onPress={handlePressScanJob}
                         >
-                            <Text style={styles.dialogBtnFillText}>Войти</Text>
+                            <Text style={[styles.botJobText, homeData.scan > 0 ? {} : styles.botJobTextDisabled]}>Скан</Text>
+                            <Text style={[styles.botJobCount, homeData.scan > 0 ? {} : styles.botJobCountDisabled]}>{homeData.scan}</Text>
                         </TouchableOpacity>
-
+                        <View style={styles.botHr} />
+                        <TouchableOpacity
+                            style={[styles.botJob, homeData.control > 0 ? {} : styles.botJobDisabled]}
+                            activeOpacity={constant.activeOpacity}
+                            disabled={homeData.control > 0 ? false : true}
+                            accessibilityRole="button"
+                            onPress={handlePressControlJob}
+                        >
+                            <Text style={[styles.botJobText, homeData.control > 0 ? {} : styles.botJobTextDisabled]}>Контроль</Text>
+                            <Text style={[styles.botJobCount, homeData.control > 0 ? {} : styles.botJobCountDisabled]}>{homeData.control}</Text>
+                        </TouchableOpacity>
+                        <View style={styles.botHr} />
+                        <TouchableOpacity
+                            style={[styles.botJob, homeData.recount > 0 ? {} : styles.botJobDisabled]}
+                            activeOpacity={constant.activeOpacity}
+                            disabled={homeData.recount > 0 ? false : true}
+                            accessibilityRole="button"
+                            onPress={handlePressRecountJob}
+                        >
+                            <Text style={[styles.botJobText, homeData.recount > 0 ? {} : styles.botJobTextDisabled]}>Пересчёт</Text>
+                            <Text style={[styles.botJobCount, homeData.recount > 0 ? {} : styles.botJobCountDisabled]}>{homeData.recount}</Text>
+                        </TouchableOpacity>
+                        <View style={styles.botHr} />
+                        <TouchableOpacity
+                            style={[styles.botJob, homeData.revise > 0 ? {} : styles.botJobDisabled]}
+                            activeOpacity={constant.activeOpacity}
+                            disabled={homeData.revise > 0 ? false : true}
+                            accessibilityRole="button"
+                            onPress={handlePressReviseJob}
+                        >
+                            <Text style={[styles.botJobText, homeData.revise > 0 ? {} : styles.botJobTextDisabled]}>Сверка</Text>
+                            <Text style={[styles.botJobCount, homeData.revise > 0 ? {} : styles.botJobCountDisabled]}>{homeData.revise}</Text>
+                        </TouchableOpacity>
                     </View>
+                </View>
 
-                    <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setModalScanVisible(!modalScanVisible)} />
-                </Dialog.Container>
-            </View>
+                <View>
+                    <Dialog.Container
+                        headerStyle={styles.dialogHeader}
+                        contentStyle={styles.dialogContent}
+                        footerStyle={styles.dialogFooter}
+                        visible={modalScanVisible}
+                        onBackdropPress={() => setModalScanVisible(!modalScanVisible)}
+                    >
+                        <Dialog.Title style={styles.dialogTitle}>Войти в зону</Dialog.Title>
+                        <View>
+                            <TextInput
+                                style={styles.dialogInput}
+                                placeholder="Штрихкод зоны"
+                                placeholderTextColor={colors.GRAY_500}
+                                ref={areaScanRef}
+                                selectTextOnFocus={true}
+                                onChangeText={setAreaScan}
+                                onSubmitEditing={handlePressModalScan}
+                            />
 
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+                            <TouchableOpacity
+                                style={styles.dialogBtnFill}
+                                activeOpacity={constant.activeOpacity}
+                                accessibilityRole="button"
+                                onPress={handlePressModalScan}
+                            >
+                                <Text style={styles.dialogBtnFillText}>Войти</Text>
+                            </TouchableOpacity>
+
+                        </View>
+
+                        <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setModalScanVisible(!modalScanVisible)} />
+                    </Dialog.Container>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
 
 
     );
 }
 
 export const styles = StyleSheet.create({
-    scrollView: { padding: sizes.padding, },
     wrapper: {
         flexDirection: 'column',
         backgroundColor: colors.BG,
         height: '100%'
     },
+    inner: { padding: sizes.padding, },
     topWrapper: {
         paddingVertical: 8,
         marginBottom: 2,

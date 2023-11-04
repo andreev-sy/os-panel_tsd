@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { TextInput, Text, View, FlatList, Alert, StyleSheet, ScrollView, TouchableOpacity, Vibration } from 'react-native';
+import { TextInput, Text, View, FlatList, RefreshControl, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Vibration } from 'react-native';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
 import { colors, constant, sizes } from '../../themes/variables';
@@ -9,6 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import createInstance from '../../../helpers/AxiosInstance';
 
 const ControlMainScreen = ({ navigation, route }) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [area, setArea] = useState('');
   const [control, setControl] = useState('');
   const [tableData, setTableData] = useState([]);
@@ -19,9 +20,9 @@ const ControlMainScreen = ({ navigation, route }) => {
 
   console.log('render ControlMainScreen')
 
-  const onPressEvent = () => {}
-  
-  const handlePressSave = () => {
+  const onPressEvent = () => { }
+
+  const handlePressSave = async () => {
     setIsLoading(true)
     api.post(`/control-main/update/`, { area, control })
       .then(res => {
@@ -44,11 +45,15 @@ const ControlMainScreen = ({ navigation, route }) => {
       });
   };
 
-  const controlMainIndex = () => {
+  const controlMainIndex = async (showSuccess = false) => {
     api.get(`/control-main/index/`)
       .then(res => {
         setTableData(res.data)
         setIsLoading(false)
+        if (showSuccess)
+          setTimeout(() => {
+            Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          }, constant.snackbarDelay)
       })
       .catch(e => {
         setIsLoading(false)
@@ -59,13 +64,20 @@ const ControlMainScreen = ({ navigation, route }) => {
       });
   }
 
-  useEffect(() => { 
+  useEffect(() => {
     console.log('axios useEffect controlMainIndex')
-    controlMainIndex() 
+    controlMainIndex()
   }, [])
 
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    controlMainIndex(true)
+    setRefreshing(false)
+  }, []);
+
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Spinner visible={isLoading} animation="fade" />
       <View style={styles.form}>
         <TextInput
@@ -107,25 +119,26 @@ const ControlMainScreen = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
 
-      { tableData.length > 0 ?
-           <View style={styles.tableWrapper}>
-            <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
-              <Thead />
-              <FlatList
-                // contentContainerStyle={{ flexDirection: 'column' }}
-                removeClippedSubviews={false}
-                initialNumToRender={1}
-                maxToRenderPerBatch={20}
-                windowSize={2}
-                data={tableData}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => <Tbody area={item} onPressEvent={onPressEvent} />}
-              />
-            </ScrollView>
-          </View>
-      : '' }
+      {tableData.length > 0 ?
+        <View style={styles.tableWrapper}>
+          <ScrollView horizontal={true} contentContainerStyle={styles.tableInner}>
+            <Thead />
+            <FlatList
+              // contentContainerStyle={{ flexDirection: 'column' }}
+              removeClippedSubviews={false}
+              initialNumToRender={1}
+              maxToRenderPerBatch={20}
+              windowSize={2}
+              data={tableData}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <Tbody area={item} onPressEvent={onPressEvent} />}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            />
+          </ScrollView>
+        </View>
+        : ''}
 
-    </View>
+    </SafeAreaView>
   );
 }
 
