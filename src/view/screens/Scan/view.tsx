@@ -1,14 +1,14 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { View, Text, Switch, TextInput, ScrollView, RefreshControl, SafeAreaView, FlatList, StyleSheet, TouchableOpacity, Alert, Vibration } from 'react-native';
-import { colors, constant, sizes } from '../../themes/variables';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
 import FindRow from './partials/FindRow';
-import Spinner from 'react-native-loading-spinner-overlay';
-import { AuthContext } from '../../../context/AuthContext';
 import createInstance from '../../../helpers/AxiosInstance';
+import { colors, constant, sizes } from '../../themes/variables';
 
 function ScanAreaScreen({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false);
@@ -66,22 +66,23 @@ function ScanAreaScreen({ navigation, route }) {
   };
 
   const handleAutoSwitch = () => {
-    if (isEdit) setIsEdit(false);
-    setBarcode('');
-    setCount('');
-    setBarcodeList([]);
-    setIsAuto(!isAuto);
-    setCount(!isAuto ? '1' : '');
+    if (isEdit) setIsEdit(false)
+    AsyncStorage.setItem('isAuto', JSON.stringify(!isAuto))
+    setIsAuto(!isAuto)
+    setBarcode('')
+    setCount('')
+    setBarcodeList([])
+    setCount(!isAuto ? '1' : '')
     setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
   };
 
   const handlePressEdit = async () => {
-    const arr_barcode = item.barcode.split(',');
+    const arr_barcode = item.barcode.split(',')
     setBarcode(arr_barcode[0])
     setCount(item.scan)
 
-    if (!isEdit) setIsEdit(true);
-    if (isAuto) setIsAuto(false);
+    if (!isEdit) setIsEdit(true)
+    if (isAuto) setIsAuto(false)
 
     setContextModalVisible(!contextModalVisible)
     setTimeout(() => countRef?.current?.focus(), constant.refDelay)
@@ -214,11 +215,20 @@ function ScanAreaScreen({ navigation, route }) {
       });
   }
 
+  const setFromAsyncStorage = async () => {
+    AsyncStorage.getItem('isAuto').then(value => {
+      if (value !== null) {
+        let auto = JSON.parse(value)
+        if (auto) setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
+        else setIsAuto(JSON.parse(auto));
+      }
+    });
+  }
 
   useEffect(() => {
     console.log('axios usEffect scanView')
+    setFromAsyncStorage()
     scanView()
-    if (isAuto) setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
   }, [])
 
   const onRefresh = useCallback(() => {

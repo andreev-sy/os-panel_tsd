@@ -1,15 +1,16 @@
 import React, { useState, useContext, useRef, useEffect, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, TouchableOpacity, Text, StyleSheet, TextInput, Vibration, RefreshControl, SafeAreaView, ScrollView } from 'react-native';
-import { colors, constant, sizes } from '../../themes/variables';
-import { AuthContext } from '../../../context/AuthContext';
-import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
+import createInstance from '../../../helpers/AxiosInstance';
+import { colors, constant, sizes } from '../../themes/variables';
+import { AuthContext } from '../../../context/AuthContext';
+import Sound from 'react-native-sound';
 
 function HomeScreen({ navigation, route }) {
-    const { isLoading, baseUrl } = useContext(AuthContext);
+    const { isLoading } = useContext(AuthContext);
     const [refreshing, setRefreshing] = useState(false);
     const [homeData, setHomeData] = useState({ 'job': 0, 'scan': 0, 'control': 0, 'recount': 0, 'revise': 0 });
     const [modalScanVisible, setModalScanVisible] = useState(false);
@@ -78,6 +79,15 @@ function HomeScreen({ navigation, route }) {
             setModalScanVisible(route.params?.modal)
             setTimeout(() => areaScanRef?.current?.focus(), constant.refDelay)
         }
+        // Sound.setCategory('Playback');
+        // const sound = new Sound('beep-error.mp3', (error) => {
+        //     if (error) {
+        //       console.log('failed to load the sound', error);
+        //       return;
+        //     } 
+        //     // loaded successfully
+        //   });
+        //   sound.play();
     }, [isLoading]);
 
     const onRefresh = useCallback(() => {

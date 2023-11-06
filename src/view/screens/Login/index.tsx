@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, TextInput, TouchableOpacity, Text, ScrollView, StyleSheet } from 'react-native';
+import { TextInput, TouchableOpacity, Text, ScrollView, StyleSheet, SafeAreaView } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -11,9 +11,10 @@ function LoginScreen() {
     const [password, setPassword] = useState('api');
 
     return (
-        <View style={styles.wrapper}>
+        <SafeAreaView style={styles.wrapper}>
+            <Spinner visible={isLoading} animation="fade" />
             <ScrollView contentContainerStyle={styles.inner}>
-                <Spinner visible={isLoading} animation="fade" />
+                <Text style={styles.label}>Адрес API</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Адрес API"
@@ -21,6 +22,7 @@ function LoginScreen() {
                     value={baseUrl}
                     onChangeText={setBaseUrl}
                 />
+                <Text style={styles.label}>Логин</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Логин"
@@ -28,6 +30,7 @@ function LoginScreen() {
                     value={username}
                     onChangeText={setUsername}
                 />
+                <Text style={styles.label}>Пароль</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Пароль"
@@ -46,12 +49,23 @@ function LoginScreen() {
                     <Text style={styles.btnText}>Войти</Text>
                 </TouchableOpacity>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 };
 
 
 export const styles = StyleSheet.create({
+    wrapper: {
+        backgroundColor: colors.BG,
+        paddingVertical: sizes.padding,
+        flex: 1,
+        justifyContent: 'center',
+    },
+    inner: {
+        paddingHorizontal: sizes.padding,
+        flexGrow: 1,
+        justifyContent: 'center',
+    },
     input: {
         height: 50,
         paddingHorizontal: 10,
@@ -62,6 +76,7 @@ export const styles = StyleSheet.create({
         borderColor: colors.GRAY_300,
         borderRadius: sizes.radius,
         elevation: 3,
+        marginBottom: 10,
     },
     btn: {
         height: 50,
@@ -77,27 +92,10 @@ export const styles = StyleSheet.create({
         fontSize: sizes.body3,
         fontWeight: '400'
     },
-    title: {
-        textAlign: 'center',
-        marginBottom: 30,
-        fontSize: sizes.h1,
-    },
-    inputWrapper: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    wrapper: {
-        backgroundColor: colors.BG,
-        paddingVertical: sizes.padding,
-        flex: 1,
-        justifyContent: 'center',
-    },
-    inner: {
-        paddingHorizontal: sizes.padding,
-        flexGrow: 1,
-        justifyContent: 'center',
-        gap: 10,
+    label: {
+        fontSize: sizes.body4,
+        color: colors.GRAY_600,
+        marginBottom: 2,
     },
 });
 
