@@ -7,7 +7,7 @@ import Snackbar from 'react-native-snackbar';
 import createInstance from '../../../helpers/AxiosInstance';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
-import Sound from 'react-native-sound';
+import { sounds } from '../../themes/variables';
 
 function HomeScreen({ navigation, route }) {
     const { isLoading } = useContext(AuthContext);
@@ -27,9 +27,11 @@ function HomeScreen({ navigation, route }) {
     const handlePressModalScan = async () => {
         api.get(`/scan/verify/?area_barcode=${areaScan}`)
             .then(res => {
+                sounds.beep.play()
                 navigation.navigate('ScanAreaStackRoute', { headerTitle: res.data.title, area: res.data, main: true })
             })
             .catch(e => {
+                sounds.beep_fail.play()
                 setTimeout(() => areaScanRef?.current?.focus(), constant.refDelay)
                 setTimeout(() => {
                     Vibration.vibrate(constant.vibroTimeShort)
@@ -38,10 +40,7 @@ function HomeScreen({ navigation, route }) {
             });
     }
 
-    const handlePressControl = () => {
-        navigation.navigate('ControlMainStackRoute')
-    }
-
+    const handlePressControl = () => navigation.navigate('ControlMainStackRoute')
     const handlePressScanJob = () => navigation.navigate('ScanStackRoute')
     const handlePressControlJob = () => navigation.navigate('ControlStackRoute')
     const handlePressRecountJob = () => navigation.navigate('RecountStackRoute')
@@ -64,11 +63,23 @@ function HomeScreen({ navigation, route }) {
             });
     }
 
+    const getNotifications = () => {
+        // const interval = setInterval(async () => {
+        //     api.get(`/notification/get-messages/`).then(res => {
+        //         console.log(res.data)
+        //         Snackbar.show({ text: res.data, textColor: colors.PRIMARY, backgroundColor: colors.LIGHT_PRIMARY, duration: constant.snackbarBiglong, action: { text: 'СКРЫТЬ', textColor: colors.GRAY_600 } });
+        //     })
+        // }, constant.notyDelay);
+
+        // return () => clearInterval(interval);
+    }
+
 
     useFocusEffect(
         useCallback(() => {
             console.log('axios useFocusEffect siteIndex');
             siteIndex()
+            getNotifications()
         }, [])
     );
 
@@ -79,15 +90,6 @@ function HomeScreen({ navigation, route }) {
             setModalScanVisible(route.params?.modal)
             setTimeout(() => areaScanRef?.current?.focus(), constant.refDelay)
         }
-        // Sound.setCategory('Playback');
-        // const sound = new Sound('beep-error.mp3', (error) => {
-        //     if (error) {
-        //       console.log('failed to load the sound', error);
-        //       return;
-        //     } 
-        //     // loaded successfully
-        //   });
-        //   sound.play();
     }, [isLoading]);
 
     const onRefresh = useCallback(() => {
@@ -174,7 +176,9 @@ function HomeScreen({ navigation, route }) {
                     </View>
                 </View>
 
-                <View>
+                
+            </ScrollView>
+            <View>
                     <Dialog.Container
                         headerStyle={styles.dialogHeader}
                         contentStyle={styles.dialogContent}
@@ -193,7 +197,6 @@ function HomeScreen({ navigation, route }) {
                                 onChangeText={setAreaScan}
                                 onSubmitEditing={handlePressModalScan}
                             />
-
                             <TouchableOpacity
                                 style={styles.dialogBtnFill}
                                 activeOpacity={constant.activeOpacity}
@@ -202,13 +205,11 @@ function HomeScreen({ navigation, route }) {
                             >
                                 <Text style={styles.dialogBtnFillText}>Войти</Text>
                             </TouchableOpacity>
-
                         </View>
 
                         <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setModalScanVisible(!modalScanVisible)} />
                     </Dialog.Container>
                 </View>
-            </ScrollView>
         </SafeAreaView>
 
 

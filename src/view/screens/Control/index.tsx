@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { TextInput, Text, View, FlatList, Alert, SafeAreaView, RefreshControl, StyleSheet, ScrollView, TouchableOpacity, Vibration } from 'react-native';
-import Thead from './partials/Thead';
-import Tbody from './partials/Tbody';
-import { colors, constant, sizes } from '../../themes/variables';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { colors, constant, sizes } from '../../themes/variables';
 import createInstance from '../../../helpers/AxiosInstance';
+import Thead from './partials/Thead';
+import Tbody from './partials/Tbody';
 
 const ControlScreen = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -38,7 +38,7 @@ const ControlScreen = ({ navigation, route }) => {
         setIsLoading(false)
         setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
-          Snackbar.show({ text: 'Контроль сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+          Snackbar.show({ text: 'Контроль сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: constant.snackbarShort });
         }, constant.snackbarDelay)
       })
       .catch(e => {
@@ -46,11 +46,13 @@ const ControlScreen = ({ navigation, route }) => {
         setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
-          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
+          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: constant.snackbarLong, action: { text: 'СКРЫТЬ', textColor: colors.GRAY_600 } });
         }, constant.snackbarDelay)
       });
   };
 
+
+ 
   const handlePressFinish = () => {
     Alert.alert('', 'Вы точно хотите завершить контроль в зоне?', [
       { text: 'Отмена' },
@@ -68,14 +70,14 @@ const ControlScreen = ({ navigation, route }) => {
 
         if (res.data.length == 0) navigation.goBack()
         setTimeout(() => {
-          Snackbar.show({ text: 'Контроль в зоне успешно завершён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
+          Snackbar.show({ text: 'Контроль в зоне успешно завершён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: constant.snackbarShort });
         }, constant.snackbarDelay)
       })
       .catch(e => {
         setContextModalVisible(!contextModalVisible)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
-          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: constant.snackbarLong })
         }, constant.snackbarDelay)
       });
   }
@@ -87,14 +89,14 @@ const ControlScreen = ({ navigation, route }) => {
         setIsLoading(false)
         if (showSuccess)
           setTimeout(() => {
-            Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+            Snackbar.show({ text: 'Данные обновлены', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: constant.snackbarShort });
           }, constant.snackbarDelay)
       })
       .catch(e => {
         setIsLoading(false)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
-          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
+          Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: constant.snackbarLong });
         }, constant.snackbarDelay)
       });
   }
@@ -199,10 +201,10 @@ const ControlScreen = ({ navigation, route }) => {
 export const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: colors.BG,
+    padding: sizes.padding,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    padding: sizes.padding
   },
   form: {
     flexDirection: 'row',

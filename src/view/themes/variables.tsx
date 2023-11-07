@@ -1,5 +1,6 @@
 import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
+import Sound from 'react-native-sound';
 
 export const colors = {
     BLUE:           "#0D6EFD",
@@ -74,4 +75,15 @@ export const constant = {
     vibroTimeShort: 250,
     vibroTimeMedium: 400,
     vibroTimeLong: 700,
+    snackbarShort: 2000,
+    snackbarMedium: 4000,
+    snackbarLong: 6000,
+    snackbarBiglong: 15000,
+    notyDelay: 10000,
+};
+
+export const sounds = {
+    beep:  new Sound('https://www.soundjay.com/buttons/sounds/beep-07a.mp3'),
+    beep_fail: new Sound('https://www.soundjay.com/buttons/sounds/beep-03.mp3'),
+    beep_info: new Sound('https://www.soundjay.com/buttons/sounds/beep-03.mp3'),
 };

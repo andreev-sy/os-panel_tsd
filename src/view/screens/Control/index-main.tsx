@@ -141,7 +141,7 @@ const ControlMainScreen = ({ navigation, route }) => {
     </SafeAreaView>
   );
 }
-
+ 
 
 export const styles = StyleSheet.create({
   wrapper: {
