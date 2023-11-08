@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { constant } from '../view/themes/variables';
 
 function createInstance() {
     const { userInfo, baseUrl, logout } = useContext(AuthContext);
@@ -8,7 +9,7 @@ function createInstance() {
     const instance = axios.create({
         baseURL: `http://${baseUrl}/api`,
         headers: { Authorization: `Bearer ${userInfo.access_token}` },
-        timeout: 5000,
+        timeout: constant.axiosTimeout,
     });
 
     instance.interceptors.response.use(

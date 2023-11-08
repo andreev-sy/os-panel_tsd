@@ -7,31 +7,27 @@ import { colors, constant } from '../view/themes/variables';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [scanAuto, setScanAuto] = useState(true);
-  const [userInfo, setUserInfo] = useState({});
-  const [baseUrl, setBaseUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [splashLoading, setSplashLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState({})
+  const [baseUrl, setBaseUrl] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [splashLoading, setSplashLoading] = useState(false)
 
   const login = (username, password, baseUrl) => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     axios
-      .post(`http://${baseUrl}/api/auth/login/`, {
-        username,
-        password,
-      })
+      .post(`http://${baseUrl}/api/auth/login/`, { username, password }, { timeout: constant.axiosTimeout })
       .then(res => {
-        let userInfo = res.data;
-        setUserInfo(userInfo);
-        setBaseUrl(baseUrl);
-        AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-        AsyncStorage.setItem('baseUrl', baseUrl);
+        let userInfo = res.data
+        setUserInfo(userInfo)
+        setBaseUrl(baseUrl)
+        AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
+        AsyncStorage.setItem('baseUrl', baseUrl)
 
-        setIsLoading(false);
+        setIsLoading(false)
       })
       .catch(e => {
-        setIsLoading(false);
+        setIsLoading(false)
         setTimeout(() => {
           Snackbar.show({ text: 'Неверные данные, или нет подключения к сети', textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
@@ -40,59 +36,53 @@ export const AuthProvider = ({ children }) => {
 
 
   const logout = () => {
-    setIsLoading(true);
+    setIsLoading(true)
 
-    AsyncStorage.removeItem('userInfo');
-    AsyncStorage.removeItem('baseUrl');
-    setUserInfo({});
-    setBaseUrl('');
+    AsyncStorage.removeItem('userInfo')
+    AsyncStorage.removeItem('baseUrl')
+    setUserInfo({})
+    setBaseUrl('')
 
     setIsLoading(false);
     setTimeout(() => {
-      Snackbar.show({ text: 'Необходимо авторизоваться', textColor: colors.PRIMARY, backgroundColor: colors.LIGHT_PRIMARY, duration: Snackbar.LENGTH_SHORT });
+      Snackbar.show({ text: 'Необходимо авторизоваться', textColor: colors.PRIMARY, backgroundColor: colors.LIGHT_PRIMARY, duration: Snackbar.LENGTH_SHORT })
     }, constant.snackbarDelay)
   };
 
   const isLoggedIn = async () => {
     try {
       setSplashLoading(true);
-      let baseUrl = await AsyncStorage.getItem('baseUrl');
-      let userInfo = await AsyncStorage.getItem('userInfo');
-      setBaseUrl(baseUrl);
-      userInfo = JSON.parse(userInfo);
+      let baseUrl = await AsyncStorage.getItem('baseUrl')
+      let userInfo = await AsyncStorage.getItem('userInfo')
+      setBaseUrl(baseUrl)
+      userInfo = JSON.parse(userInfo)
 
       if (userInfo) {
-        axios.get(`http://${baseUrl}/api/auth/check/`, { headers: { Authorization: `Bearer ${userInfo.access_token}` } })
+        axios.get(`http://${baseUrl}/api/auth/check/`, { timeout: constant.axiosTimeout, headers: { Authorization: `Bearer ${userInfo.access_token}` } })
           .then(res => {
-            let userInfo = res.data;
-            setUserInfo(userInfo);
-            AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-            setSplashLoading(false);
+            let userInfo = res.data
+            AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
+            setUserInfo(userInfo)
+            setSplashLoading(false)
           })
           .catch(e => {
-            setSplashLoading(false);
-            logout();
+            setSplashLoading(false)
+            logout()
           });
       } else {
-        setSplashLoading(false);
-        logout();
+        setSplashLoading(false)
+        logout()
       }
 
     } catch (e) {
-      setSplashLoading(false);
-      logout();
+      setSplashLoading(false)
+      logout()
     }
   };
 
-  // const setConst = async () => {
-  //     let scan = await AsyncStorage.getItem('scanAuto');
-
-  //     if(scan) setScanAuto(scan);
-  //     else setScanAuto(true);
-  // };
-
-  useEffect(() => { isLoggedIn(); }, []);
-  // useEffect(() => { setConst(); }, []);
+  useEffect(() => { 
+    isLoggedIn()
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -101,7 +91,6 @@ export const AuthProvider = ({ children }) => {
         splashLoading,
         userInfo,
         baseUrl,
-        scanAuto,
         setBaseUrl,
         login,
         logout

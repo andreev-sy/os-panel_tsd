@@ -4,7 +4,9 @@ import { View, Text, StyleSheet } from 'react-native';
 
 function BadgeText({ text, color, style }) {
     return (
-        <Text style={[ styles.wrapper, { backgroundColor: color }, style ]}>{text}</Text>
+        <Text style={[ styles.wrapper, { backgroundColor: color }, style ]}>
+            {text}
+        </Text>
     );
 }
 

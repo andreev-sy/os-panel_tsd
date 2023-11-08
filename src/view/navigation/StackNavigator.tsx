@@ -54,7 +54,7 @@ const HomeStackNavigator = () => {
           title: `Скан: ${route.params?.headerTitle}`,
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
-          headerLeft: () => route.params?.main === false ? <HeaderBack navigation={navigation} /> : false,
+          headerLeft: () => (route.params?.main === false) ? <HeaderBack navigation={navigation} /> : false,
           headerRight: () => <ActionScan navigation={navigation} area={route.params?.area} main={route.params?.main} />,
         })}
       />

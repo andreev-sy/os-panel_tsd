@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { SplashStackNavigator, LoginStackNavigator, HomeStackNavigator } from '../navigation/StackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
+import { SplashStackNavigator, LoginStackNavigator, HomeStackNavigator } from '../navigation/StackNavigator';
 import {AuthContext} from '../../context/AuthContext';
 
 
 function AuthRouter() {
-    const {userInfo, splashLoading, baseUrl} = useContext(AuthContext);
+    const {userInfo, splashLoading} = useContext(AuthContext);
 
     return (
         <NavigationContainer>

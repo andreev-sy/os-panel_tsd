@@ -1,6 +1,7 @@
 import { Dimensions } from "react-native";
-const { width, height } = Dimensions.get("window");
 import Sound from 'react-native-sound';
+
+const { width, height } = Dimensions.get("window")
 
 export const colors = {
     BLUE:           "#0D6EFD",
@@ -39,8 +40,7 @@ export const colors = {
     LIGHT_WARNING:  "#ffffea",
     LIGHT_DANGER:   "#fef2f2",
     BG:             "#F8F9FA",
-};
-
+}
 
 export const sizes = {
     // global sizes
@@ -66,7 +66,7 @@ export const sizes = {
     // app dimensions
     width,
     height
-};
+}
 
 export const constant = {
     activeOpacity:  0.8,
@@ -80,10 +80,11 @@ export const constant = {
     snackbarLong: 6000,
     snackbarBiglong: 15000,
     notyDelay: 10000,
-};
+    axiosTimeout: 5000,
+}
 
 export const sounds = {
     beep:  new Sound('https://www.soundjay.com/buttons/sounds/beep-07a.mp3'),
     beep_fail: new Sound('https://www.soundjay.com/buttons/sounds/beep-03.mp3'),
     beep_info: new Sound('https://www.soundjay.com/buttons/sounds/beep-03.mp3'),
-};
+}

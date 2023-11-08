@@ -5,7 +5,6 @@ import { colors, constant } from '../themes/variables';
 
 function HeaderBack({ navigation }) {
     return (
-
         <TouchableOpacity
             style={styles.btn}
             activeOpacity={constant.activeOpacity}
@@ -22,11 +21,7 @@ function HeaderBack({ navigation }) {
 }
 
 export const styles = StyleSheet.create({
-    btn: {
-        paddingLeft: 7,
-        paddingTop: 1,
-    },
-
+    btn: { paddingLeft: 7, paddingTop: 1, },
 });
 
 export default HeaderBack;
