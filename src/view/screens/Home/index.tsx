@@ -63,23 +63,10 @@ function HomeScreen({ navigation, route }) {
             });
     }
 
-    const getNotifications = () => {
-        // const interval = setInterval(async () => {
-        //     api.get(`/notification/get-messages/`).then(res => {
-        //         console.log(res.data)
-        //         Snackbar.show({ text: res.data, textColor: colors.PRIMARY, backgroundColor: colors.LIGHT_PRIMARY, duration: constant.snackbarBiglong, action: { text: 'СКРЫТЬ', textColor: colors.GRAY_600 } });
-        //     })
-        // }, constant.notyDelay);
-
-        // return () => clearInterval(interval);
-    }
-
-
     useFocusEffect(
         useCallback(() => {
             console.log('axios useFocusEffect siteIndex');
             siteIndex()
-            getNotifications()
         }, [])
     );
 
