@@ -9,6 +9,7 @@ import Thead from './partials/Thead';
 import FindRow from './partials/FindRow';
 import createInstance from '../../../helpers/AxiosInstance';
 import { colors, constant, sizes } from '../../themes/variables';
+import Notification from '../../components/Notification';
 
 function ScanAreaScreen({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false);
@@ -429,7 +430,7 @@ function ScanAreaScreen({ navigation, route }) {
           />
         </Dialog.Container>
       </View>
-
+      <Notification style={{ padding: 0, margin: sizes.padding }}/>
     </SafeAreaView>
   );
 }

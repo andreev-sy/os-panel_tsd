@@ -79,13 +79,13 @@ export const constant = {
     snackbarMedium: 4000,
     snackbarLong: 6000,
     snackbarBiglong: 15000,
-    notyDelay: 500,
-    notyTime: 5000,
+    notyDelay: 8000,
+    notyTime: 7000,
     axiosTimeout: 5000,
 }
 
 export const sounds = {
-    beep:  new Sound('../assets/beep-success.mp3'),
-    beep_fail:  new Sound('../assets/beep-error.mp3'),
-    beep_info:  new Sound('../assets/beep-notification.mp3'),
+    beep:  new Sound('http://135.181.78.213:1333/files/sounds/beep-success.mp3'),
+    beep_fail:  new Sound('http://135.181.78.213:1333/files/sounds/beep-error.mp3'),
+    beep_info:  new Sound('http://135.181.78.213:1333/files/sounds/beep-notification.mp3'),
 }

@@ -8,6 +8,7 @@ import OtherData from './partials/OtherData/';
 import Snackbar from 'react-native-snackbar';
 import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Notification from '../../components/Notification';
 
 function ReviseAreaScreen({ navigation, route }) {
   const [index, setIndex] = useState(0);
@@ -71,6 +72,7 @@ function ReviseAreaScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.wrapper}>
+      <Notification style={{ padding: 0, margin: sizes.padding }}/>
       <Spinner visible={isLoading} animation="fade" />
       <TabView
         lazy

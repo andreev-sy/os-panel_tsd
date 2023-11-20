@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { View, SafeAreaView, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
+import Notification from '../../components/Notification';
 
 function ProfileScreen({ navigation, route }) {
   const { userInfo, baseUrl, logout } = useContext(AuthContext);
@@ -10,6 +11,7 @@ function ProfileScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.wrapper}>
+      <Notification/>
       <View style={styles.inner}>
         <View>
           <View style={styles.boxWrapper}>

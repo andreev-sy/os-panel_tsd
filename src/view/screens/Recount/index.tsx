@@ -7,6 +7,7 @@ import createInstance from '../../../helpers/AxiosInstance';
 import { colors, constant, sizes } from '../../themes/variables';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
+import Notification from '../../components/Notification';
 
 const ReacountScreen = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -188,7 +189,7 @@ const ReacountScreen = ({ navigation, route }) => {
           <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setContextModalVisible(!contextModalVisible)} />
         </Dialog.Container>
       </View>
-
+      <Notification style={{ padding: 0, margin: sizes.padding }}/>
     </SafeAreaView>
   );
 }

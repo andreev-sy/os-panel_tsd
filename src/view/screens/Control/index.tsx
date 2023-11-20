@@ -7,6 +7,7 @@ import { colors, constant, sizes } from '../../themes/variables';
 import createInstance from '../../../helpers/AxiosInstance';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
+import Notification from '../../components/Notification';
 
 const ControlScreen = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -116,7 +117,6 @@ const ControlScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.wrapper}>
       <Spinner visible={isLoading} animation="fade" />
-
       <View style={styles.form}>
         <TextInput
           style={styles.input}
@@ -193,6 +193,7 @@ const ControlScreen = ({ navigation, route }) => {
           <Dialog.Button label="Закрыть" style={styles.dialogClose} onPress={() => setContextModalVisible(!contextModalVisible)} />
         </Dialog.Container>
       </View>
+      <Notification style={{ padding: 0, margin: sizes.padding }}/>
     </SafeAreaView>
   );
 }

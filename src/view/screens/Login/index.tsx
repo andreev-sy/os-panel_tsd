@@ -7,8 +7,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 function LoginScreen() {
     const { isLoading, login } = useContext(AuthContext);
     const [baseUrl, setBaseUrl] = useState('135.181.78.213:1333');
-    const [username, setUsername] = useState('api');
-    const [password, setPassword] = useState('api');
+    const [username, setUsername] = useState('002');
+    const [password, setPassword] = useState('test1');
 
     return (
         <SafeAreaView style={styles.wrapper}>

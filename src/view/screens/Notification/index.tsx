@@ -5,6 +5,7 @@ import Snackbar from 'react-native-snackbar';
 import NotificationRow from './partials/NotificationRow';
 import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Notification from '../../components/Notification';
 
 function NotificationScreen({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false);
@@ -63,6 +64,7 @@ function NotificationScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.wrapper}>
+      <Notification/>
       <Spinner visible={isLoading} animation="fade" />
       <FlatList
         contentContainerStyle={styles.inner}

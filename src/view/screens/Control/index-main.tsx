@@ -7,6 +7,7 @@ import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import createInstance from '../../../helpers/AxiosInstance';
+import Notification from '../../components/Notification';
 
 const ControlMainScreen = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -137,7 +138,7 @@ const ControlMainScreen = ({ navigation, route }) => {
           </ScrollView>
         </View>
         : ''}
-
+      <Notification style={{ padding: 0, margin: sizes.padding }}/>
     </SafeAreaView>
   );
 }

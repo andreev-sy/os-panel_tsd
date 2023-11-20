@@ -88,7 +88,7 @@ function HomeScreen({ navigation, route }) {
 
     return (
         <SafeAreaView style={styles.wrapper}>
-            {/* <Notification /> */}
+            <Notification/>
             <Spinner visible={isLoading} animation="fade" />
             <ScrollView
                 contentContainerStyle={styles.inner}
@@ -200,8 +200,6 @@ function HomeScreen({ navigation, route }) {
                     </Dialog.Container>
                 </View>
         </SafeAreaView>
-
-
     );
 }
 

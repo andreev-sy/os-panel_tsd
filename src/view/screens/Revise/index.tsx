@@ -7,6 +7,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import AreaRow from './partials/AreaRow';
 import { colors, constant, sizes } from '../../themes/variables';
 import createInstance from '../../../helpers/AxiosInstance';
+import Notification from '../../components/Notification';
 
 function ReviseScreen({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false);
@@ -82,6 +83,7 @@ function ReviseScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.wrapper}>
+      <Notification/>
       <Spinner visible={isLoading} animation="fade" />
       <FlatList
         contentContainerStyle={styles.inner}

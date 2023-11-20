@@ -7,6 +7,7 @@ import Snackbar from "react-native-snackbar";
 import createInstance from '../../../helpers/AxiosInstance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useFocusEffect } from '@react-navigation/native';
+import Notification from '../../components/Notification';
 
 function ScanScreen({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false);
@@ -79,8 +80,8 @@ function ScanScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.wrapper}>
+      <Notification/>
       <Spinner visible={isLoading} animation="fade" />
-
       <FlatList
         contentContainerStyle={styles.inner}
         initialNumToRender={6}
