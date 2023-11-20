@@ -79,7 +79,8 @@ export const constant = {
     snackbarMedium: 4000,
     snackbarLong: 6000,
     snackbarBiglong: 15000,
-    notyDelay: 2000,
+    notyDelay: 500,
+    notyTime: 5000,
     axiosTimeout: 5000,
 }
 

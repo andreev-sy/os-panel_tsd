@@ -21,27 +21,33 @@ function createInstance() {
             //     'id': 1,
             //     'text': 'text',
             // }
-            if (response.data.notification) {
-                let noty = response.data.notification
-                delete response.data.notification;
-                setTimeout(() => {
-                    Vibration.vibrate(constant.vibroTimeShort)
-                    sounds.beep_info.play()
-                    Snackbar.show({
-                        text: noty.text,
-                        textColor: colors.PRIMARY,
-                        backgroundColor: colors.LIGHT_PRIMARY,
-                        duration: Snackbar.LENGTH_INDEFINITE,
-                        action: {
-                          text: 'СКРЫТЬ',
-                          textColor: colors.PRIMARY,
-                          onPress: () => {
-                            console.log(noty.id)
-                          },
-                        },
-                    });
-                }, constant.snackbarDelay+2000)
-            }
+
+            // console.log(response.data)
+            // if(response.data.length > 0){
+            //     if(response.data[response.data.length - 1]['notification'] === undefined)
+            //         return response
+
+            //     const noty = response.data.pop();
+            //     console.log(response.data)
+            //     if (noty) {
+            //         setTimeout( () => {
+            //             Vibration.vibrate(constant.vibroTimeShort)
+            //             sounds.beep_info.play()
+            //             Snackbar.show({
+            //                 text: noty.text,
+            //                 textColor: colors.PRIMARY,
+            //                 backgroundColor: colors.LIGHT_PRIMARY,
+            //                 duration: constant.notyTime,
+            //                 action: {
+            //                     text: 'СКРЫТЬ',
+            //                     textColor: colors.PRIMARY,
+            //                     onPress: () => axios.get(`http://${baseUrl}/api/notification/update/?id=${noty.id}`, { timeout: constant.axiosTimeout, headers: { Authorization: `Bearer ${userInfo.access_token}` } })
+            //                 },
+            //             });
+            //         }, constant.notyDelay)
+            //     }
+            // }
+            
 
             return response;
         },

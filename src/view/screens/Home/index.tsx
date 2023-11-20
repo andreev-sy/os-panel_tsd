@@ -8,6 +8,7 @@ import createInstance from '../../../helpers/AxiosInstance';
 import { colors, constant, sizes } from '../../themes/variables';
 import { AuthContext } from '../../../context/AuthContext';
 import { sounds } from '../../themes/variables';
+import Notification from '../../components/Notification';
 
 function HomeScreen({ navigation, route }) {
     const { isLoading } = useContext(AuthContext);
@@ -87,6 +88,7 @@ function HomeScreen({ navigation, route }) {
 
     return (
         <SafeAreaView style={styles.wrapper}>
+            {/* <Notification /> */}
             <Spinner visible={isLoading} animation="fade" />
             <ScrollView
                 contentContainerStyle={styles.inner}
