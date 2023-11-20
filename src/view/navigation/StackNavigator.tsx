@@ -127,7 +127,7 @@ const HomeStackNavigator = () => {
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerLeft: () => <HeaderBack navigation={navigation} />,
-          headerRight: () => <ActionNotification />,
+          headerRight: () => <ActionNotification navigation={navigation} />,
         })}
       />
     </Stack.Navigator>

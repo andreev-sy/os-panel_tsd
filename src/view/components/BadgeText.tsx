@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { colors } from '../themes/variables';
 
 
 function BadgeText({ text, color, style }) {
@@ -12,12 +13,14 @@ function BadgeText({ text, color, style }) {
 
 const styles = StyleSheet.create({
     wrapper: {
-        width: 10, 
-        height: 10, 
         borderRadius: 50,
         position: 'absolute',
         right: -5,
-        top: -2.5
+        top: -2.5,
+        color: colors.WHITE,
+        fontSize: 12,
+        paddingHorizontal: 4,
+        paddingVertical: 1,
     }
 })
 

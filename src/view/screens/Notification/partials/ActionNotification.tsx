@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Vibration } from 'react-native';
 import { colors, constant, sizes } from '../../../themes/variables';
 import Dialog from "react-native-dialog";
+import createInstance from '../../../../helpers/AxiosInstance';
+import Snackbar from 'react-native-snackbar';
 
-const ActionNotification = () => {
+const ActionNotification = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
+    const api = createInstance();
 
     const handleViewAllPress = () => {
-        setModalVisible(!modalVisible);
+        api.get(`/notification/update-all/`)
+            .then(res => {
+                setModalVisible(!modalVisible)
+                navigation.goBack()
+                setTimeout(() => {
+                    Snackbar.show({ text: 'Все уведомления прочитаны', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
+                }, constant.snackbarDelay)
+            })
+            .catch(e => {
+                setTimeout(() => {
+                    Vibration.vibrate(constant.vibroTimeShort)
+                    Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
+                }, constant.snackbarDelay)
+            });
     };
 
     return (

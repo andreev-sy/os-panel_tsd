@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Snackbar from 'react-native-snackbar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Badge from '../../../components/Badge';
 import createInstance from '../../../../helpers/AxiosInstance';
 import { colors, constant } from '../../../themes/variables';
 import { useFocusEffect } from '@react-navigation/native';
+import BadgeText from '../../../components/BadgeText';
 
 function HeaderHome({ navigation }) {
-    const [notification, setNotification] = useState(1);
+    const [notification, setNotification] = useState(0);
 
     const api = createInstance();
 
@@ -25,9 +25,7 @@ function HeaderHome({ navigation }) {
             });
     }
 
-    // useFocusEffect( useCallback(() => { notificationCount() }, []) );
-    // useEffect(() => { notificationCount() });
-
+    useFocusEffect( useCallback(() => { notificationCount() }, []) );
 
     return (
         <View style={styles.wrapper}>
@@ -37,7 +35,7 @@ function HeaderHome({ navigation }) {
                 onPress={() => navigation.navigate('NotificationStackRoute') }
             >
                 <MaterialCommunityIcons name="bell" color={colors.BLACK} size={25} />
-                { notification > 0 ? <Badge color={ colors.SUCCESS } /> : '' }
+                { notification > 0 ? <BadgeText text={notification} color={ colors.SUCCESS } /> : '' }
             </TouchableOpacity>
             <TouchableOpacity
                 activeOpacity={constant.activeOpacity}

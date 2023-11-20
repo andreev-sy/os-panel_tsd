@@ -17,7 +17,7 @@ const NotificationRow = ({ notification, onPressEvent }) => {
             <Text style={styles.notificationDate}>{notification.date}</Text>
             <Text style={styles.notificationText}>{notification.text}</Text>
             { 
-                notification.viewed ? 
+                notification.viewed == 0 ? 
                 <View style={[ styles.notificationViewed, styles.notificationViewedTrue ]} /> 
                 : 
                 <View style={[ styles.notificationViewed, styles.notificationViewedFalse ]} /> 

@@ -15,12 +15,9 @@ function NotificationScreen({ navigation, route }) {
   console.log('render NotificationScreen')
 
   const onPressEvent = useCallback((notification) => {
-    const index = notificationData.findIndex(el => el.id === notification.id);
-    if (index !== -1) {
       api.get(`/notification/update/?id=${notification.id}`)
         .then(res => {
-          notificationData[index]['viewed'] = true;
-          setNotificationData(notificationData);
+          setNotificationData(res.data);
           setTimeout(() => {
             Snackbar.show({ text: 'Уведомление прочитано', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
           }, constant.snackbarDelay)
@@ -31,7 +28,6 @@ function NotificationScreen({ navigation, route }) {
             Snackbar.show({ text: e.message, textColor: colors.LIGHT_DANGER, backgroundColor: colors.DANGER, duration: Snackbar.LENGTH_SHORT })
           }, constant.snackbarDelay)
         });
-    }
   }, []);
  
 
@@ -85,7 +81,7 @@ function NotificationScreen({ navigation, route }) {
 
 
 export const styles = StyleSheet.create({
-  wrapper: { paddingVertical: sizes.padding, backgroundColor: colors.BG },
+  wrapper: { paddingVertical: sizes.padding, backgroundColor: colors.BG, height: '100%' },
   inner: { paddingHorizontal: sizes.padding, },
 });
 

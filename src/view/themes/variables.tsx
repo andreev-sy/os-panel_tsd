@@ -79,12 +79,12 @@ export const constant = {
     snackbarMedium: 4000,
     snackbarLong: 6000,
     snackbarBiglong: 15000,
-    notyDelay: 10000,
+    notyDelay: 2000,
     axiosTimeout: 5000,
 }
 
 export const sounds = {
-    beep:  new Sound('https://www.soundjay.com/buttons/sounds/beep-07a.mp3'),
-    beep_fail: new Sound('https://www.soundjay.com/buttons/sounds/beep-03.mp3'),
-    beep_info: new Sound('https://www.soundjay.com/buttons/sounds/beep-03.mp3'),
+    beep:  new Sound('../assets/beep-success.mp3'),
+    beep_fail:  new Sound('../assets/beep-error.mp3'),
+    beep_info:  new Sound('../assets/beep-notification.mp3'),
 }
