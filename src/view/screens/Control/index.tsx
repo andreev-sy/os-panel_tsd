@@ -78,8 +78,8 @@ const ControlScreen = ({ navigation, route }) => {
       .catch(e => {
         setContextModalVisible(!contextModalVisible)
         setTimeout(() => {
-          Vibration.vibrate(constant.vibroTimeShort)
           sounds.beep_fail.play()
+          Vibration.vibrate(constant.vibroTimeShort)
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: constant.snackbarLong })
         }, constant.snackbarDelay)
       });

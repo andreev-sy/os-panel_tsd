@@ -36,8 +36,8 @@ function ScanScreen({ navigation, route }) {
     }else{
       setTimeout(() => areaBarcodeRef?.current?.focus(), constant.refDelay)
       setTimeout( () => {
-        Vibration.vibrate(constant.vibroTimeMedium)
         sounds.beep_fail.play()
+        Vibration.vibrate(constant.vibroTimeMedium)
         Snackbar.show({ text: 'Введенный штрихкод не совпадает с выбраной зоной', textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
       }, constant.snackbarDelay)
      }

@@ -47,8 +47,8 @@ const ReacountScreen = ({ navigation, route }) => {
         setIsLoading(false)
         setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
-          Vibration.vibrate(constant.vibroTimeShort)
           sounds.beep_fail.play()
+          Vibration.vibrate(constant.vibroTimeShort)
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
       });

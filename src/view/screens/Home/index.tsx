@@ -32,9 +32,9 @@ function HomeScreen({ navigation, route }) {
                 navigation.navigate('ScanAreaStackRoute', { headerTitle: res.data.title, area: res.data, main: true })
             })
             .catch(e => {
-                sounds.beep_fail.play()
                 setTimeout(() => areaScanRef?.current?.focus(), constant.refDelay)
                 setTimeout(() => {
+                    sounds.beep_fail.play()
                     Vibration.vibrate(constant.vibroTimeShort)
                     Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT })
                 }, constant.snackbarDelay)

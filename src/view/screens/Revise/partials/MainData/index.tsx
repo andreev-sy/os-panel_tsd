@@ -40,8 +40,8 @@ function MainData({ navigation, data, area }) {
       })
       .catch(e => {
         setTimeout(() => {
-          Vibration.vibrate(constant.vibroTimeShort)
           sounds.beep_fail.play()
+          Vibration.vibrate(constant.vibroTimeShort)
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
         }, constant.snackbarDelay)
       });

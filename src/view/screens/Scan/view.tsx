@@ -3,7 +3,7 @@ import { View, Text, Switch, TextInput, ScrollView, RefreshControl, SafeAreaView
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
-import Spinner from 'react-native-loading-spinner-overlay';
+import Spinner from 'react-native-loading-spinner-overlay';``
 import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
 import FindRow from './partials/FindRow';
@@ -192,8 +192,8 @@ function ScanAreaScreen({ navigation, route }) {
         .catch(e => {
           setIsLoading(false)
           setTimeout(() => {
-            Vibration.vibrate(constant.vibroTimeShort)
             sounds.beep_fail.play()
+            Vibration.vibrate(constant.vibroTimeShort)
             Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
           }, constant.snackbarDelay)
         });

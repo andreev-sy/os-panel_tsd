@@ -19,8 +19,8 @@ function Notification({style}) {
                   const response = await api.get(`/notification/message/`)
                   if(response.data?.text?.length > 0){
                       setNoty(response.data)
-                      Vibration.vibrate(constant.vibroTimeShort)
                       sounds.beep_info.play()
+                      Vibration.vibrate(constant.vibroTimeShort)
                       setVisible(response.data)
                       api.get(`/notification/send/?id=${response.data.id}`)
       
@@ -90,7 +90,7 @@ export const styles = StyleSheet.create({
         left: 0,
         zIndex: 3,
         padding: sizes.padding,
-        opacity: 0.9
+        opacity: 0.86
     },
     inner: {
         borderRadius: sizes.radius,
