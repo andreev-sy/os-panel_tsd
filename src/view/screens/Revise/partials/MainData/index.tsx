@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { View, Text, TextInput, ScrollView, RefreshControl, FlatList, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
-import { colors, constant, sizes } from '../../../../themes/variables';
+import { colors, constant, sizes, sounds } from '../../../../themes/variables';
 import createInstance from '../../../../../helpers/AxiosInstance';
 import Dialog from 'react-native-dialog';
 import MainBody from './MainBody';
@@ -34,12 +34,14 @@ function MainData({ navigation, data, area }) {
         setNewScan('')
         setContextModalVisible(!contextModalVisible)
         setTimeout(() => {
+          sounds.beep.play()
           Snackbar.show({ text: 'Факт успешно сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT, });
         }, constant.snackbarDelay)
       })
       .catch(e => {
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
+          sounds.beep_fail.play()
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
         }, constant.snackbarDelay)
       });

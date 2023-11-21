@@ -4,7 +4,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
 import createInstance from '../../../helpers/AxiosInstance';
-import { colors, constant, sizes } from '../../themes/variables';
+import { colors, constant, sizes, sounds } from '../../themes/variables';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
 import Notification from '../../components/Notification';
@@ -39,6 +39,7 @@ const ReacountScreen = ({ navigation, route }) => {
         setIsLoading(false)
         setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
+          sounds.beep.play()
           Snackbar.show({ text: 'Пересчет сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
       })
@@ -47,6 +48,7 @@ const ReacountScreen = ({ navigation, route }) => {
         setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
+          sounds.beep_fail.play()
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
       });

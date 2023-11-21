@@ -90,6 +90,7 @@ export const styles = StyleSheet.create({
         left: 0,
         zIndex: 3,
         padding: sizes.padding,
+        opacity: 0.9
     },
     inner: {
         borderRadius: sizes.radius,

@@ -3,7 +3,7 @@ import { TextInput, Text, View, FlatList, Alert, SafeAreaView, RefreshControl, S
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { colors, constant, sizes } from '../../themes/variables';
+import { colors, constant, sizes, sounds } from '../../themes/variables';
 import createInstance from '../../../helpers/AxiosInstance';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
@@ -71,6 +71,7 @@ const ControlScreen = ({ navigation, route }) => {
 
         if (res.data.length == 0) navigation.goBack()
         setTimeout(() => {
+          sounds.beep.play()
           Snackbar.show({ text: 'Контроль в зоне успешно завершён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: constant.snackbarShort });
         }, constant.snackbarDelay)
       })
@@ -78,6 +79,7 @@ const ControlScreen = ({ navigation, route }) => {
         setContextModalVisible(!contextModalVisible)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
+          sounds.beep_fail.play()
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: constant.snackbarLong })
         }, constant.snackbarDelay)
       });

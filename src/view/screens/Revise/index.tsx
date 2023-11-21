@@ -5,7 +5,7 @@ import Dialog from "react-native-dialog";
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import AreaRow from './partials/AreaRow';
-import { colors, constant, sizes } from '../../themes/variables';
+import { colors, constant, sizes, sounds } from '../../themes/variables';
 import createInstance from '../../../helpers/AxiosInstance';
 import Notification from '../../components/Notification';
 
@@ -30,14 +30,16 @@ function ReviseScreen({ navigation, route }) {
 
   const handlePressEnter = async () => {
     if (areaBarcode.trim() == areaSelect?.barcode) {
-      navigation.navigate('ReviseAreaStackRoute', { headerTitle: areaSelect?.title, area: areaSelect })
+      sounds.beep.play()
       setmodalVisible(!modalVisible)
+      navigation.navigate('ReviseAreaStackRoute', { headerTitle: areaSelect?.title, area: areaSelect })
       return;
     }
 
     setAreaBarcode('');
     setTimeout( () => {
       Vibration.vibrate(constant.vibroTimeShort)
+      sounds.beep_fail.play()
       Snackbar.show({ text: 'Введенный штрихкод не совпадает с выбраной зоной', textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
     }, constant.snackbarDelay)
   };

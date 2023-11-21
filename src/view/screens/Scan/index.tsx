@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, FlatList, StyleSheet, RefreshControl, SafeAreaView, TextInput, TouchableOpacity, Text, Vibration } from 'react-native';
 import AreaRow from './partials/AreaRow';
-import { colors, constant, sizes } from '../../themes/variables';
+import { colors, constant, sizes, sounds } from '../../themes/variables';
 import Dialog from "react-native-dialog";
 import Snackbar from "react-native-snackbar";
 import createInstance from '../../../helpers/AxiosInstance';
@@ -29,12 +29,15 @@ function ScanScreen({ navigation, route }) {
   const handlePressEnter = async () => {
     // сверяем введный ШК с ШК из выбранной зоны
     if (areaBarcode.trim() == areaSelect.barcode) {
-      navigation.navigate('ScanAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect, main: false })
+      sounds.beep.play()
       setmodalVisible(!modalVisible)
+      navigation.navigate('ScanAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect, main: false })
+      return;
     }else{
       setTimeout(() => areaBarcodeRef?.current?.focus(), constant.refDelay)
       setTimeout( () => {
         Vibration.vibrate(constant.vibroTimeMedium)
+        sounds.beep_fail.play()
         Snackbar.show({ text: 'Введенный штрихкод не совпадает с выбраной зоной', textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
       }, constant.snackbarDelay)
      }

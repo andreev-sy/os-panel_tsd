@@ -8,7 +8,7 @@ import Tbody from './partials/Tbody';
 import Thead from './partials/Thead';
 import FindRow from './partials/FindRow';
 import createInstance from '../../../helpers/AxiosInstance';
-import { colors, constant, sizes } from '../../themes/variables';
+import { colors, constant, sizes, sounds } from '../../themes/variables';
 import Notification from '../../components/Notification';
 
 function ScanAreaScreen({ navigation, route }) {
@@ -153,12 +153,14 @@ function ScanAreaScreen({ navigation, route }) {
           setitem({})
           setIsLoading(false)
           setTimeout(() => {
+            sounds.beep.play()
             Snackbar.show({ text: 'Товар успешно изменён', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
           }, constant.snackbarDelay)
         })
         .catch(e => {
           setIsLoading(false)
           setTimeout(() => {
+            sounds.beep_fail.play()
             Vibration.vibrate(constant.vibroTimeShort)
             Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
           }, constant.snackbarDelay)
@@ -167,11 +169,11 @@ function ScanAreaScreen({ navigation, route }) {
     } else {
       api.post(`/scan/add/`, { 'barcode': barcode, 'count': count, 'area': route.params?.area.id })
         .then(res => {
-          console.log(res.data)
           if (res.data?.msg?.length > 0) {
             setFindData(res.data?.find)
             setIsLoading(false)
             setTimeout(() => {
+              sounds.beep.play()
               Snackbar.show({ text: res.data.msg, textColor: colors.INFO, backgroundColor: colors.LIGHT_INFO, duration: Snackbar.LENGTH_LONG });
             }, constant.snackbarDelay)
 
@@ -182,15 +184,16 @@ function ScanAreaScreen({ navigation, route }) {
             else setCount('')
             setIsLoading(false)
             setTimeout(() => {
+              sounds.beep.play()
               Snackbar.show({ text: 'Товар успешно добавлен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
             }, constant.snackbarDelay)
           }
         })
         .catch(e => {
-          console.log(e)
           setIsLoading(false)
           setTimeout(() => {
             Vibration.vibrate(constant.vibroTimeShort)
+            sounds.beep_fail.play()
             Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
           }, constant.snackbarDelay)
         });
@@ -221,7 +224,7 @@ function ScanAreaScreen({ navigation, route }) {
       if (value !== null) {
         let auto = JSON.parse(value)
         if (auto) setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
-        else setIsAuto(JSON.parse(auto));
+        else setIsAuto(JSON.parse(auto))
       }
     });
   }

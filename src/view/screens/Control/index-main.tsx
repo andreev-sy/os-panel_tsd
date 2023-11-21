@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { TextInput, Text, View, FlatList, RefreshControl, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Vibration } from 'react-native';
 import Thead from './partials/Thead';
 import Tbody from './partials/Tbody';
-import { colors, constant, sizes } from '../../themes/variables';
+import { colors, constant, sizes, sounds } from '../../themes/variables';
 import Dialog from 'react-native-dialog';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -33,6 +33,7 @@ const ControlMainScreen = ({ navigation, route }) => {
         setIsLoading(false)
         setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
+          sounds.beep.play()  
           Snackbar.show({ text: 'Контроль сохранен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
       })
@@ -41,6 +42,7 @@ const ControlMainScreen = ({ navigation, route }) => {
         setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
         setTimeout(() => {
           Vibration.vibrate(constant.vibroTimeShort)
+          sounds.beep_fail.play()
           Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT });
         }, constant.snackbarDelay)
       });
