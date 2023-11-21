@@ -6,7 +6,7 @@ import { fixFloat } from '../../../../helpers/Utilitites';
 
 const AreaRow = ({ area, onPressEvent }) => {
   
-  console.log('render area'+area.id);
+  //console.log('render area'+area.id);
 
   return (
     <TouchableOpacity

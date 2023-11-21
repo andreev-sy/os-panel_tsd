@@ -4,7 +4,7 @@ import { colors, constant, sizes } from '../../../themes/variables';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const FindRow = ({ item, onPressEvent }) => {
-  console.log('render item'+item)
+  //console.log('render item'+item)
   const dataItem = item.item
   return (
     <TouchableOpacity

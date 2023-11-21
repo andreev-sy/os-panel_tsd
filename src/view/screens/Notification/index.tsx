@@ -13,7 +13,7 @@ function NotificationScreen({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);
   const api = createInstance();
  
-  console.log('render NotificationScreen')
+  //console.log('render NotificationScreen')
 
   const onPressEvent = useCallback((notification) => {
       api.get(`/notification/update/?id=${notification.id}`)
@@ -52,7 +52,7 @@ function NotificationScreen({ navigation, route }) {
   }
 
   useEffect(() => {
-    console.log('axios useEffect notificationIndex')
+    //console.log('axios useEffect notificationIndex')
     notificationIndex()
   }, []);
 

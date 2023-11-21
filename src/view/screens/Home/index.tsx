@@ -66,13 +66,13 @@ function HomeScreen({ navigation, route }) {
 
     useFocusEffect(
         useCallback(() => {
-            console.log('axios useFocusEffect siteIndex');
+            //console.log('axios useFocusEffect siteIndex');
             siteIndex()
         }, [])
     );
 
     useEffect(() => {
-        console.log('axios useEffect siteIndex');
+        //console.log('axios useEffect siteIndex');
         siteIndex()
         if (route.params?.modal === true) {
             setModalScanVisible(route.params?.modal)

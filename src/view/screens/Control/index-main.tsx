@@ -19,7 +19,7 @@ const ControlMainScreen = ({ navigation, route }) => {
   const controlRef = useRef(null);
   const api = createInstance();
 
-  console.log('render ControlMainScreen')
+  // console.log('render ControlMainScreen')
 
   const onPressEvent = () => { }
 
@@ -68,7 +68,7 @@ const ControlMainScreen = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    console.log('axios useEffect controlMainIndex')
+    // console.log('axios useEffect controlMainIndex')
     controlMainIndex()
   }, [])
 

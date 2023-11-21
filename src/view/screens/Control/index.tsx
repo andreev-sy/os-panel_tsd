@@ -21,10 +21,9 @@ const ControlScreen = ({ navigation, route }) => {
   const controlRef = useRef(null);
   const api = createInstance();
 
-  console.log('render ControlScreen')
+  // console.log('render ControlScreen')
 
   const onPressEvent = useCallback((area) => {
-    console.log(area)
     setAreaSelected(area)
     setContextModalVisible(!contextModalVisible)
   }, []);
@@ -64,7 +63,6 @@ const ControlScreen = ({ navigation, route }) => {
   const finishArea = async () => {
     api.post(`/control/finish/`, { 'area': areaSelected.id })
       .then(res => {
-        console.log(res.data)
         setTableData(res.data);
         setContextModalVisible(!contextModalVisible)
         setAreaSelected({})
@@ -105,7 +103,7 @@ const ControlScreen = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    console.log('axios useEffect controlIndex')
+    // console.log('axios useEffect controlIndex')
     controlIndex()
   }, [])
 

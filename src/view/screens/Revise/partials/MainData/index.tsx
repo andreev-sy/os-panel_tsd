@@ -17,7 +17,7 @@ function MainData({ navigation, data, area }) {
   const newScanRef = useRef(null);
   const api = createInstance();
 
-  console.log('render MainData');
+  //console.log('render MainData');
 
   const onPressEvent = useCallback((item) => {
     setItem(item)

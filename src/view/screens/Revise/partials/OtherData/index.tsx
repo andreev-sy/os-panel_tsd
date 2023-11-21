@@ -12,7 +12,7 @@ function OtherData({ navigation, data, area }) {
   const [tableData, setTableData] = useState(data);
   const api = createInstance();
 
-  console.log('render other');
+  //console.log('render other');
 
   const reviseOther = async (showSuccess = false) => {
     api.get(`/revise/other/?area_id=${area.id}`)

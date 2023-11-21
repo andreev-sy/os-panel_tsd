@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { colors, sizes } from '../../../themes/variables';
 
 const Tbody = ({ item, onPressEvent }) => {
-  console.log('render item'+item.id);
+  //console.log('render item'+item.id);
   let widthArr = [130, 140, 140, 100, 200]
   let numberOfLines = parseInt(item.id)
 

@@ -27,7 +27,7 @@ function ScanAreaScreen({ navigation, route }) {
   const countRef = useRef(null);
   const api = createInstance();
 
-  console.log('render ScanAreaScreen')
+  //console.log('render ScanAreaScreen')
 
   const onPressEvent = useCallback((item) => {
     setitem(item)
@@ -230,7 +230,7 @@ function ScanAreaScreen({ navigation, route }) {
   }
 
   useEffect(() => {
-    console.log('axios usEffect scanView')
+    //console.log('axios usEffect scanView')
     setFromAsyncStorage()
     scanView()
   }, [])

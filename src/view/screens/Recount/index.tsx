@@ -21,10 +21,9 @@ const ReacountScreen = ({ navigation, route }) => {
   const controlRef = useRef(null);
   const api = createInstance();
 
-  console.log('render ReacountScreen')
+  //console.log('render ReacountScreen')
 
   const onPressEvent = useCallback((area) => {
-    console.log(area)
     setAreaSelected(area)
     setContextModalVisible(!contextModalVisible)
   }, []);
@@ -63,7 +62,6 @@ const ReacountScreen = ({ navigation, route }) => {
   const finishArea = async () => {
     api.post(`/recount/finish/`, { 'area': areaSelected.id })
       .then(res => {
-        console.log(res.data)
         setTableData(res.data);
         setContextModalVisible(!contextModalVisible)
         setAreaSelected({})
@@ -85,7 +83,6 @@ const ReacountScreen = ({ navigation, route }) => {
   const recountIndex = async (showSuccess=false) => {
     api.get(`/recount/index/`)
       .then(res => {
-        console.log(res.data)
         setTableData(res.data)
         setIsLoading(false)
         if (showSuccess)
@@ -103,7 +100,7 @@ const ReacountScreen = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    console.log('axios useEffect recountIndex')
+    //console.log('axios useEffect recountIndex')
     recountIndex()
   }, [])
 

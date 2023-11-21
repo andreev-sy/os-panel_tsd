@@ -4,7 +4,7 @@ import { colors, sizes } from '../../../themes/variables';
 import { fixFloat } from '../../../../helpers/Utilitites'
 
 const Tbody = ({ area, onPressEvent }) => {
-  console.log('render area' + area.id);
+  //console.log('render area' + area.id);
   let widthArr = [42, 120, 80, 80, 80]
   let numberOfLines = parseInt(area.id)
 

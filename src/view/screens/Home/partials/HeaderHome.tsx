@@ -13,7 +13,7 @@ function HeaderHome({ navigation }) {
     const api = createInstance();
 
     const notificationCount = () => {
-        console.log('notificationCount')
+        //console.log('notificationCount')
         api.get(`/notification/count/`)
             .then(res => { 
                 setNotification(parseInt(res.data)) 

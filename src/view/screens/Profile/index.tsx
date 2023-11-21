@@ -7,7 +7,7 @@ import Notification from '../../components/Notification';
 function ProfileScreen({ navigation, route }) {
   const { userInfo, baseUrl, logout } = useContext(AuthContext);
 
-  console.log('render ProfileScreen')
+  //console.log('render ProfileScreen')
 
   return (
     <SafeAreaView style={styles.wrapper}>

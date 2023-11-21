@@ -18,7 +18,7 @@ function ReviseAreaScreen({ navigation, route }) {
   const [otherData, setOtherData] = useState([]);
   const api = createInstance();
 
-  console.log('render ReviseAreaScreen')
+  //console.log('render ReviseAreaScreen')
 
   const reviseMain = async (showSuccess = false) => {
     api.get(`/revise/view/?area_id=${route.params.area.id}`)
@@ -58,14 +58,14 @@ function ReviseAreaScreen({ navigation, route }) {
 
   useFocusEffect(
     useCallback(() => {
-      console.log('axios useFocusEffect reviseIndex')
+      //console.log('axios useFocusEffect reviseIndex')
       reviseMain()
       reviseOther()
     }, [])
   );
 
   useEffect(() => {
-    console.log('axios useEffect reviseIndex')
+    //console.log('axios useEffect reviseIndex')
     reviseMain()
     reviseOther()
   }, [])

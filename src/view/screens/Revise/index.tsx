@@ -19,10 +19,9 @@ function ReviseScreen({ navigation, route }) {
   const areaRef = useRef(null);
   const api = createInstance();
   
-  console.log('render ReviseScreen')
+  //console.log('render ReviseScreen')
 
   const onPressEvent = useCallback((area) => {
-    console.log(area)
     setAreaSelect(area)
     setmodalVisible(!modalVisible)
     setTimeout(() => areaRef?.current?.focus(), constant.refDelay)
@@ -33,7 +32,7 @@ function ReviseScreen({ navigation, route }) {
       sounds.beep.play()
       setmodalVisible(!modalVisible)
       navigation.navigate('ReviseAreaStackRoute', { headerTitle: areaSelect?.title, area: areaSelect })
-      return;
+      return
     }
 
     setAreaBarcode('');
@@ -66,13 +65,13 @@ function ReviseScreen({ navigation, route }) {
 
   useFocusEffect( 
     useCallback( () => { 
-      console.log('axios useFocusEffect reviseIndex')
+      //console.log('axios useFocusEffect reviseIndex')
       reviseIndex() 
     }, []) 
   );
 
   useEffect(() => { 
-    console.log('axios useEffect reviseIndex')
+    //console.log('axios useEffect reviseIndex')
     reviseIndex() 
   }, [])
 

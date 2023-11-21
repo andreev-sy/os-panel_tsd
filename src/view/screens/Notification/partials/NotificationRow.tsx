@@ -4,7 +4,7 @@ import { colors, constant, sizes } from '../../../themes/variables';
 
 const NotificationRow = ({ notification, onPressEvent }) => {
     
-    console.log('render notification' + notification.id);
+    //console.log('render notification' + notification.id);
 
     return (
         <TouchableOpacity

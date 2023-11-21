@@ -20,7 +20,6 @@ function ScanScreen({ navigation, route }) {
   const api = createInstance();
 
   const onPressEvent = useCallback((area) => {
-    console.log(area)
     setAreaSelect(area)
     setTimeout(() => areaBarcodeRef?.current?.focus(), constant.refDelay)
     setmodalVisible(!modalVisible)
@@ -32,7 +31,7 @@ function ScanScreen({ navigation, route }) {
       sounds.beep.play()
       setmodalVisible(!modalVisible)
       navigation.navigate('ScanAreaStackRoute', { headerTitle: areaSelect.title, area: areaSelect, main: false })
-      return;
+      return
     }else{
       setTimeout(() => areaBarcodeRef?.current?.focus(), constant.refDelay)
       setTimeout( () => {
@@ -64,13 +63,13 @@ function ScanScreen({ navigation, route }) {
 
   useFocusEffect( 
     useCallback( () => { 
-      console.log('axios useFocusEffect scanIndex')
+      //console.log('axios useFocusEffect scanIndex')
       scanIndex() 
     }, []) 
   );
   
   useEffect(() => { 
-    console.log('axios useEffect scanIndex')
+    //console.log('axios useEffect scanIndex')
     scanIndex() 
   }, [])
 
