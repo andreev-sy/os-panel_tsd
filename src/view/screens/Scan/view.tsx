@@ -141,9 +141,11 @@ function ScanAreaScreen({ navigation, route }) {
   }
 
   const handlePressSave = async () => {
+    if(!barcode) return false;
+    // var startTime = performance.now()
     setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
-    setIsLoading(true)
     if (isEdit) {
+      setIsLoading(true)
       api.post(`/scan/update/`, { 'new_scan': count, 'area_item': item.id })
         .then(res => {
           setTableData(res.data)
@@ -167,35 +169,39 @@ function ScanAreaScreen({ navigation, route }) {
         });
 
     } else {
-      api.post(`/scan/add/`, { 'barcode': barcode, 'count': count, 'area': route.params?.area.id })
+      let copy_barcode = barcode;
+      let copy_count = count;
+      if (isAuto) setBarcode('')
+      api.post(`/scan/add/`, { 'barcode': copy_barcode, 'count': copy_count, 'area': route.params?.area.id })
         .then(res => {
           if (res.data?.msg?.length > 0) {
             setFindData(res.data?.find)
             setIsLoading(false)
             setTimeout(() => {
               sounds.beep.play()
-              Snackbar.show({ text: res.data.msg, textColor: colors.INFO, backgroundColor: colors.LIGHT_INFO, duration: Snackbar.LENGTH_LONG });
+              Snackbar.show({ text: res.data.msg, textColor: colors.INFO, backgroundColor: colors.LIGHT_INFO, duration: constant.snackbarLong });
             }, constant.snackbarDelay)
-
           } else {
+            if (!isAuto){
+              setBarcode('')
+              setCount('')
+            }
             setTableData(res.data)
-            setBarcode('')
-            if (isAuto) setTimeout(() => barcodeRef?.current?.focus(), constant.refDelay)
-            else setCount('')
-            setIsLoading(false)
-            setTimeout(() => {
-              sounds.beep.play()
-              Snackbar.show({ text: 'Товар успешно добавлен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
-            }, constant.snackbarDelay)
+            // setIsLoading(false)
+            // setTimeout(() => {
+            //   sounds.beep.play()
+            //   Snackbar.show({ text: 'Товар успешно добавлен', textColor: colors.SUCCESS, backgroundColor: colors.LIGHT_SUCCESS, duration: Snackbar.LENGTH_SHORT });
+            // }, constant.snackbarDelay)
+            // var time = (performance.now() - startTime) / 1000
+            // console.log(`Call to doSomething took ${time} sec.`)
           }
         })
         .catch(e => {
-          setIsLoading(false)
-          setTimeout(() => {
+            // setIsLoading(false)
+            setBarcode(copy_barcode)
             sounds.beep_fail.play()
             Vibration.vibrate(constant.vibroTimeShort)
-            Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: Snackbar.LENGTH_SHORT, });
-          }, constant.snackbarDelay)
+            Snackbar.show({ text: e.message, textColor: colors.DANGER, backgroundColor: colors.LIGHT_DANGER, duration: constant.snackbarLong, });
         });
     }
   };
@@ -307,9 +313,10 @@ function ScanAreaScreen({ navigation, route }) {
           />
           {isAuto &&
             <TouchableOpacity
-              style={[styles.formBtn, (barcode && count) ? {} : styles.formBtnDisabled]}
+              // style={[styles.formBtn, (barcode && count) ? {} : styles.formBtnDisabled]}
+              style={styles.formBtn}
               activeOpacity={constant.activeOpacity}
-              disabled={(barcode && count) ? false : true}
+              // disabled={(barcode && count) ? false : true}
               accessibilityRole="button"
               onPress={handlePressSave}
             >
